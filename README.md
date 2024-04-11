@@ -1,2 +1,1 @@
-# backpack
-Backpack, personal backpack for all important things in your life.
+This is a starter template for [Learn Next.js](https://nextjs.org/learn).
