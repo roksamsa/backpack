@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_jhk_ukhkhs",
+  "info": {
+    "displayName": "ukhkh",
+    "icon": "cog"
+  },
+  "options": {},
+  "attributes": {
+    "jhll": {
+      "type": "richtext"
+    }
+  }
+}

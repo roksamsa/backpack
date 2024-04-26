@@ -1,5 +1,5 @@
+import RegisterForm from "@/src/components/authenticate/register-form";
 import { Card, CardBody } from "@nextui-org/react";
-import RegisterForm from "../components/authenticate/register-form";
 
 const RegisterPage = () => {
   return (

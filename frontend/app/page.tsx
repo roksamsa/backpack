@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   title: "Backpack",
 };
 
-const IndexPage = ({ session }: { session: Session | null }) => {
+const HomePage = async ({ session }: { session: Session | null }) => {
+    console.log("user");
   const signInButtonNode = () => {
     if (session) {
       return false;
@@ -17,6 +18,9 @@ const IndexPage = ({ session }: { session: Session | null }) => {
 
     return (
       <div>
+        <Link href="/login">
+          <Button color="default">Login</Button>
+        </Link>
         <Link href="/register">
           <Button color="default">Register</Button>
         </Link>
@@ -61,4 +65,4 @@ const IndexPage = ({ session }: { session: Session | null }) => {
   );
 };
 
-export default IndexPage;
+export default HomePage;
