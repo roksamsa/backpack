@@ -11,8 +11,8 @@ const InsurancesPage = async () => {
   }
   return (
     <div>
-      <h1>{insurancesData?.data?.data?.attributes?.name}</h1>
-      <p>{insurancesData?.data?.data?.attributes?.description}</p>
+      <h1>{insurancesData?.data?.attributes?.name}</h1>
+      <p>{insurancesData?.data?.attributes?.description}</p>
     </div>
   );
 };

@@ -377,6 +377,12 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     name: Attribute.String;
     url: Attribute.String;
     description: Attribute.Text;
+    categoryId: Attribute.UID;
+    category_item: Attribute.Relation<
+      'api::category.category',
+      'manyToOne',
+      'api::category-item.category-item'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -395,29 +401,72 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
   };
 }
 
-export interface ApiUkhkhUkhkh extends Schema.SingleType {
-  collectionName: 'ukhkhs';
+export interface ApiCategoryGroupCategoryGroup extends Schema.CollectionType {
+  collectionName: 'category_groups';
   info: {
-    singularName: 'ukhkh';
-    pluralName: 'ukhkhs';
-    displayName: 'ukhkh';
+    singularName: 'category-group';
+    pluralName: 'category-groups';
+    displayName: 'Category Group';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    ljlj: Attribute.RichText;
+    groupId: Attribute.UID;
+    name: Attribute.String;
+    category: Attribute.Relation<
+      'api::category-group.category-group',
+      'oneToOne',
+      'api::category.category'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::ukhkh.ukhkh',
+      'api::category-group.category-group',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::ukhkh.ukhkh',
+      'api::category-group.category-group',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryItemCategoryItem extends Schema.CollectionType {
+  collectionName: 'category_items';
+  info: {
+    singularName: 'category-item';
+    pluralName: 'category-items';
+    displayName: 'Category Item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    ItemId: Attribute.UID;
+    categories: Attribute.Relation<
+      'api::category-item.category-item',
+      'oneToMany',
+      'api::category.category'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category-item.category-item',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category-item.category-item',
       'oneToOne',
       'admin::user'
     > &
@@ -863,7 +912,8 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::category.category': ApiCategoryCategory;
-      'api::ukhkh.ukhkh': ApiUkhkhUkhkh;
+      'api::category-group.category-group': ApiCategoryGroupCategoryGroup;
+      'api::category-item.category-item': ApiCategoryItemCategoryItem;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

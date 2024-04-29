@@ -22,7 +22,8 @@ const categoriesDefaultFirstItem: Category = {
     updatedAt: "2024-04-26T13:18:56.368Z",
     publishedAt: "2024-04-26T12:28:03.655Z",
     url: "/app/dashboard",
-    description: "Voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.",
+    description:
+      "Welcome to your Dashboard! This is your personal financial command center, providing a comprehensive overview of both your investments and insurance policies.",
   },
 };
 
@@ -73,7 +74,7 @@ export async function getCategoryById(categoryId: number) {
     console.log("AAAAAAA", data);
 
     if (data.error) return { ok: false, data: null, error: data.error };
-    return { ok: true, data: data, error: null };
+    return { ok: true, data: data.data, error: null };
   } catch (error) {
     console.log(error);
     return { ok: false, data: null, error: error };

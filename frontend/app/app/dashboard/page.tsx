@@ -6,7 +6,6 @@ const DashboardPage = async () => {
 
   try {
     dashboardData = await getCategoryById(0);
-    console.log("dashboardDatadashboardData", dashboardData);
   } catch (error) {
     console.log(error);
   }

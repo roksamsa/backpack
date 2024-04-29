@@ -20,6 +20,15 @@
     },
     "description": {
       "type": "text"
+    },
+    "categoryId": {
+      "type": "uid"
+    },
+    "category_item": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category-item.category-item",
+      "inversedBy": "categories"
     }
   }
 }

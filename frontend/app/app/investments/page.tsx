@@ -11,8 +11,8 @@ const InvestmentsPage = async () => {
   }
   return (
     <div>
-      <h1>{investmentsData?.data?.data?.attributes?.name}</h1>
-      <p>{investmentsData?.data?.data?.attributes?.description}</p>
+      <h1>{investmentsData?.data?.attributes?.name}</h1>
+      <p>{investmentsData?.data?.attributes?.description}</p>
     </div>
   );
 };
