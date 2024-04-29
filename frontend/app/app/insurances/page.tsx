@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { getCategoryById } from "@/src/services/data-service";
+import React from "react";
 
-const InsurancesPage = () => {
+const InsurancesPage = async () => {
+  let insurancesData;
+
+  try {
+    insurancesData = await getCategoryById(2);
+  } catch (error) {
+    console.log(error);
+  }
   return (
     <div>
-      <h1>Insurances</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
-      </p>
+      <h1>{insurancesData?.data?.data?.attributes?.name}</h1>
+      <p>{insurancesData?.data?.data?.attributes?.description}</p>
     </div>
   );
 };

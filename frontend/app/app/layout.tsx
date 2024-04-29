@@ -10,7 +10,7 @@ export default function RootInsideLayout({
       <body>
         <div className="page__wrapper">
           <Sidebar />
-          <div>{children}</div>
+          <div className="page__content">{children}</div>
         </div>
       </body>
     </html>

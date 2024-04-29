@@ -81,4 +81,10 @@ a {
     flex-grow: 1;
     height: 100%;
   }
+
+  &__content {
+    flex-grow: 1;
+    height: 100%;
+    padding: 1.5rem;
+  }
 }
