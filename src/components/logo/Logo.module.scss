@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+}
+
+.logoSvg {
+  width: 35px;
+  margin-right: 1rem;
+  fill: #2f4d7e;
+}
+
+.logoText {
+  font-family: "Cairo", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.7rem;
+  color: #0b5adb;
+}

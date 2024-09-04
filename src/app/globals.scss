@@ -16,14 +16,22 @@
   }
 }
 
+html, body {
+    height: 100vh;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #f6f9ff;
+}
+
+.page {
+    display: flex;
+    height: 100%;
+
+    &__content {
+        padding: 2rem;
+    }
 }
 
 @layer utilities {
