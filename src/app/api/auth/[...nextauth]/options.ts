@@ -1,9 +1,12 @@
 import { Credentials } from "@/interfaces/interfaces";
 import type { NextAuthOptions } from "next-auth";
+import { PrismaClient } from "@prisma/client";
+
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import LinkedinProvider from "next-auth/providers/linkedin";
+import TwitterProvider from "next-auth/providers/twitter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -14,8 +17,16 @@ export const options: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET!,
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
+    }),
+    LinkedinProvider({
+      clientId: process.env.LINKEDIN_ID!,
+      clientSecret: process.env.LINKEDIN_SECRET!,
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_ID!,
+      clientSecret: process.env.TWITTER_SECRET!,
     }),
     CredentialsProvider({
       name: "Credentials",

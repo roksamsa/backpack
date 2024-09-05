@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "./UserProfile.module.scss";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@nextui-org/skeleton";
 
 const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
@@ -11,6 +11,7 @@ const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
       className={`${styles.userProfileWrapper} ${
         isSidebarClosed ? styles.sidebarClosed : ""
       }`}
+      onClick={() => signOut()}
     >
       {session?.user ? (
         <div className={styles.userProfile}>

@@ -46,6 +46,15 @@ const Login = () => {
             <Button onClick={() => signIn("github")}>
               Sign in with GitHub
             </Button>
+            <Button onClick={() => signIn("google")}>
+              Sign in with Google
+            </Button>
+            <Button onClick={() => signIn("twitter")}>
+              Sign in with Twitter
+            </Button>
+            <Button onClick={() => signIn("linkedin")}>
+              Sign in with Linkedin
+            </Button>
           </form>
         </CardBody>
       </Card>
