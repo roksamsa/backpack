@@ -1,19 +1,20 @@
 import NextAuth from "next-auth";
 import { PrismaClient } from "@prisma/client";
-import { compare } from "bcryptjs";
 import {
   Credentials,
   CustomSession,
   CustomToken,
 } from "@/interfaces/interfaces";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const prisma = new PrismaClient();
 
 export default NextAuth({
+  debug: true,
   providers: [
-    CredentialsProvider({
+    /*CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
@@ -35,33 +36,19 @@ export default NextAuth({
 
         return null;
       },
-    }),
+    }),*/
     GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   callbacks: {
-    async session({
-      session,
-      token,
-    }: {
-      session: CustomSession;
-      token: CustomToken;
-    }) {
-      if (token.id) {
-        session.userId = token.id;
-      }
+    async session({ session, token }) {
       return session;
     },
-    async jwt({ token, user }: { token: CustomToken; user?: { id: number } }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-  },
-  pages: {
-    signIn: "/auth/signin",
   },
 });

@@ -9,8 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/button": "^2.0.37",
+    "@nextui-org/card": "^2.0.33",
+    "@nextui-org/input": "^2.2.4",
+    "@nextui-org/skeleton": "^2.0.31",
+    "@nextui-org/system": "^2.2.5",
+    "@nextui-org/theme": "^2.2.9",
     "@prisma/client": "^5.19.1",
     "bcryptjs": "^2.4.3",
+    "framer-motion": "^11.5.4",
     "next": "14.2.7",
     "next-auth": "^4.24.7",
     "pg": "^8.12.0",
