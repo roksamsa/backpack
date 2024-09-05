@@ -4,10 +4,14 @@ import styles from "./UserProfile.module.scss";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@nextui-org/skeleton";
 
-const UserProfile = () => {
+const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const { data: session } = useSession();
   return (
-    <div className={styles.userProfileWrapper}>
+    <div
+      className={`${styles.userProfileWrapper} ${
+        isSidebarClosed ? styles.sidebarClosed : ""
+      }`}
+    >
       {session?.user ? (
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>

@@ -4,20 +4,57 @@
   display: flex;
   align-items: center;
   padding: 2rem;
+
+  &.sidebarClosed {
+    .arrowToggleWrapper {
+      width: 2rem;
+      min-width: 2rem;
+      height: 2rem;
+      margin-left: 16px;
+      margin-right: 0;
+      transform: rotate(180deg);
+      background-color: rgba(166, 177, 200, 0.2);
+    }
+
+    .logoText {
+      display: none;
+    }
+
+    .logoSvg {
+      width: 25px;
+      margin-right: 0;
+    }
+  }
 }
 
 .logoSvg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 35px;
   margin-right: 1rem;
   fill: #2f4d7e;
+  flex-shrink: 0;
+  transition: width 150ms ease-in-out;
 }
 
 .logoText {
-    margin-top: .5rem;
+  flex-grow: 1;
+  margin-top: 0.5rem;
   font-family: "Cairo", system-ui;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
   font-size: 1.7rem;
   color: #0b5adb;
+}
+
+.arrowToggleWrapper {
+  cursor: pointer;
+  transition: transform 150ms ease-in-out;
+  background-color: transparent;
+}
+
+.arrowToggleSidebar {
+  margin-top: 0.5rem;
 }

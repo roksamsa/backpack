@@ -5,4 +5,9 @@
     height: 100%;
     background-color: #f1f5ff; // #f1f6ff
     border-right: 1px solid #eaeff7;
+    transition: width 200ms ease-in-out;
+}
+
+.sidebarClosed {
+    width: calc(4rem + 25px);
 }
