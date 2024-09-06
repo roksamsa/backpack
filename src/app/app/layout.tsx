@@ -8,6 +8,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const { data: session, status } = useSession();
   const router = useRouter();
 
+  console.log("session", session);
+
   useEffect(() => {
     if (status === "loading") return;
     if (status === "unauthenticated") {

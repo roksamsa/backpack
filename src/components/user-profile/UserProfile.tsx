@@ -24,11 +24,15 @@ const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
             ) : (
               <div className={styles.userAvatarWithFirstLetter}>
                 {session?.user?.name?.[0]}
+                {session?.user?.lastname && session?.user?.lastname?.[0]}
               </div>
             )}
           </div>
           <div className={styles.userText}>
-            <div className={styles.userName}>{session?.user?.name}</div>
+            <div className={styles.userName}>
+              {session?.user?.name}
+              {session?.user?.lastname && ` ${session.user.lastname}`}
+            </div>
             <div className={styles.userEmail}>{session?.user?.email}</div>
           </div>
         </div>

@@ -59,8 +59,14 @@
 }
 
 .userAvatarWithFirstLetter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 3px;
+  background-color: #0b5adb;
+  border-radius: 50%;
   text-transform: uppercase;
-  font-weight: bold;
 }
 
 .userAvatar {
@@ -77,7 +83,6 @@
     inset: 0;
     border-radius: 50%;
     content: "";
-    //border: 2px solid #f1f5ff;
     background-color: #f1f5ff;
     overflow: hidden;
   }
