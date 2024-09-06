@@ -25,7 +25,7 @@
   display: flex;
   align-items: center;
   padding: 1.5rem 2rem;
-  transition: background-color 150ms ease-in-out;
+  transition: padding 150ms ease-in-out, background-color 150ms ease-in-out;
   cursor: pointer;
 
   &:hover {
