@@ -12,16 +12,83 @@ import React, { useState } from "react";
 import styles from "./AddNewCategoryModal.module.scss";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
+import { useSession } from "next-auth/react";
+import { fetchData } from "@/utils/apiHelper";
 
 const AddNewCategoryModal = () => {
   const {
     setIsAddingNewCategoryModalVisible,
     isAddingNewCategoryModalVisible,
+    setMainSections,
   } = useDataStoreContext();
+  const { data: session, status } = useSession();
 
   const [categoryName, setCategoryName] = React.useState<string>("");
   const [categorySlug, setCategorySlug] = React.useState<string>("");
   const [parentCategory, setParentCategory] = React.useState<string>("");
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
+    useState<boolean>(false);
+
+  const formatSlug = (value: string) => {
+    let slug = value
+      .replace(/[^a-zA-Z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+    slug = slug.replace(/^-/, "");
+
+    return slug;
+  };
+
+  const handleCategoryNameChange = (value: string) => {
+    setCategoryName(value);
+
+    if (!isSlugManuallyEdited) {
+      setCategorySlug(formatSlug(value));
+    }
+  };
+
+  const handleCategorySlugChange = (value: string) => {
+    setIsSlugManuallyEdited(true);
+    setCategorySlug(formatSlug(value));
+  };
+
+  const handleOnClose = async () => {
+    setIsAddingNewCategoryModalVisible(false);
+
+    try {
+      const response = await fetchData({
+        url: "/api/categories/create",
+        method: "POST",
+        body: {
+          userId: session?.user?.id,
+          name: categoryName,
+          link: `/app/${categorySlug}`,
+          properties: {
+            color: "red",
+            priority: 10,
+          },
+        },
+        options: {
+          onSuccess: async (data) => {
+            await fetchData({
+              url: "/api/categories/getMainSections",
+              query: { userId: session?.user?.id },
+              method: "GET",
+              options: {
+                onSuccess: (data) => {
+                  setMainSections(data);
+                },
+              },
+            });
+          },
+        },
+      });
+
+      console.log("Created category:", response);
+    } catch (error) {
+      console.error("Failed to create category:", error);
+    }
+  };
 
   return (
     <Modal
@@ -45,21 +112,21 @@ const AddNewCategoryModal = () => {
               </p>
               <Input
                 type="text"
-                label="Category name"
-                placeholder="Enter category name"
+                label="Section name"
+                placeholder="Enter section name"
                 value={categoryName}
-                onValueChange={setCategoryName}
+                onValueChange={handleCategoryNameChange}
               />
               <Input
                 type="text"
                 label="URL slug"
-                placeholder="Enter slug for new category"
+                placeholder="Enter slug for new catesectiongory"
                 value={categorySlug}
-                onValueChange={setCategorySlug}
+                onValueChange={handleCategorySlugChange}
               />
               <Select
-                label="Parent category"
-                placeholder="Select parent category"
+                label="Parent section"
+                placeholder="Select parent section"
                 className="max-w-xs"
                 selectedKeys={[parentCategory]}
                 onChange={(e) => setParentCategory(e.target.value)}
@@ -68,10 +135,10 @@ const AddNewCategoryModal = () => {
               </Select>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={handleOnClose}>
                 Cancel
               </Button>
-              <Button color="primary" onPress={onClose}>
+              <Button color="primary" onPress={handleOnClose}>
                 Add
               </Button>
             </ModalFooter>

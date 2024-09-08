@@ -24,6 +24,11 @@ html, body {
 body {
   color: rgb(var(--foreground-rgb));
   background-color: #f6f9ff;
+  font-family: "Cairo", system-ui;
+}
+
+h1 {
+    font-size: 1.7rem;
 }
 
 .page {
@@ -39,6 +44,35 @@ body {
         padding: 2rem;
         overflow: auto;
     }
+
+    &__headline {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e5e8ef;
+    }
+
+    &__headline-up {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin-bottom: .5rem;
+
+        h1 {
+            flex-grow: 1;
+        }
+    }
+
+    &__headline-down {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+}
+
+.text-small {
+    font-size: 1rem;
 }
 
 @layer utilities {

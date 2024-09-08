@@ -1,6 +1,7 @@
 "use client";
 
 import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewCategoryModal";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -14,8 +15,6 @@ export default function RootLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  console.log("session", session);
-
   useEffect(() => {
     if (status === "loading") return;
     if (status === "unauthenticated") {
@@ -27,7 +26,10 @@ export default function RootLayout({
 
   return (
     <DataStoreProvider>
-      <div className="page__wrapper">{children}</div>
+      <div className="page">
+        <Sidebar />
+        <div className="page__content">{children}</div>
+      </div>
       <div className="modals">
         <AddNewCategoryModal />
       </div>

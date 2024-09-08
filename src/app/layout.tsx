@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Cairo } from "next/font/google";
 
 import "./globals.scss";
 import AuthProvider from "@/context/AuthProvider";
@@ -8,7 +8,7 @@ export const metadata = {
   description: "Learn NextAuth.js by Dave Gray",
 };
 
-const inter = Inter({ subsets: ["latin"] });
+const cairo = Cairo({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cairo.className}>
         <AuthProvider>{children}</AuthProvider>;
       </body>
     </html>
