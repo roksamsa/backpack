@@ -10,6 +10,7 @@ import { Key, useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { useCallback } from "react";
 import { Skeleton } from "@nextui-org/skeleton";
+import ContentMetals from "@/components/content/ContentMetals";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -139,11 +140,7 @@ const CategoryPage = () => {
         </div>
       </div>
       <div className="content__wrapper">
-        <Card>
-          <CardBody>
-            <p>Make beautiful websites regardless of your design experience.</p>
-          </CardBody>
-        </Card>
+        <ContentMetals categoryId={selectedTab} />
       </div>
     </div>
   );

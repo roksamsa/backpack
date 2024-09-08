@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
-    // Extract userId from query parameters
     const url = new URL(req.url);
     const userId = url.searchParams.get("userId");
 
@@ -16,7 +15,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Fetch categories where userId is either null or matches the current userId
     const mainSections = await prisma.category.findMany({
       where: {
         OR: [{ userId: null }, { userId: userId }],
@@ -24,7 +22,6 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // Return the filtered categories
     return NextResponse.json(mainSections, { status: 200 });
   } catch (error) {
     console.error("Error fetching categories:", error);
