@@ -13,6 +13,7 @@ import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
+import toast from "react-hot-toast";
 
 const AddNewCategoryModal = () => {
   const {
@@ -26,8 +27,22 @@ const AddNewCategoryModal = () => {
   const [categoryName, setCategoryName] = React.useState<string>("");
   const [categorySlug, setCategorySlug] = React.useState<string>("");
   const [parentCategory, setParentCategory] = React.useState<string>("");
+  const [mainSectionsForDropdown, setMainSectionsForDropdown] = React.useState<
+    any[]
+  >([]);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
     useState<boolean>(false);
+
+  useEffect(() => {
+    const mainSectionsWithNoneSection = [
+      {
+        id: null,
+        name: "No parent section",
+      },
+      ...mainSections,
+    ];
+    setMainSectionsForDropdown(mainSectionsWithNoneSection);
+  }, [mainSections]);
 
   const formatSlug = (value: string) => {
     let slug = value
@@ -52,8 +67,14 @@ const AddNewCategoryModal = () => {
     setCategorySlug(formatSlug(value));
   };
 
-  const handleOnClose = async () => {
+  const handleOnCancel = async () => {
     setIsAddingNewCategoryModalVisible(false);
+    setCategoryName("");
+    setCategorySlug("");
+  };
+
+  const handleOnSave = async () => {
+    handleOnCancel();
 
     try {
       await fetchData({
@@ -71,6 +92,7 @@ const AddNewCategoryModal = () => {
         },
         options: {
           onSuccess: async (data) => {
+            toast("Successfully added new section!");
             await fetchData({
               url: "/api/categories/getMainSections",
               query: { userId: session?.user?.id },
@@ -119,7 +141,7 @@ const AddNewCategoryModal = () => {
               <Input
                 type="text"
                 label="URL slug"
-                placeholder="Enter slug for new catesectiongory"
+                placeholder="Enter slug for new section"
                 value={categorySlug}
                 onValueChange={handleCategorySlugChange}
               />
@@ -130,7 +152,7 @@ const AddNewCategoryModal = () => {
                 selectedKeys={[parentCategory]}
                 onChange={(e) => setParentCategory(e.target.value)}
               >
-                {mainSections.map((section: any) => (
+                {mainSectionsForDropdown.map((section: any) => (
                   <SelectItem key={section.id} value={section.id}>
                     {section.name}
                   </SelectItem>
@@ -138,10 +160,10 @@ const AddNewCategoryModal = () => {
               </Select>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={handleOnClose}>
+              <Button color="danger" variant="light" onPress={handleOnCancel}>
                 Cancel
               </Button>
-              <Button color="primary" onPress={handleOnClose}>
+              <Button color="primary" onPress={handleOnSave}>
                 Add
               </Button>
             </ModalFooter>

@@ -8,6 +8,7 @@ import { MdAdd } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
+import { Skeleton } from "@nextui-org/skeleton";
 
 const Menu = () => {
   const pathname = usePathname();
@@ -40,19 +41,30 @@ const Menu = () => {
 
   return (
     <div className={styles.menu}>
-      <ul className={styles.menuList}>
-        {mainSections.map((category: any, index: number) => (
-          <li
-            key={index}
-            className={`${styles.menuItem} ${
-              pathname === category.link ? styles.active : ""
-            }`}
-          >
-            <Link href={category.link}>{category.name}</Link>
-          </li>
-        ))}
-      </ul>
-
+      {mainSections?.length > 0 ? (
+        <ul className={styles.menuList}>
+          {mainSections.map((category: any, index: number) => (
+            <li
+              key={index}
+              className={`${styles.menuItem} ${
+                pathname === category.link ? styles.active : ""
+              }`}
+            >
+              <Link href={category.link}>{category.name}</Link>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="w-full flex items-center gap-3">
+          <div className="w-full flex flex-col gap-5">
+            <Skeleton className="h-10 w-5/5 rounded-full" />
+            <Skeleton className="h-10 w-5/5 rounded-full" />
+            <Skeleton className="h-10 w-5/5 rounded-full" />
+            <Skeleton className="h-10 w-5/5 rounded-full" />
+            <Skeleton className="h-10 w-5/5 rounded-full" />
+          </div>
+        </div>
+      )}
       <Button
         className={styles.addNewCategory}
         color="primary"

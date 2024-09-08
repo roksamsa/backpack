@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Key, useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 import { useCallback } from "react";
+import { Skeleton } from "@nextui-org/skeleton";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -79,7 +80,6 @@ const CategoryPage = () => {
   }, [searchParams, subSections]);
 
   useEffect(() => {
-    console.log("subSections", subSections);
     if (selectedTab && subSections.length > 0) {
       replace(
         `${pathname}?${createQueryString(
@@ -96,7 +96,15 @@ const CategoryPage = () => {
     <div className="content">
       <div className="content__headline">
         <div className="content__headline-up">
-          <h1>{pageData?.name}</h1>
+          {pageData?.name ? (
+            <h1>{pageData?.name}</h1>
+          ) : (
+            <div className="w-full flex items-center gap-3">
+              <div className="w-full flex flex-col gap-5">
+                <Skeleton className="h-8 w-11/12 rounded-full" />
+              </div>
+            </div>
+          )}
           <Button
             color="primary"
             radius="full"

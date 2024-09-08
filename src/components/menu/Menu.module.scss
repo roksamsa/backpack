@@ -1,33 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
 
 .menu {
-    flex-grow: 1;
-    overflow: hidden;
-    padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.menuList {
+  overflow: auto;
 }
 
 .menuItem {
-    margin-top: .3rem;
-    border-radius: 30px;
-    font-size: 1.2rem;
-    transition: background-color 150ms ease-in-out;
+  margin-top: 0.3rem;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  transition: background-color 150ms ease-in-out;
 
-    a {
-        display: block;
-        padding: .8rem 1rem;
-    }
+  a {
+    display: block;
+    padding: 0.8rem 1rem;
+  }
 
-    &:hover {
-        background-color: #dfe7f3;
-    }
+  &:hover {
+    background-color: #dfe7f3;
+  }
 
-    &.active {
-        background-color: #0b5adb;
-        color: #fff;
-    }
+  &.active {
+    background-color: #0b5adb;
+    color: #fff;
+  }
 }
 
 .addNewCategory {
-    width: 100%;
-    justify-content: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: 0.3rem;
 }

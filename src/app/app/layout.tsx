@@ -5,7 +5,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -33,6 +33,7 @@ export default function RootLayout({
       <div className="modals">
         <AddNewCategoryModal />
       </div>
+      <Toaster position="bottom-right" reverseOrder={false} />
     </DataStoreProvider>
   );
 }
