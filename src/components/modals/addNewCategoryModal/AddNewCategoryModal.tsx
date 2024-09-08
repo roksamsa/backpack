@@ -14,16 +14,17 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import toast from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 const AddNewCategoryModal = () => {
+  const pathname = usePathname();
+  const { data: session } = useSession();
   const {
     isAddingNewCategoryModalVisible,
     mainSections,
     setIsAddingNewCategoryModalVisible,
     setMainSections,
   } = useDataStoreContext();
-  const { data: session, status } = useSession();
-
   const [categoryName, setCategoryName] = React.useState<string>("");
   const [categorySlug, setCategorySlug] = React.useState<string>("");
   const [parentCategory, setParentCategory] = React.useState<string>("");
@@ -32,6 +33,14 @@ const AddNewCategoryModal = () => {
   >([]);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
     useState<boolean>(false);
+
+  useEffect(() => {
+    const selectedMainSection = mainSections.find(
+      (section: any) => section.link === pathname,
+    );
+
+    setParentCategory(selectedMainSection?.id.toString());
+  }, [mainSections, pathname]);
 
   useEffect(() => {
     const mainSectionsWithNoneSection = [
@@ -117,7 +126,7 @@ const AddNewCategoryModal = () => {
       onOpenChange={setIsAddingNewCategoryModalVisible}
     >
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
               Add new section to your backpack

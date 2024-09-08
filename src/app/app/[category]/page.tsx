@@ -13,16 +13,14 @@ import { Skeleton } from "@nextui-org/skeleton";
 
 const CategoryPage = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
   const {
     mainSections,
     setSubSections,
     subSections,
     setIsAddingNewCategoryModalVisible,
   } = useDataStoreContext();
-
-  const router = useRouter();
-  const { replace } = useRouter();
-  const searchParams = useSearchParams();
   const [pageData, setPageData] = useState<any[]>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
 
