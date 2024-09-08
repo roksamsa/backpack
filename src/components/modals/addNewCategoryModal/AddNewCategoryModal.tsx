@@ -101,7 +101,7 @@ const AddNewCategoryModal = () => {
         },
         options: {
           onSuccess: async (data) => {
-            toast("Successfully added new section!");
+            toast.success("Successfully added new section!");
             await fetchData({
               url: "/api/categories/getMainSections",
               query: { userId: session?.user?.id },
@@ -116,6 +116,7 @@ const AddNewCategoryModal = () => {
         },
       });
     } catch (error) {
+      toast.success("Failed to create new section!");
       console.error("Failed to create category:", error);
     }
   };
