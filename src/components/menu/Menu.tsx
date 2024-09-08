@@ -61,7 +61,7 @@ const Menu = () => {
         onClick={() => setIsAddingNewCategoryModalVisible(true)}
         startContent={<MdAdd />}
       >
-        Add new category
+        Add new section
       </Button>
     </div>
   );
