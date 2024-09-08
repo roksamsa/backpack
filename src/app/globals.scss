@@ -79,6 +79,12 @@ h1 {
     align-items: center;
     width: 100%;
   }
+
+  &__add-new-section {
+    width: 3rem;
+    min-width: 3rem;
+    padding: 0;
+  }
 }
 
 .text-small {

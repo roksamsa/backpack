@@ -15,14 +15,14 @@ export default function RootLayout({
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (status === "loading") return;
     if (status === "unauthenticated") {
       router.push("/login");
     } else {
       router.push("/app");
     }
-  }, [status, router]);
+  }, [status, router]);*/
 
   return (
     <DataStoreProvider>

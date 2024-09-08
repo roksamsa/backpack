@@ -7,9 +7,8 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import styles from "./AddNewCategoryModal.module.scss";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useSession } from "next-auth/react";
@@ -17,8 +16,9 @@ import { fetchData } from "@/utils/apiHelper";
 
 const AddNewCategoryModal = () => {
   const {
-    setIsAddingNewCategoryModalVisible,
     isAddingNewCategoryModalVisible,
+    mainSections,
+    setIsAddingNewCategoryModalVisible,
     setMainSections,
   } = useDataStoreContext();
   const { data: session, status } = useSession();
@@ -56,13 +56,14 @@ const AddNewCategoryModal = () => {
     setIsAddingNewCategoryModalVisible(false);
 
     try {
-      const response = await fetchData({
+      await fetchData({
         url: "/api/categories/create",
         method: "POST",
         body: {
           userId: session?.user?.id,
           name: categoryName,
           link: `/app/${categorySlug}`,
+          parentId: +parentCategory,
           properties: {
             color: "red",
             priority: 10,
@@ -83,8 +84,6 @@ const AddNewCategoryModal = () => {
           },
         },
       });
-
-      console.log("Created category:", response);
     } catch (error) {
       console.error("Failed to create category:", error);
     }
@@ -131,7 +130,11 @@ const AddNewCategoryModal = () => {
                 selectedKeys={[parentCategory]}
                 onChange={(e) => setParentCategory(e.target.value)}
               >
-                <SelectItem key="334324">Test</SelectItem>
+                {mainSections.map((section: any) => (
+                  <SelectItem key={section.id} value={section.id}>
+                    {section.name}
+                  </SelectItem>
+                ))}
               </Select>
             </ModalBody>
             <ModalFooter>

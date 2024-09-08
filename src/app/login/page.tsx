@@ -15,8 +15,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("status", session);
-
   useEffect(() => {
     if (status === "loading") return;
     if (status === "unauthenticated") {
