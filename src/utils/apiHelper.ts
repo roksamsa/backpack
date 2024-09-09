@@ -1,7 +1,3 @@
-// utils/apiHelper.ts
-
-type Callback = () => void;
-
 interface FetchOptions {
   method: string;
   headers: Record<string, string>;

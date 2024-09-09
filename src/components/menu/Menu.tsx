@@ -43,6 +43,14 @@ const Menu = () => {
     <div className={styles.menu}>
       {mainSections?.length > 0 ? (
         <ul className={styles.menuList}>
+          <li
+            key="dashboard"
+            className={`${styles.menuItem} ${
+              pathname === "/app" ? styles.active : ""
+            }`}
+          >
+            <Link href="/app">Dashboard</Link>
+          </li>
           {mainSections.map((category: any, index: number) => (
             <li
               key={index}

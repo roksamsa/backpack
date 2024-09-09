@@ -49,12 +49,14 @@ const ContentMetals: React.FC<ContentMetalsProps> = ({ categoryId }) => {
   return (
     <div className="test">
       {items.map((item: any) => (
-        <Card>
+        <Card key={item.id}>
           <CardBody>
-            <div className="test">{item.type}</div>
-            <div className="test">{item.title}</div>
-            <div className="test">{item.status}</div>
-            <div className="test">{item.value}</div>
+            <div className="card__wrapper">
+              <div className="test">{item.type}</div>
+              <div className="test">{item.title}</div>
+              <div className="test">{item.status}</div>
+              <div className="test">{item.value}</div>
+            </div>
           </CardBody>
         </Card>
       ))}

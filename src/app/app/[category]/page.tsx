@@ -24,6 +24,7 @@ const CategoryPage = () => {
   } = useDataStoreContext();
   const [pageData, setPageData] = useState<any[]>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
+  const [prevPathname, setPrevPathname] = useState<string>(pathname);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -75,8 +76,18 @@ const CategoryPage = () => {
 
   useEffect(() => {
     const subSectionId = searchParams.get("subSectionId");
-    if (subSectionId) setSelectedTab(subSectionId.toString());
-  }, [searchParams, subSections]);
+
+    if (pathname !== prevPathname) {
+      setPrevPathname(pathname);
+    }
+
+    console.log("pathname", pathname);
+    console.log("prevPathname", prevPathname);
+
+    if (subSectionId && pathname === prevPathname) {
+      setSelectedTab(subSectionId.toString());
+    }
+  }, [searchParams, subSections, pathname]);
 
   useEffect(() => {
     if (selectedTab && subSections.length > 0) {
@@ -89,6 +100,8 @@ const CategoryPage = () => {
     } else {
       replace(`${pathname}`);
     }
+
+    console.log("selectedTab", selectedTab);
   }, [pathname, selectedTab, subSections.length]);
 
   return (
@@ -116,10 +129,11 @@ const CategoryPage = () => {
         <div className="content__headline-down">
           {subSections.length > 0 && (
             <Tabs
-              aria-label="Dynamic tabs"
+              aria-label="Subsections tabs"
               color="primary"
               radius="full"
               variant="light"
+              className="content__headline-tabs"
               items={subSections}
               selectedKey={selectedTab}
               onSelectionChange={setSelectedTab}

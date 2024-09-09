@@ -1,7 +1,3 @@
-"use client";
-
-import Sidebar from "@/components/sidebar/Sidebar";
-
 const SignIn = () => {
   return (
     <div className="page">
