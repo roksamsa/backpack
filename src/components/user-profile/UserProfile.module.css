@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+.sidebarClosed .userText {
+  display: none;
+}
+.sidebarClosed .userProfile {
+  justify-content: center;
+  padding: 1.5rem 1rem;
+}
+.sidebarClosed .userAvatar {
+  margin-right: 0;
+}
+
+.userProfileLoading {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  transition: padding 150ms ease-in-out, background-color 150ms ease-in-out;
+  cursor: pointer;
+}
+.userProfile:hover {
+  background-color: #dfe7f3;
+}
+
+.userAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: 1rem;
+  border-radius: 50%;
+  color: white;
+}
+
+.userText {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  margin-bottom: -2px;
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.userEmail {
+  font-size: 0.9rem;
+}
+
+.userAvatarWithFirstLetter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 3px;
+  background-color: #0b5adb;
+  border-radius: 50%;
+  text-transform: uppercase;
+}
+
+.userAvatar {
+  flex-shrink: 0;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #cdd4de;
+  box-sizing: content-box;
+  padding: 2px;
+}
+.userAvatar::before {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  content: "";
+  background-color: #f1f5ff;
+  overflow: hidden;
+}
+.userAvatar img {
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+}/*# sourceMappingURL=UserProfile.module.css.map */

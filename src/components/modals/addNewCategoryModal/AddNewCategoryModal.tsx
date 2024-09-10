@@ -13,8 +13,12 @@ import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
-import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
+
+import toast from "react-hot-toast";
+import IconPicker from "@/components/icon-selector/IconSelector";
+
+import styles from "./AddNewCategoryModal.module.scss";
 
 const AddNewCategoryModal = () => {
   const pathname = usePathname();
@@ -33,25 +37,8 @@ const AddNewCategoryModal = () => {
   >([]);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
     useState<boolean>(false);
-
-  useEffect(() => {
-    const selectedMainSection = mainSections.find(
-      (section: any) => section.link === pathname,
-    );
-
-    setParentCategory(selectedMainSection?.id.toString());
-  }, [mainSections, pathname]);
-
-  useEffect(() => {
-    const mainSectionsWithNoneSection = [
-      {
-        id: null,
-        name: "No parent section",
-      },
-      ...mainSections,
-    ];
-    setMainSectionsForDropdown(mainSectionsWithNoneSection);
-  }, [mainSections]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("");
 
   const formatSlug = (value: string) => {
     let slug = value
@@ -62,6 +49,10 @@ const AddNewCategoryModal = () => {
 
     return slug;
   };
+
+  useEffect(() => {
+    console.log(selectedIcon);
+  }, [selectedIcon]);
 
   const handleCategoryNameChange = (value: string) => {
     setCategoryName(value);
@@ -95,8 +86,7 @@ const AddNewCategoryModal = () => {
           link: `/app/${categorySlug}`,
           parentId: +parentCategory,
           properties: {
-            color: "red",
-            priority: 10,
+            icon: selectedIcon,
           },
         },
         options: {
@@ -121,6 +111,25 @@ const AddNewCategoryModal = () => {
     }
   };
 
+  useEffect(() => {
+    const selectedMainSection = mainSections.find(
+      (section: any) => section.link === pathname,
+    );
+
+    setParentCategory(selectedMainSection?.id.toString());
+  }, [mainSections, pathname]);
+
+  useEffect(() => {
+    const mainSectionsWithNoneSection = [
+      {
+        id: null,
+        name: "No parent section",
+      },
+      ...mainSections,
+    ];
+    setMainSectionsForDropdown(mainSectionsWithNoneSection);
+  }, [mainSections]);
+
   return (
     <Modal
       isOpen={isAddingNewCategoryModalVisible}
@@ -136,10 +145,7 @@ const AddNewCategoryModal = () => {
               <p>
                 Magna exercitation reprehenderit magna aute tempor cupidatat
                 consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                aliqua enim laboris do dolor eiusmod. Et mollit incididunt nisi
-                consectetur esse laborum eiusmod pariatur proident Lorem eiusmod
-                et. Culpa deserunt nostrud ad veniam.
+                incididunt cillum quis.
               </p>
               <Input
                 type="text"
@@ -168,6 +174,7 @@ const AddNewCategoryModal = () => {
                   </SelectItem>
                 ))}
               </Select>
+              <IconPicker onSelectIcon={setSelectedIcon} />
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={handleOnCancel}>

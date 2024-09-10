@@ -3,7 +3,7 @@ import { Cairo } from "next/font/google";
 import "./globals.scss";
 import AuthProvider from "@/context/AuthProvider";
 
-export const metadata = {
+const metadata = {
   title: "Backpack",
   description: "Learn NextAuth.js by Dave Gray",
 };

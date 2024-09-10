@@ -9,6 +9,7 @@ import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
+import IconDisplay from "../icon-display/IconDisplay";
 
 const Menu = () => {
   const pathname = usePathname();
@@ -37,7 +38,7 @@ const Menu = () => {
 
       fetchSections();
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, setMainSections]);
 
   return (
     <div className={styles.menu}>
@@ -49,7 +50,9 @@ const Menu = () => {
               pathname === "/app" ? styles.active : ""
             }`}
           >
-            <Link href="/app">Dashboard</Link>
+            <Link className={styles.menuItemLink} href="/app">
+              <div className={styles.menuItemLinkWrapper}>Dashboard</div>
+            </Link>
           </li>
           {mainSections.map((category: any, index: number) => (
             <li
@@ -58,7 +61,15 @@ const Menu = () => {
                 pathname === category.link ? styles.active : ""
               }`}
             >
-              <Link href={category.link}>{category.name}</Link>
+              <Link href={category.link} className={styles.menuItemLink}>
+                <div className={styles.menuItemLinkWrapper}>
+                  <IconDisplay
+                    className={styles.menuItemIcon}
+                    iconName={category.properties.icon}
+                  />
+                  {category.name}
+                </div>
+              </Link>
             </li>
           ))}
         </ul>

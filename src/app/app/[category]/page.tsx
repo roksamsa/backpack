@@ -24,7 +24,11 @@ const CategoryPage = () => {
   } = useDataStoreContext();
   const [pageData, setPageData] = useState<any[]>([]);
   const [selectedTab, setSelectedTab] = useState<string | null>(null);
-  const [prevPathname, setPrevPathname] = useState<string>(pathname);
+  const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(
+    null,
+  );
+  const [prevPathname, setPrevPathname] = useState<string>();
+  const [currentPathname, setCurrentPathname] = useState<string>(pathname);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -33,14 +37,20 @@ const CategoryPage = () => {
       if (pageData?.id) {
         params.set(name, value);
       } else {
-        // Remove the query parameter if pageData changes or is invalid
         params.delete("subSectionId");
       }
 
       return params.toString();
     },
-    [searchParams, pageData, subSections], // Add pageData as a dependency
+    [searchParams, pageData],
   );
+
+  useEffect(() => {
+    if (currentPathname !== pathname) {
+      setPrevPathname(currentPathname);
+      setCurrentPathname(pathname);
+    }
+  }, [pathname, currentPathname]);
 
   useEffect(() => {
     const selectedMainSection = mainSections.find(
@@ -76,18 +86,8 @@ const CategoryPage = () => {
 
   useEffect(() => {
     const subSectionId = searchParams.get("subSectionId");
-
-    if (pathname !== prevPathname) {
-      setPrevPathname(pathname);
-    }
-
-    console.log("pathname", pathname);
-    console.log("prevPathname", prevPathname);
-
-    if (subSectionId && pathname === prevPathname) {
-      setSelectedTab(subSectionId.toString());
-    }
-  }, [searchParams, subSections, pathname]);
+    setSubSectionIdQuery(subSectionId);
+  }, [searchParams]);
 
   useEffect(() => {
     if (selectedTab && subSections.length > 0) {
@@ -102,7 +102,7 @@ const CategoryPage = () => {
     }
 
     console.log("selectedTab", selectedTab);
-  }, [pathname, selectedTab, subSections.length]);
+  }, [pathname, selectedTab, subSections.length, createQueryString, replace]);
 
   return (
     <div className="content">
@@ -154,7 +154,9 @@ const CategoryPage = () => {
         </div>
       </div>
       <div className="content__wrapper">
-        <ContentMetals categoryId={selectedTab} />
+        {selectedTab === subSectionIdQuery && (
+          <ContentMetals categoryId={selectedTab} />
+        )}
       </div>
     </div>
   );

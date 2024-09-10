@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+html,
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background-color: #f6f9ff;
+  font-family: "Cairo", system-ui;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.page {
+  display: flex;
+  height: 100%;
+}
+.page__wrapper {
+  height: 100%;
+}
+.page__content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow: auto;
+}
+
+.card__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  flex-grow: 1;
+}
+.content__wrapper {
+  flex-grow: 1;
+}
+.content__headline {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e8ef;
+}
+.content__headline-up {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+.content__headline-up h1 {
+  flex-grow: 1;
+}
+.content__headline-down {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+.content__headline-tabs {
+  overflow: hidden;
+}
+.content__add-new-section {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3rem;
+  min-width: 3rem;
+  margin-left: 0.5rem;
+  padding: 0;
+}
+
+.text-small {
+  font-size: 1.1rem;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}/*# sourceMappingURL=globals.css.map */

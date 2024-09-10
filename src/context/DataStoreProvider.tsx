@@ -9,7 +9,16 @@ interface DataStoreProviderType {
   subSections: any[];
 }
 
-const DataStoreContext = createContext<DataStoreProviderType | null>(null);
+const initialState: DataStoreProviderType = {
+  isAddingNewCategoryModalVisible: false,
+  mainSections: [],
+  subSections: [],
+  setIsAddingNewCategoryModalVisible: () => {},
+  setMainSections: () => {},
+  setSubSections: () => {},
+};
+
+const DataStoreContext = createContext<DataStoreProviderType>(initialState);
 
 export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
   const [isAddingNewCategoryModalVisible, setIsAddingNewCategoryModalVisible] =

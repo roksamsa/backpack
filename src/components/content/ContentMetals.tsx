@@ -42,14 +42,20 @@ const ContentMetals: React.FC<ContentMetalsProps> = ({ categoryId }) => {
   }, [categoryId]);
 
   /*https://api.metals.dev/v1/latest
-?api_key=R8CGBIGWYKNKAO4NZUIL3594NZUIL
+?api_key=
 &currency=EUR
 &unit=g*/
 
   return (
     <div className="test">
       {items.map((item: any) => (
-        <Card key={item.id}>
+        <Card
+          key={item.id}
+          radius="sm"
+          shadow="md"
+          isHoverable={true}
+          isPressable={false}
+        >
           <CardBody>
             <div className="card__wrapper">
               <div className="test">{item.type}</div>

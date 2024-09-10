@@ -1,8 +1,10 @@
 import React from "react";
+import Image from "next/image";
 
-import styles from "./UserProfile.module.scss";
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@nextui-org/skeleton";
+
+import styles from "./UserProfile.module.scss";
 
 const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const { data: session } = useSession();
@@ -17,10 +19,11 @@ const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>
             {session?.user?.image ? (
-              <img
+              <Image
+                alt={session?.user?.name!}
                 title={session?.user?.name!}
                 src={session?.user?.image!}
-              ></img>
+              />
             ) : (
               <div className={styles.userAvatarWithFirstLetter}>
                 {session?.user?.name?.[0]}

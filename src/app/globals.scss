@@ -89,7 +89,6 @@ h1 {
   }
 
   &__headline-tabs {
-    width: 100%;
     overflow: hidden;
   }
 
@@ -99,7 +98,7 @@ h1 {
     flex-shrink: 0;
     width: 3rem;
     min-width: 3rem;
-    margin-left: 1rem;
+    margin-left: .5rem;
     padding: 0;
   }
 }

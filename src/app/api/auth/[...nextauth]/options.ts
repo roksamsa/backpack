@@ -22,7 +22,7 @@ export interface CustomSession {
   };
   expires: ISODateString;
 }
-export interface CustomUser {
+interface CustomUser {
   id: string;
   name?: string | null;
   lastname?: string | null;
@@ -90,13 +90,15 @@ export const options: NextAuthOptions = {
         }
 
         // Verify password
-        const isValidPassword = await compare(
-          credentials.password,
-          user.hashedPassword,
-        );
+        if (user.hashedPassword) {
+          const isValidPassword = await compare(
+            credentials.password,
+            user.hashedPassword,
+          );
 
-        if (!isValidPassword) {
-          throw new Error("Invalid password");
+          if (!isValidPassword) {
+            throw new Error("Invalid password");
+          }
         }
 
         // If authentication succeeds, return the user object

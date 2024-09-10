@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
-
 .menu {
   display: flex;
   flex-direction: column;
@@ -14,40 +13,25 @@
 }
 
 .menuItem {
-  display: flex;
-  align-items: center;
   margin-top: 0.3rem;
   border-radius: 30px;
   font-size: 1.2rem;
   transition: background-color 150ms ease-in-out;
-
-  &:hover {
-    background-color: #dfe7f3;
-  }
-
-  &.active {
-    background-color: #0b5adb;
-    color: #fff;
-  }
 }
-
-.menuItemLink {
+.menuItem a {
   display: block;
-  width: 100%;
   padding: 0.8rem 1rem;
 }
-
-.menuItemLinkWrapper {
-  display: flex;
-  align-items: center;
+.menuItem:hover {
+  background-color: #dfe7f3;
 }
-
-.menuItemIcon {
-    margin-right: 1rem;
+.menuItem.active {
+  background-color: #0b5adb;
+  color: #fff;
 }
 
 .addNewCategory {
   justify-content: flex-start;
   width: 100%;
   margin-top: 0.3rem;
-}
+}/*# sourceMappingURL=Menu.module.css.map */
