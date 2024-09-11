@@ -49,10 +49,10 @@ h1 {
 }
 
 .card {
-    &__wrapper {
-        display: flex;
-        justify-content: space-between;
-    }
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .content {
@@ -92,13 +92,22 @@ h1 {
     overflow: hidden;
   }
 
+  &__headline-icon {
+    margin-right: 1rem;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
   &__add-new-section {
     display: flex;
     justify-content: center;
     flex-shrink: 0;
     width: 3rem;
     min-width: 3rem;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
     padding: 0;
   }
 }

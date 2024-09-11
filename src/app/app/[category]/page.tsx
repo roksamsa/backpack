@@ -11,6 +11,7 @@ import { MdAdd } from "react-icons/md";
 import { useCallback } from "react";
 import { Skeleton } from "@nextui-org/skeleton";
 import ContentMetals from "@/components/content/ContentMetals";
+import IconDisplay from "@/components/icon-display/IconDisplay";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -100,7 +101,6 @@ const CategoryPage = () => {
     } else {
       replace(`${pathname}`);
     }
-
   }, [pathname, selectedTab, subSections.length, createQueryString, replace]);
 
   return (
@@ -108,7 +108,13 @@ const CategoryPage = () => {
       <div className="content__headline">
         <div className="content__headline-up">
           {pageData?.name ? (
-            <h1>{pageData?.name}</h1>
+            <>
+              <IconDisplay
+                iconName={pageData.properties?.icon}
+                className="content__headline-icon"
+              />
+              <h1>{pageData?.name}</h1>
+            </>
           ) : (
             <div className="w-full flex items-center gap-3">
               <div className="w-full flex flex-col gap-5">
