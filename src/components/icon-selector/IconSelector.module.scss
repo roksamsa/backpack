@@ -1,8 +1,9 @@
 .modalIconsWrapper {
   width: 100%;
-  height: 200px;
+  height: 150px;
   overflow: hidden;
-  margin-top: 1rem;
+  overflow-y: auto;
+  margin-top: .5rem;
   border: 1px solid #ddd;
   border-radius: 6px;
 }
@@ -10,23 +11,27 @@
 .modalIcons {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: .2rem;
+  gap: 10px;
   width: 100%;
   height: 100%;
-  overflow: auto;
 }
 
 .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: .5rem 0;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: transform 150ms ease-in-out, background-color 150ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 150ms ease-in-out, background-color 150ms ease-in-out;
 
-    &:hover {
-        transform: scale(1.2);
-        background-color: #eee;
-    }
+  &:hover {
+    transform: scale(1.2);
+    background-color: #eee;
+  }
+
+  &.iconSelected {
+    background-color: #006fee;
+    color: #fff;
+  }
 }

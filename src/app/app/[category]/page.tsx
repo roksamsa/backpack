@@ -101,7 +101,6 @@ const CategoryPage = () => {
       replace(`${pathname}`);
     }
 
-    console.log("selectedTab", selectedTab);
   }, [pathname, selectedTab, subSections.length, createQueryString, replace]);
 
   return (

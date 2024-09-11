@@ -50,10 +50,6 @@ const AddNewCategoryModal = () => {
     return slug;
   };
 
-  useEffect(() => {
-    console.log(selectedIcon);
-  }, [selectedIcon]);
-
   const handleCategoryNameChange = (value: string) => {
     setCategoryName(value);
 
