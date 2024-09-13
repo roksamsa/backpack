@@ -2,16 +2,17 @@
 
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { fetchData } from "@/utils/apiHelper";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody } from "@nextui-org/card";
+import { Button, ButtonGroup } from "@nextui-org/button";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Key, useEffect, useState } from "react";
-import { MdAdd } from "react-icons/md";
-import { useCallback } from "react";
+import { useEffect, useState } from "react";
+import { MdAdd, MdGridView, MdSplitscreen } from "react-icons/md";
 import { Skeleton } from "@nextui-org/skeleton";
+
 import ContentMetals from "@/components/content/ContentMetals";
 import IconDisplay from "@/components/icon-display/IconDisplay";
+import React from "react";
+import LogoSvg from "@/components/logo/LogoSvg";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -22,48 +23,33 @@ const CategoryPage = () => {
     setSubSections,
     subSections,
     setIsAddingNewCategoryModalVisible,
+    setIsAddingNewItemModalVisible,
   } = useDataStoreContext();
   const [pageData, setPageData] = useState<any[]>([]);
-  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+  const [selectedTab, setSelectedTab] = useState<string>("");
+  const [metalsData, setMetalsData] = useState<any[]>([]);
   const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(
     null,
   );
-  const [prevPathname, setPrevPathname] = useState<string>();
-  const [currentPathname, setCurrentPathname] = useState<string>(pathname);
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (pageData?.id) {
-        params.set(name, value);
-      } else {
-        params.delete("subSectionId");
-      }
-
-      return params.toString();
-    },
-    [searchParams, pageData],
+  const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
+    "content__wrapper rows",
   );
 
-  useEffect(() => {
-    if (currentPathname !== pathname) {
-      setPrevPathname(currentPathname);
-      setCurrentPathname(pathname);
-    }
-  }, [pathname, currentPathname]);
+  const handleToggleViewClick = (type: string) => {
+    if (type === "grid") setContentWrapperClasses("content__wrapper grid");
+    if (type === "rows") setContentWrapperClasses("content__wrapper rows");
+  };
 
   useEffect(() => {
     const selectedMainSection = mainSections.find(
       (section: any) => section.link === pathname,
     );
+
     setPageData(selectedMainSection || null);
   }, [mainSections, pathname]);
 
   useEffect(() => {
     if (pageData?.id) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("subSectionId");
       const fetchSubSections = async () => {
         try {
           await fetchData({
@@ -83,25 +69,49 @@ const CategoryPage = () => {
 
       fetchSubSections();
     }
-  }, [pageData, searchParams, setSubSections]);
+  }, [pageData, setSubSections]);
+
+  useEffect(() => {
+    if (subSectionIdQuery) {
+      const fetchSections = async () => {
+        try {
+          await fetchData({
+            url: "/api/items/getItemsBySection",
+            query: { categoryId: subSectionIdQuery },
+            method: "GET",
+            options: {
+              onSuccess: (data) => {
+                setMetalsData(data);
+              },
+            },
+          });
+        } catch (error) {
+          console.error("Failed to create category:", error);
+        }
+      };
+
+      fetchSections();
+    }
+  }, [subSectionIdQuery]);
 
   useEffect(() => {
     const subSectionId = searchParams.get("subSectionId");
-    setSubSectionIdQuery(subSectionId);
+
+    if (subSectionId) {
+      setSubSectionIdQuery(subSectionId);
+      setSelectedTab(subSectionId);
+    }
   }, [searchParams]);
 
   useEffect(() => {
     if (selectedTab && subSections.length > 0) {
-      replace(
-        `${pathname}?${createQueryString(
-          "subSectionId",
-          selectedTab.toString(),
-        )}`,
-      );
+      const params = new URLSearchParams(searchParams);
+      params.set("subSectionId", selectedTab);
+      replace(`${pathname}?${params.toString()}`);
     } else {
       replace(`${pathname}`);
     }
-  }, [pathname, selectedTab, subSections.length, createQueryString, replace]);
+  }, [selectedTab, searchParams, pathname, replace, subSections.length]);
 
   return (
     <div className="content">
@@ -122,14 +132,42 @@ const CategoryPage = () => {
               </div>
             </div>
           )}
-          <Button
-            color="primary"
-            radius="full"
-            variant="shadow"
-            startContent={<MdAdd />}
-          >
-            Add new item
-          </Button>
+
+          <div className="content__headline-actions">
+            <ButtonGroup className="content__toggle-view">
+              <Button
+                isIconOnly
+                color={
+                  contentWrapperClasses.includes("rows") ? "primary" : "default"
+                }
+                radius="full"
+                variant="light"
+                className="button icon-only"
+                startContent={<MdSplitscreen />}
+                onPress={() => handleToggleViewClick("rows")}
+              ></Button>
+              <Button
+                isIconOnly
+                color={
+                  contentWrapperClasses.includes("grid") ? "primary" : "default"
+                }
+                radius="full"
+                variant="light"
+                className="button icon-only"
+                startContent={<MdGridView />}
+                onPress={() => handleToggleViewClick("grid")}
+              ></Button>
+            </ButtonGroup>
+            <Button
+              color="primary"
+              radius="full"
+              variant="shadow"
+              startContent={<MdAdd />}
+              onPress={() => setIsAddingNewItemModalVisible(true)}
+            >
+              Add new item
+            </Button>
+          </div>
         </div>
         <div className="content__headline-down">
           {subSections.length > 0 && (
@@ -141,28 +179,38 @@ const CategoryPage = () => {
               className="content__headline-tabs"
               items={subSections}
               selectedKey={selectedTab}
-              onSelectionChange={setSelectedTab}
+              onSelectionChange={(key) => setSelectedTab(String(key))}
             >
               {(item) => <Tab key={item.id} title={item.name}></Tab>}
             </Tabs>
           )}
           <Button
+            isIconOnly={subSections.length > 0}
             color="primary"
             variant="light"
             radius="full"
             startContent={<MdAdd />}
             onPress={() => setIsAddingNewCategoryModalVisible(true)}
-            className={subSections.length > 0 ? "content__add-new-section" : ""}
+            className={
+              subSections.length > 0
+                ? "button icon-only content__add-new-section"
+                : "button"
+            }
           >
             {subSections.length === 0 && "Add new subsection"}
           </Button>
         </div>
       </div>
-      <div className="content__wrapper">
-        {selectedTab === subSectionIdQuery && (
-          <ContentMetals categoryId={selectedTab} />
-        )}
-      </div>
+      {metalsData.length ? (
+        <div className={contentWrapperClasses}>
+          <ContentMetals data={metalsData} />
+        </div>
+      ) : (
+        <div className="no-data">
+          <LogoSvg />
+          <p>No items in you backpack yet :(</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewCategoryModal";
+import AddNewItemModal from "@/components/modals/addNewItemModal/AddNewItemModal";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
@@ -32,6 +33,7 @@ export default function RootLayout({
       </div>
       <div className="modals">
         <AddNewCategoryModal />
+        <AddNewItemModal />
       </div>
       <Toaster position="bottom-right" reverseOrder={false} />
     </DataStoreProvider>

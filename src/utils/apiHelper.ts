@@ -49,6 +49,8 @@ export async function fetchData({
     if (onSuccess) {
       onSuccess(data);
     }
+
+    return data;
   } catch (error) {
     if (error instanceof Error) {
       if (onError) {
@@ -59,6 +61,8 @@ export async function fetchData({
     } else {
       console.error("Unknown error:", error);
     }
+
+    return error;
   } finally {
     if (onFinish) {
       onFinish();

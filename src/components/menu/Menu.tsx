@@ -4,7 +4,7 @@ import styles from "./Menu.module.scss";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/button";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdOutlineDashboard } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
@@ -51,7 +51,13 @@ const Menu = () => {
             }`}
           >
             <Link className={styles.menuItemLink} href="/app">
-              <div className={styles.menuItemLinkWrapper}>Dashboard</div>
+              <div className={styles.menuItemLinkWrapper}>
+                <IconDisplay
+                  className={styles.menuItemIcon}
+                  iconName="MdOutlineDashboard"
+                />
+                Dashboard
+              </div>
             </Link>
           </li>
           {mainSections.map((category: any, index: number) => (

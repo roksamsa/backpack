@@ -18,8 +18,6 @@ import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import IconPicker from "@/components/icon-selector/IconSelector";
 
-import styles from "./AddNewCategoryModal.module.scss";
-
 const AddNewCategoryModal = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -37,7 +35,6 @@ const AddNewCategoryModal = () => {
   >([]);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
     useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("");
 
   const formatSlug = (value: string) => {
