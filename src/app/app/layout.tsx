@@ -31,7 +31,10 @@ export default function RootLayout({
         <Sidebar />
         <div className="page__content">
           <div className="page__backpack-bg"></div>
-          <div className="page__backpack-man"></div>
+          <div className="page__backpack-man">
+            <div className="page__backpack-man-shadow"></div>
+            <div className="page__backpack-man-figure"></div>
+          </div>
           {children}
         </div>
       </div>
