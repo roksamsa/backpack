@@ -29,7 +29,11 @@ export default function RootLayout({
     <DataStoreProvider>
       <div className="page">
         <Sidebar />
-        <div className="page__content">{children}</div>
+        <div className="page__content">
+          <div className="page__backpack-bg"></div>
+          <div className="page__backpack-man"></div>
+          {children}
+        </div>
       </div>
       <div className="modals">
         <AddNewCategoryModal />

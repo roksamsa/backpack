@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@mixin randomAnimation(
+  $minDuration: 1s,
+  $maxDuration: 3s,
+  $minDelay: 1s,
+  $maxDelay: 3s
+) {
+  animation-duration: #{random($maxDuration - $minDuration + 1) + $minDuration};
+  animation-delay: #{random($maxDelay - $minDelay + 1) + $minDelay};
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: random(300); // Only run once, will restart after delay
+  animation-fill-mode: forwards; // Keeps the final state after the animation completes
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -49,7 +76,7 @@ h1 {
 }
 
 .content-item {
-    flex-grow: 0;
+  flex-grow: 0;
 }
 
 .page {
@@ -65,6 +92,35 @@ h1 {
     flex-grow: 1;
     padding: 2rem;
     overflow: auto;
+  }
+
+  &__backpack-bg {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60%;
+    height: 700px;
+    background-image: url("/backpack-bg.svg");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: 100%;
+    opacity: .8;
+  }
+
+  &__backpack-man {
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
+    width: 250px;
+    height: 500px;
+    background-image: url("/backpack-man.svg");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: 100%;
+    animation-name: float;
+    @include randomAnimation(1s, 3s, 1s, 5s);
+    animation-name: float;
+    animation-delay: #{random(5)}s;
   }
 }
 
