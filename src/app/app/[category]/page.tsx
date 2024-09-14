@@ -204,6 +204,15 @@ const CategoryPage = () => {
       {metalsData.length ? (
         <div className={contentWrapperClasses}>
           <ContentMetals data={metalsData} />
+          <Button
+            color="primary"
+            radius="full"
+            variant="solid"
+            startContent={<MdAdd />}
+            onPress={() => setIsAddingNewItemModalVisible(true)}
+          >
+            Add new item
+          </Button>
         </div>
       ) : (
         <div className="no-data">

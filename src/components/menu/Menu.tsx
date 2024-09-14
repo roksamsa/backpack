@@ -4,21 +4,17 @@ import SimpleBar from "simplebar-react";
 import MenuItem from "./MenuItem";
 
 import { usePathname } from "next/navigation";
-import { Button } from "@nextui-org/button";
-import { MdAdd } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
-import { Tooltip } from "@nextui-org/tooltip";
 
 import "simplebar-react/dist/simplebar.min.css";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
+  const skeletonItems = Array.from({ length: 10 });
   const pathname = usePathname();
   const { data: session } = useSession();
-  const [isAddNewSectionHovered, setIsAddNewSectionHovered] =
-    useState<boolean>(false);
   const { setIsAddingNewCategoryModalVisible, setMainSections, mainSections } =
     useDataStoreContext();
 
@@ -91,13 +87,11 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
           </ul>
         </SimpleBar>
       ) : (
-        <div className="w-full flex items-center gap-3">
+        <div className={styles.menuList + " w-full flex items-center gap-3"}>
           <div className="w-full flex flex-col gap-5">
-            <Skeleton className="h-10 w-5/5 rounded-full" />
-            <Skeleton className="h-10 w-5/5 rounded-full" />
-            <Skeleton className="h-10 w-5/5 rounded-full" />
-            <Skeleton className="h-10 w-5/5 rounded-full" />
-            <Skeleton className="h-10 w-5/5 rounded-full" />
+            {skeletonItems.map((_, index) => (
+              <Skeleton key={index} className="h-8 w-5/5 rounded-full" />
+            ))}
           </div>
         </div>
       )}
