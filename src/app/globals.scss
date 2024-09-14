@@ -104,7 +104,7 @@ h1 {
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: 100%;
-    opacity: .8;
+    opacity: 0.8;
   }
 
   &__backpack-man {
@@ -122,10 +122,10 @@ h1 {
     bottom: 2%;
     width: 100px;
     height: 15px;
-    background-color: rgba(0, 0, 0, .7);
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: 50%;
-    filter: blur(.6rem);
-    opacity: .8;
+    filter: blur(0.6rem);
+    opacity: 0.8;
   }
 
   &__backpack-man-figure {
@@ -159,7 +159,7 @@ h1 {
   &__wrapper {
     display: grid;
     grid-column-gap: 1.5rem;
-    grid-row-gap: 1.5rem;
+    grid-row-gap: 1rem;
 
     &.grid {
       grid-template-columns: repeat(auto-fit, 300px);
@@ -169,7 +169,7 @@ h1 {
   &__headline {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #e5e8ef;
   }
@@ -233,6 +233,16 @@ h1 {
 
 .text-small {
   font-size: 1.1rem;
+}
+
+.content-item {
+  .rounded-small {
+    border-radius: 5px;
+  }
+
+  .shadow-medium {
+    box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 0.03), 0px 2px 20px 0px rgb(0 0 0 / 0.05);
+  }
 }
 
 @layer utilities {
