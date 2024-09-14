@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 export async function DELETE(req: NextRequest) {
   try {
-    const { id } = await req.json();
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
 
     if (!id) {
       return NextResponse.json(
@@ -15,7 +16,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     const deletedItem = await prisma.item.delete({
-      where: { id },
+      where: { id: +id },
     });
 
     return NextResponse.json(deletedItem, { status: 200 });
