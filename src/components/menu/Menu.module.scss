@@ -93,6 +93,11 @@
 
 .menuItemIcon {
   margin-right: 0.7rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .addNewCategory {
