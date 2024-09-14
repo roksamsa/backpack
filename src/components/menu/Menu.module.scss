@@ -6,20 +6,68 @@
   flex-grow: 1;
   width: 100%;
   overflow: hidden;
-  padding: 2rem;
+
+  &.sidebarClosed {
+    .menuList {
+      padding: 0 1rem;
+    }
+
+    .menuItem span {
+      display: none;
+    }
+
+    .menuItemIcon {
+      margin-right: 0;
+    }
+
+    .menuItemLinkWrapper {
+      padding: 0 1rem;
+    }
+
+    .menuItemLink {
+      width: 100%;
+      padding: 0.5rem 0;
+    }
+
+    .addNewCategory {
+      justify-content: flex-start;
+      min-width: auto;
+      margin: 0.3rem 1rem 0 1rem;
+      font-size: 24px;
+
+      span {
+        display: none;
+      }
+    }
+  }
 }
 
 .menuList {
-  overflow: auto;
+  padding: 0 2rem;
+}
+
+.menuItemWrapper {
+  display: flex;
+  height: 100%;
+  min-height: 45px;
 }
 
 .menuItem {
   display: flex;
   align-items: center;
+  min-height: 45px;
   margin-top: 0.3rem;
   border-radius: 30px;
   font-size: 1.2rem;
-  transition: background-color 150ms ease-in-out;
+  transition: all 150ms ease-in-out;
+
+  .menuItemWrapper {
+    width: 100%;
+  }
+
+  span {
+    white-space: nowrap;
+  }
 
   &:hover {
     background-color: #dfe7f3;
@@ -32,9 +80,10 @@
 }
 
 .menuItemLink {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .menuItemLinkWrapper {
@@ -43,11 +92,13 @@
 }
 
 .menuItemIcon {
-    margin-right: 1rem;
+  margin-right: 0.7rem;
 }
 
 .addNewCategory {
+  flex-grow: 1;
   justify-content: flex-start;
-  width: 100%;
-  margin-top: 0.3rem;
+  min-height: 45px;
+  margin: 0.3rem 2rem 0 2rem;
+  transition: all 150ms ease-in-out;
 }

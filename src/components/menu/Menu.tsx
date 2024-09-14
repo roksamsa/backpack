@@ -1,19 +1,24 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 import styles from "./Menu.module.scss";
-import Link from "next/link";
+import SimpleBar from "simplebar-react";
+import MenuItem from "./MenuItem";
+
 import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/button";
-import { MdAdd, MdOutlineDashboard } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
-import IconDisplay from "../icon-display/IconDisplay";
+import { Tooltip } from "@nextui-org/tooltip";
 
-const Menu = () => {
+import "simplebar-react/dist/simplebar.min.css";
+
+const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  const [isAddNewSectionHovered, setIsAddNewSectionHovered] =
+    useState<boolean>(false);
   const { setIsAddingNewCategoryModalVisible, setMainSections, mainSections } =
     useDataStoreContext();
 
@@ -21,7 +26,7 @@ const Menu = () => {
     if (session?.user?.id) {
       const fetchSections = async () => {
         try {
-          const response = await fetchData({
+          await fetchData({
             url: "/api/categories/getMainSections",
             query: { userId: session?.user?.id },
             method: "GET",
@@ -41,44 +46,50 @@ const Menu = () => {
   }, [session?.user?.id, setMainSections]);
 
   return (
-    <div className={styles.menu}>
+    <div
+      className={`${styles.menu} ${
+        isSidebarClosed ? styles.sidebarClosed : ""
+      }`}
+    >
       {mainSections?.length > 0 ? (
-        <ul className={styles.menuList}>
-          <li
-            key="dashboard"
-            className={`${styles.menuItem} ${
-              pathname === "/app" ? styles.active : ""
-            }`}
-          >
-            <Link className={styles.menuItemLink} href="/app">
-              <div className={styles.menuItemLinkWrapper}>
-                <IconDisplay
-                  className={styles.menuItemIcon}
-                  iconName="MdOutlineDashboard"
-                />
-                Dashboard
-              </div>
-            </Link>
-          </li>
-          {mainSections.map((category: any, index: number) => (
+        <SimpleBar style={{ maxHeight: 1000 }}>
+          <ul className={styles.menuList}>
             <li
-              key={index}
+              key="dashboard"
               className={`${styles.menuItem} ${
-                pathname === category.link ? styles.active : ""
+                pathname === "/app" ? styles.active : ""
               }`}
             >
-              <Link href={category.link} className={styles.menuItemLink}>
-                <div className={styles.menuItemLinkWrapper}>
-                  <IconDisplay
-                    className={styles.menuItemIcon}
-                    iconName={category.properties.icon}
-                  />
-                  {category.name}
-                </div>
-              </Link>
+              <MenuItem
+                name="Dashboard"
+                iconName="MdOutlineDashboard"
+                link="/app"
+                onClick={() => {}}
+                isSidebarClosed={isSidebarClosed}
+              />
             </li>
-          ))}
-        </ul>
+            {mainSections.map((category: any, index: number) => (
+              <li
+                key={index}
+                className={`${styles.menuItem} ${
+                  pathname === category.link ? styles.active : ""
+                }`}
+              >
+                <MenuItem
+                  name={category.name}
+                  iconName={
+                    category.properties.icon
+                      ? category.properties.icon
+                      : "MdStar"
+                  }
+                  link={category.link}
+                  onClick={() => {}}
+                  isSidebarClosed={isSidebarClosed}
+                />
+              </li>
+            ))}
+          </ul>
+        </SimpleBar>
       ) : (
         <div className="w-full flex items-center gap-3">
           <div className="w-full flex flex-col gap-5">
@@ -90,16 +101,13 @@ const Menu = () => {
           </div>
         </div>
       )}
-      <Button
-        className={styles.addNewCategory}
-        color="primary"
-        variant="light"
-        radius="full"
+      <MenuItem
+        iconName="MdAdd"
+        isSidebarClosed={isSidebarClosed}
+        link={null}
+        name="Add new section"
         onClick={() => setIsAddingNewCategoryModalVisible(true)}
-        startContent={<MdAdd />}
-      >
-        Add new section
-      </Button>
+      />
     </div>
   );
 };

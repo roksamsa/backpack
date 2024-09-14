@@ -25,8 +25,8 @@
   animation-duration: #{random($maxDuration - $minDuration + 1) + $minDuration};
   animation-delay: #{random($maxDelay - $minDelay + 1) + $minDelay};
   animation-timing-function: ease-in-out;
-  animation-iteration-count: random(300); // Only run once, will restart after delay
-  animation-fill-mode: forwards; // Keeps the final state after the animation completes
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 :root {

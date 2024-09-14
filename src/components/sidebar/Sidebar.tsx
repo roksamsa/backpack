@@ -17,7 +17,7 @@ const Sidebar = () => {
         isSidebarClosed={isSidebarClosed}
         setIsSidebarClosed={setIsSidebarClosed}
       />
-      <Menu />
+      <Menu isSidebarClosed={isSidebarClosed} />
       <UserProfile isSidebarClosed={isSidebarClosed} />
     </div>
   );

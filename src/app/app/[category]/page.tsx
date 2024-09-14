@@ -161,7 +161,7 @@ const CategoryPage = () => {
             <Button
               color="primary"
               radius="full"
-              variant="shadow"
+              variant="solid"
               startContent={<MdAdd />}
               onPress={() => setIsAddingNewItemModalVisible(true)}
             >
