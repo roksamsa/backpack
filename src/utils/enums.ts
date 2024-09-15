@@ -38,3 +38,11 @@ export enum InvestmentType {
   AGRICULTURAL_PRODUCTS = "Agricultural Products",
   INFRASTRUCTURE_INVESTMENTS = "Infrastructure Investments",
 }
+
+export enum ModalType {
+  CONFIRM = "confirm",
+  ADD_MAIN_SECTION = "add-main-section",
+  ADD_SUB_SECTION = "add-sub-section",
+  EDIT_MAIN_SECTION = "edit-main-section",
+  EDIT_SUB_SECTION = "edit-sub-section",
+}

@@ -15,10 +15,9 @@ import { fetchData } from "@/utils/apiHelper";
 import { InvestmentType } from "@/utils/enums";
 
 import toast from "react-hot-toast";
-import { usePathname, useSearchParams } from "next/navigation";
-import { ModalData } from "@/interfaces/interfaces";
+import { useSearchParams } from "next/navigation";
 
-const AddNewItemModal = () => {
+const ConfirmModal = () => {
   const { subSections, addingNewItemModalData, setAddEditItemModalData } =
     useDataStoreContext();
   const searchParams = useSearchParams();
@@ -27,7 +26,6 @@ const AddNewItemModal = () => {
   const [value, setValue] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [section, setSection] = useState<string>("");
-  const [currentSection, setCurrentSection] = useState<string>("");
   const [selectedItemType, setSelectedItemType] = useState<string>("");
   const [typesForDropdown, setTypesForDropdown] = useState<any[]>(
     Object.values(InvestmentType).map((value) => ({ name: value })),
@@ -37,13 +35,9 @@ const AddNewItemModal = () => {
     setItemName(name);
   };
 
-  const handleOnCancel = () => {
+  const handleOnCancel = async () => {
     setAddEditItemModalData({ ...addingNewItemModalData, isVisible: false });
     setItemName("");
-  };
-
-  const handleModalOpen = (event: any) => {
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: event });
   };
 
   const handleOnSave = async () => {
@@ -87,6 +81,11 @@ const AddNewItemModal = () => {
       setSection(subSectionId);
     }
   }, [searchParams, subSections]);
+
+  const handleModalOpen = (event: any) => {
+    console.log("event", event);
+    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: false });
+  };
 
   return (
     <Modal
@@ -174,4 +173,4 @@ const AddNewItemModal = () => {
   );
 };
 
-export default AddNewItemModal;
+export default ConfirmModal;

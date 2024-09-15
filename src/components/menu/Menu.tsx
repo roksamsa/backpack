@@ -10,13 +10,18 @@ import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
 
 import "simplebar-react/dist/simplebar.min.css";
+import { ModalType } from "@/utils/enums";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const skeletonItems = Array.from({ length: 10 });
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { setIsAddingNewCategoryModalVisible, setMainSections, mainSections } =
-    useDataStoreContext();
+  const {
+    addingNewCategoryModalData,
+    mainSections,
+    setAddEditSectionModalData,
+    setMainSections,
+  } = useDataStoreContext();
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -41,6 +46,14 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
     }
   }, [session?.user?.id, setMainSections]);
 
+  const handleAddSectionModalOpenClick = (event: any) => {
+    setAddEditSectionModalData({
+      ...addingNewCategoryModalData,
+      type: ModalType.ADD_MAIN_SECTION,
+      isVisible: true,
+    });
+  };
+
   return (
     <div
       className={`${styles.menu} ${
@@ -48,7 +61,7 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
       }`}
     >
       {mainSections?.length > 0 ? (
-        <SimpleBar style={{ maxHeight: 1000 }}>
+        <SimpleBar className={styles.menuListWrapper} autoHide={false}>
           <ul className={styles.menuList}>
             <li
               key="dashboard"
@@ -57,11 +70,12 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
               }`}
             >
               <MenuItem
-                name="Dashboard"
+                areActionButtonsVisible={false}
                 iconName="MdOutlineDashboard"
-                link="/app"
-                onClick={() => {}}
                 isSidebarClosed={isSidebarClosed}
+                link="/app"
+                name="Dashboard"
+                onClick={() => {}}
               />
             </li>
             {mainSections.map((category: any, index: number) => (
@@ -72,15 +86,16 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
                 }`}
               >
                 <MenuItem
-                  name={category.name}
+                  areActionButtonsVisible={true}
                   iconName={
                     category.properties.icon
                       ? category.properties.icon
                       : "MdStar"
                   }
-                  link={category.link}
-                  onClick={() => {}}
                   isSidebarClosed={isSidebarClosed}
+                  link={category.link}
+                  name={category.name}
+                  onClick={() => {}}
                 />
               </li>
             ))}
@@ -96,11 +111,12 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
         </div>
       )}
       <MenuItem
+        areActionButtonsVisible={false}
         iconName="MdAdd"
         isSidebarClosed={isSidebarClosed}
         link={null}
         name="Add new section"
-        onClick={() => setIsAddingNewCategoryModalVisible(true)}
+        onClick={(event) => handleAddSectionModalOpenClick(event)}
       />
     </div>
   );

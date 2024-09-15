@@ -1,16 +1,22 @@
 import React from "react";
-
-import styles from "./Logo.module.scss";
-import { MdArrowBackIosNew } from "react-icons/md";
-import { Button } from "@nextui-org/button";
 import LogoSvg from "./LogoSvg";
 
+import { MdArrowBackIosNew } from "react-icons/md";
+import { Button } from "@nextui-org/button";
+
+import styles from "./Logo.module.scss";
+
 interface Props {
-  isSidebarClosed: boolean;
-  setIsSidebarClosed: (isClosed: boolean) => void;
+  isSidebarClosed?: boolean;
+  isToggleButtonVisible?: boolean;
+  setIsSidebarClosed?: (isClosed: boolean) => void;
 }
 
-const Logo = ({ setIsSidebarClosed, isSidebarClosed }: Props) => {
+const Logo = ({
+  isSidebarClosed = false,
+  isToggleButtonVisible = true,
+  setIsSidebarClosed = () => {},
+}: Props) => {
   return (
     <div
       className={`${styles.logo} ${
@@ -21,16 +27,18 @@ const Logo = ({ setIsSidebarClosed, isSidebarClosed }: Props) => {
         <LogoSvg />
       </div>
       <div className={styles.logoText}>Backpack</div>
-      <div className={styles.arrowToggleSidebar}>
-        <Button
-          isIconOnly
-          radius="full"
-          className={styles.arrowToggleWrapper}
-          onClick={() => setIsSidebarClosed(!isSidebarClosed)}
-        >
-          <MdArrowBackIosNew />
-        </Button>
-      </div>
+      {isToggleButtonVisible && (
+        <div className={styles.arrowToggleSidebar}>
+          <Button
+            isIconOnly
+            radius="full"
+            className={styles.arrowToggleWrapper}
+            onClick={() => setIsSidebarClosed(!isSidebarClosed)}
+          >
+            <MdArrowBackIosNew />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

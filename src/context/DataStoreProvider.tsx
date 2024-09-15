@@ -1,12 +1,14 @@
+import { ModalData } from "@/interfaces/interfaces";
+import { defaultEmptyModalData } from "@/utils/globals";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
 interface DataStoreProviderType {
-  isAddingNewCategoryModalVisible: boolean;
-  isAddingNewItemModalVisible: boolean;
+  addingNewCategoryModalData: ModalData;
+  addingNewItemModalData: ModalData;
   mainSections: any[];
   metalsApiData: {};
-  setIsAddingNewCategoryModalVisible: (data: boolean) => void;
-  setIsAddingNewItemModalVisible: (data: boolean) => void;
+  setAddEditSectionModalData: (data: ModalData) => void;
+  setAddEditItemModalData: (data: ModalData) => void;
   setMainSections: (data: any[]) => void;
   setMetalsApiData: (data: any) => void;
   setSubSections: (data: any[]) => void;
@@ -14,12 +16,12 @@ interface DataStoreProviderType {
 }
 
 const initialState: DataStoreProviderType = {
-  isAddingNewCategoryModalVisible: false,
-  isAddingNewItemModalVisible: false,
+  addingNewCategoryModalData: defaultEmptyModalData,
+  addingNewItemModalData: defaultEmptyModalData,
   mainSections: [],
   metalsApiData: {},
-  setIsAddingNewCategoryModalVisible: () => {},
-  setIsAddingNewItemModalVisible: () => {},
+  setAddEditSectionModalData: (data) => data,
+  setAddEditItemModalData: (data) => data,
   setMainSections: () => {},
   setMetalsApiData: () => {},
   setSubSections: () => {},
@@ -29,10 +31,11 @@ const initialState: DataStoreProviderType = {
 const DataStoreContext = createContext<DataStoreProviderType>(initialState);
 
 export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
-  const [isAddingNewCategoryModalVisible, setIsAddingNewCategoryModalVisible] =
-    useState<boolean>(false);
-  const [isAddingNewItemModalVisible, setIsAddingNewItemModalVisible] =
-    useState<boolean>(false);
+  const [addingNewCategoryModalData, setAddEditSectionModalData] =
+    useState<ModalData>(defaultEmptyModalData);
+  const [addingNewItemModalData, setAddEditItemModalData] = useState<ModalData>(
+    defaultEmptyModalData,
+  );
   const [mainSections, setMainSections] = useState<any[]>([]);
   const [subSections, setSubSections] = useState<any[]>([]);
   const [metalsApiData, setMetalsApiData] = useState<any[]>([]);
@@ -40,12 +43,12 @@ export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
   return (
     <DataStoreContext.Provider
       value={{
-        isAddingNewCategoryModalVisible,
-        isAddingNewItemModalVisible,
+        addingNewCategoryModalData,
+        addingNewItemModalData,
         mainSections,
         metalsApiData,
-        setIsAddingNewCategoryModalVisible,
-        setIsAddingNewItemModalVisible,
+        setAddEditSectionModalData,
+        setAddEditItemModalData,
         setMainSections,
         setMetalsApiData,
         setSubSections,

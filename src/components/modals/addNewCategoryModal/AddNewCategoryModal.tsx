@@ -17,22 +17,26 @@ import { usePathname } from "next/navigation";
 
 import toast from "react-hot-toast";
 import IconPicker from "@/components/icon-selector/IconSelector";
+import { ModalType } from "@/utils/enums";
 
 const AddNewCategoryModal = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
-    isAddingNewCategoryModalVisible,
+    addingNewCategoryModalData,
     mainSections,
-    setIsAddingNewCategoryModalVisible,
+    setAddEditSectionModalData,
     setMainSections,
   } = useDataStoreContext();
-  const [categoryName, setCategoryName] = React.useState<string>("");
-  const [categorySlug, setCategorySlug] = React.useState<string>("");
-  const [parentCategory, setParentCategory] = React.useState<string>("");
-  const [mainSectionsForDropdown, setMainSectionsForDropdown] = React.useState<
-    any[]
-  >([]);
+  const [modalTitle, setModalTitle] = useState<string>("Add");
+  const [saveButtonText, setSaveButtonText] = useState<string>("Save");
+  const [cancelButtonText, setCancelButtonText] = useState<string>("Cancel");
+  const [categoryName, setCategoryName] = useState<string>("");
+  const [categorySlug, setCategorySlug] = useState<string>("");
+  const [parentCategory, setParentCategory] = useState<string>("");
+  const [mainSectionsForDropdown, setMainSectionsForDropdown] = useState<any[]>(
+    [],
+  );
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
     useState<boolean>(false);
   const [selectedIcon, setSelectedIcon] = useState("");
@@ -60,15 +64,23 @@ const AddNewCategoryModal = () => {
     setCategorySlug(formatSlug(value));
   };
 
-  const handleOnCancel = async () => {
-    setIsAddingNewCategoryModalVisible(false);
+  const handleOnCancel = () => {
+    setAddEditSectionModalData({
+      ...addingNewCategoryModalData,
+      isVisible: false,
+    });
     setCategoryName("");
     setCategorySlug("");
   };
 
-  const handleOnSave = async () => {
-    handleOnCancel();
+  const handleModalOpenChange = (event: any) => {
+    setAddEditSectionModalData({
+      ...addingNewCategoryModalData,
+      isVisible: event,
+    });
+  };
 
+  const addNewSectionApiCall = async () => {
     try {
       await fetchData({
         url: "/api/categories/create",
@@ -104,13 +116,71 @@ const AddNewCategoryModal = () => {
     }
   };
 
-  useEffect(() => {
-    const selectedMainSection = mainSections.find(
-      (section: any) => section.link === pathname,
+  const editSectionApiCall = async () => {
+    console.log("selectedMainSection1", mainSections);
+    const selectedMainSection = mainSections?.find((section: any) =>
+      section.link.includes(categorySlug),
     );
+    console.log("selectedMainSection2", selectedMainSection);
+    console.log("categorySlug", categorySlug);
+    try {
+      await fetchData({
+        url: "/api/categories/edit",
+        method: "PUT",
+        body: {
+          id: selectedMainSection?.id,
+          userId: session?.user?.id,
+          name: categoryName,
+          link: `/app/${categorySlug}`,
+          parentId: +parentCategory,
+          properties: {
+            icon: selectedIcon,
+          },
+        },
+        options: {
+          onSuccess: async (data) => {
+            toast.success("Successfully added new section!");
+            await fetchData({
+              url: "/api/categories/getMainSections",
+              query: { userId: session?.user?.id },
+              method: "GET",
+              options: {
+                onSuccess: (data) => {
+                  setMainSections(data);
+                },
+              },
+            });
+          },
+        },
+      });
+    } catch (error) {
+      toast.success("Failed to create new section!");
+      console.error("Failed to create category:", error);
+    }
+  };
 
-    setParentCategory(selectedMainSection?.id.toString());
-  }, [mainSections, pathname]);
+  const handleOnSave = async () => {
+    handleOnCancel();
+
+    console.log("handleOnSave", addingNewCategoryModalData);
+
+    switch (addingNewCategoryModalData?.type) {
+      case ModalType.ADD_MAIN_SECTION:
+        addNewSectionApiCall();
+        break;
+
+      case ModalType.ADD_SUB_SECTION:
+        addNewSectionApiCall();
+        break;
+
+      case ModalType.EDIT_MAIN_SECTION:
+        editSectionApiCall();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     const mainSectionsWithNoneSection = [
@@ -123,16 +193,52 @@ const AddNewCategoryModal = () => {
     setMainSectionsForDropdown(mainSectionsWithNoneSection);
   }, [mainSections]);
 
+  useEffect(() => {
+    console.log("addingNewCategoryModalData", addingNewCategoryModalData);
+
+    switch (addingNewCategoryModalData.type) {
+      case ModalType.ADD_MAIN_SECTION:
+        setModalTitle("Add new main section to your backpack");
+        setSaveButtonText("Add new main section");
+        setParentCategory("");
+        setCategoryName("");
+        setCategorySlug("");
+        break;
+
+      case ModalType.ADD_SUB_SECTION:
+        const selectedMainSection = mainSections.find(
+          (section: any) => section.link === pathname,
+        );
+        setModalTitle("Add new sub section to your backpack");
+        setSaveButtonText("Add new sub section");
+        setParentCategory(selectedMainSection?.id.toString() || "");
+        setCategoryName("");
+        setCategorySlug("");
+        break;
+
+      case ModalType.EDIT_MAIN_SECTION:
+        setModalTitle("Edit main section");
+        setSaveButtonText("Save");
+        setCategoryName(addingNewCategoryModalData?.data?.name || "");
+        setCategorySlug(addingNewCategoryModalData?.data?.link || "");
+        setParentCategory("");
+        break;
+
+      default:
+        break;
+    }
+  }, [addingNewCategoryModalData, mainSections, pathname]);
+
   return (
     <Modal
-      isOpen={isAddingNewCategoryModalVisible}
-      onOpenChange={setIsAddingNewCategoryModalVisible}
+      isOpen={addingNewCategoryModalData?.isVisible}
+      onOpenChange={handleModalOpenChange}
     >
       <ModalContent>
         {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Add new section to your backpack
+              {modalTitle}
             </ModalHeader>
             <ModalBody>
               <p>
@@ -171,10 +277,10 @@ const AddNewCategoryModal = () => {
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={handleOnCancel}>
-                Cancel
+                {cancelButtonText}
               </Button>
               <Button color="primary" onPress={handleOnSave}>
-                Add
+                {saveButtonText}
               </Button>
             </ModalFooter>
           </>

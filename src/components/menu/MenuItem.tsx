@@ -5,21 +5,44 @@ import IconDisplay from "../icon-display/IconDisplay";
 
 import { Tooltip } from "@nextui-org/tooltip";
 import { Button } from "@nextui-org/button";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { useDataStoreContext } from "@/context/DataStoreProvider";
+import { ModalType } from "@/utils/enums";
 
-const MenuItem = ({
-  iconName,
-  isSidebarClosed,
-  link,
-  name,
-  onClick,
-}: {
+interface MenuItemProps {
+  areActionButtonsVisible: boolean;
   iconName: string;
   isSidebarClosed: boolean;
   link: string | null;
   name: string;
-  onClick: () => void;
-}) => {
+  onClick: (event: any) => void;
+}
+
+const MenuItem = ({
+  areActionButtonsVisible = true,
+  iconName,
+  isSidebarClosed,
+  link,
+  name,
+  onClick = () => {},
+}: MenuItemProps) => {
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
+  const { setAddEditSectionModalData } = useDataStoreContext();
+
+  const itemObject = {
+    name,
+    link,
+    iconName,
+  };
+
+  const handleEditMainSectionModalOpenClick = (event: any) => {
+    setAddEditSectionModalData({
+      data: itemObject,
+      isVisible: true,
+      type: ModalType.EDIT_MAIN_SECTION,
+    });
+    onClick(event);
+  };
 
   return (
     <div
@@ -29,36 +52,58 @@ const MenuItem = ({
     >
       <Tooltip
         content={name}
+        isOpen={isMenuItemHovered && isSidebarClosed}
         placement="right"
         showArrow={true}
-        isOpen={isMenuItemHovered && isSidebarClosed}
       >
         {!link ? (
           <Button
             className={styles.addNewCategory}
             color="primary"
-            onClick={onClick}
+            onPress={onClick}
             radius="full"
+            variant="light"
             startContent={
               <IconDisplay
                 className={styles.menuItemIcon}
                 iconName={iconName}
               />
             }
-            variant="light"
           >
             <span>Add new section</span>
           </Button>
         ) : (
-          <Link className={styles.menuItemLink} href={link}>
-            <div className={styles.menuItemLinkWrapper}>
-              <IconDisplay
-                className={styles.menuItemIcon}
-                iconName={iconName}
-              />
-              <span>{name}</span>
-            </div>
-          </Link>
+          <div className={styles.menuItemLinkWrapper}>
+            <Link className={styles.menuItemLink} href={link}>
+              <div className={styles.menuItemLinkWrapper}>
+                <IconDisplay
+                  className={styles.menuItemIcon}
+                  iconName={iconName}
+                />
+                <span>{name}</span>
+              </div>
+            </Link>
+            {areActionButtonsVisible && (
+              <div className={styles.menuItemActions}>
+                <Button
+                  isIconOnly
+                  color="primary"
+                  //onClick={onClick}
+                  radius="full"
+                  startContent={<MdDeleteOutline />}
+                  variant="light"
+                />
+                <Button
+                  isIconOnly
+                  color="primary"
+                  radius="full"
+                  startContent={<MdEdit />}
+                  variant="light"
+                  onPress={handleEditMainSectionModalOpenClick}
+                />
+              </div>
+            )}
+          </div>
         )}
       </Tooltip>
     </div>

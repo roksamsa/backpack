@@ -13,17 +13,20 @@ import ContentMetals from "@/components/content/ContentMetals";
 import IconDisplay from "@/components/icon-display/IconDisplay";
 import React from "react";
 import LogoSvg from "@/components/logo/LogoSvg";
+import { ModalType } from "@/utils/enums";
 
 const CategoryPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const {
+    addingNewCategoryModalData,
+    addingNewItemModalData,
     mainSections,
+    setAddEditItemModalData,
+    setAddEditSectionModalData,
     setSubSections,
     subSections,
-    setIsAddingNewCategoryModalVisible,
-    setIsAddingNewItemModalVisible,
   } = useDataStoreContext();
   const [pageData, setPageData] = useState<any[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>("");
@@ -38,6 +41,10 @@ const CategoryPage = () => {
   const handleToggleViewClick = (type: string) => {
     if (type === "grid") setContentWrapperClasses("content__wrapper grid");
     if (type === "rows") setContentWrapperClasses("content__wrapper rows");
+  };
+
+  const handleAddNewItemClick = () => {
+    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: true });
   };
 
   useEffect(() => {
@@ -113,6 +120,14 @@ const CategoryPage = () => {
     }
   }, [selectedTab, searchParams, pathname, replace, subSections.length]);
 
+  const handleAddSectionModalOpenClick = (event: any) => {
+    setAddEditSectionModalData({
+      ...addingNewCategoryModalData,
+      type: ModalType.ADD_SUB_SECTION,
+      isVisible: true,
+    });
+  };
+
   return (
     <div className="content">
       <div className="content__headline">
@@ -163,7 +178,7 @@ const CategoryPage = () => {
               radius="full"
               variant="solid"
               startContent={<MdAdd />}
-              onPress={() => setIsAddingNewItemModalVisible(true)}
+              onPress={handleAddNewItemClick}
             >
               Add new item
             </Button>
@@ -190,7 +205,7 @@ const CategoryPage = () => {
             variant="light"
             radius="full"
             startContent={<MdAdd />}
-            onPress={() => setIsAddingNewCategoryModalVisible(true)}
+            onPress={handleAddSectionModalOpenClick}
             className={
               subSections.length > 0
                 ? "button icon-only content__add-new-section"

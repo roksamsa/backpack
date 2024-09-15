@@ -4,8 +4,6 @@ import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewC
 import AddNewItemModal from "@/components/modals/addNewItemModal/AddNewItemModal";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 
