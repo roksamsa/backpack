@@ -196,8 +196,8 @@ const AddNewCategoryModal = () => {
         break;
 
       case ModalType.ADD_SUB_SECTION:
-        const selectedMainSection = mainSections.find(
-          (section: any) => section.link === pathname,
+        const selectedMainSection = mainSections.find((section: any) =>
+          pathname.includes(section.link),
         );
         setModalTitle("Add new sub section to your backpack");
         setSaveButtonText("Add new sub section");
