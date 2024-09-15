@@ -10,7 +10,9 @@ import TodoistProvider from "next-auth/providers/todoist";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: ['query', 'info', 'warn'], // adjust logging levels
+});
 
 export interface CustomSession {
   user?: {

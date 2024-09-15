@@ -8,9 +8,9 @@ import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
+import { ModalType } from "@/utils/enums";
 
 import "simplebar-react/dist/simplebar.min.css";
-import { ModalType } from "@/utils/enums";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const skeletonItems = Array.from({ length: 10 });
@@ -54,6 +54,20 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
     });
   };
 
+  const itemDashboard: MenuItem = {
+    id: 9999,
+    iconName: "MdOutlineDashboard",
+    link: null,
+    name: "Dashboard",
+  };
+
+  const itemAddNewSection: MenuItem = {
+    id: 9999999,
+    iconName: "MdAdd",
+    link: null,
+    name: "Add new section",
+  };
+
   return (
     <div
       className={`${styles.menu} ${
@@ -71,30 +85,31 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
             >
               <MenuItem
                 areActionButtonsVisible={false}
-                iconName="MdOutlineDashboard"
+                item={itemDashboard}
                 isSidebarClosed={isSidebarClosed}
-                link="/app"
-                name="Dashboard"
+                isAddingNewSectionMenuItem={false}
                 onClick={() => {}}
               />
             </li>
-            {mainSections.map((category: any, index: number) => (
+            {mainSections.map((section: any, index: number) => (
               <li
                 key={index}
                 className={`${styles.menuItem} ${
-                  pathname === category.link ? styles.active : ""
+                  pathname.includes(section.link) ? styles.active : ""
                 }`}
               >
                 <MenuItem
                   areActionButtonsVisible={true}
-                  iconName={
-                    category.properties.icon
-                      ? category.properties.icon
-                      : "MdStar"
-                  }
+                  item={{
+                    link: section.link,
+                    name: section.name,
+                    id: section.id,
+                    iconName: section.properties.icon
+                      ? section.properties.icon
+                      : "MdStar",
+                  }}
+                  isAddingNewSectionMenuItem={false}
                   isSidebarClosed={isSidebarClosed}
-                  link={category.link}
-                  name={category.name}
                   onClick={() => {}}
                 />
               </li>
@@ -112,10 +127,9 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
       )}
       <MenuItem
         areActionButtonsVisible={false}
-        iconName="MdAdd"
         isSidebarClosed={isSidebarClosed}
-        link={null}
-        name="Add new section"
+        isAddingNewSectionMenuItem={true}
+        item={itemAddNewSection}
         onClick={(event) => handleAddSectionModalOpenClick(event)}
       />
     </div>

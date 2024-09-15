@@ -88,7 +88,7 @@ const AddNewCategoryModal = () => {
         body: {
           userId: session?.user?.id,
           name: categoryName,
-          link: `/app/${categorySlug}`,
+          link: categorySlug,
           parentId: +parentCategory,
           properties: {
             icon: selectedIcon,
@@ -117,21 +117,15 @@ const AddNewCategoryModal = () => {
   };
 
   const editSectionApiCall = async () => {
-    console.log("selectedMainSection1", mainSections);
-    const selectedMainSection = mainSections?.find((section: any) =>
-      section.link.includes(categorySlug),
-    );
-    console.log("selectedMainSection2", selectedMainSection);
-    console.log("categorySlug", categorySlug);
     try {
       await fetchData({
         url: "/api/categories/edit",
         method: "PUT",
         body: {
-          id: selectedMainSection?.id,
+          id: addingNewCategoryModalData?.data?.id,
           userId: session?.user?.id,
           name: categoryName,
-          link: `/app/${categorySlug}`,
+          link: categorySlug,
           parentId: +parentCategory,
           properties: {
             icon: selectedIcon,

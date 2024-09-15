@@ -48,11 +48,11 @@ const CategoryPage = () => {
   };
 
   useEffect(() => {
-    const selectedMainSection = mainSections.find(
-      (section: any) => section.link === pathname,
+    const selectedMainSection = mainSections.find((section: any) =>
+      pathname.includes(section.link),
     );
 
-    setPageData(selectedMainSection || null);
+    setPageData(selectedMainSection);
   }, [mainSections, pathname]);
 
   useEffect(() => {

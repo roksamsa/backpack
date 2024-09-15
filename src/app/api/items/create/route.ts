@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ["query", "info", "warn"], // adjust logging levels
+  });
+
+if (process.env.NODE_ENV === "development") {
+  global.prisma = prisma;
+}
 
 export async function POST(req: NextRequest) {
   try {

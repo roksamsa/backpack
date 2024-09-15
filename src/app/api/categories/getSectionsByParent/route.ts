@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ["query", "info", "warn"], // adjust logging levels
+  });
+
+if (process.env.NODE_ENV === "development") {
+  global.prisma = prisma;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,6 +18,9 @@ export async function GET(request: NextRequest) {
     const childCategories = await prisma.category.findMany({
       where: {
         parentId: parentId,
+      },
+      orderBy: {
+        name: "asc",
       },
     });
 

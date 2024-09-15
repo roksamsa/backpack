@@ -12,3 +12,10 @@ export interface ModalData {
   isVisible: boolean;
   type: string;
 }
+
+export interface MenuItem {
+  iconName: string;
+  id: number;
+  link: string | null;
+  name: string;
+}

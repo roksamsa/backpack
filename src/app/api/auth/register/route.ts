@@ -2,7 +2,15 @@ import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const prisma =
+  global.prisma ||
+  new PrismaClient({
+    log: ["query", "info", "warn"], // adjust logging levels
+  });
+
+if (process.env.NODE_ENV === "development") {
+  global.prisma = prisma;
+}
 
 export async function POST(req: NextRequest) {
   try {

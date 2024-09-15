@@ -8,36 +8,30 @@ import { Button } from "@nextui-org/button";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { ModalType } from "@/utils/enums";
+import { MenuItem } from "@/utils/interfaces";
 
 interface MenuItemProps {
   areActionButtonsVisible: boolean;
-  iconName: string;
+  isAddingNewSectionMenuItem: boolean;
   isSidebarClosed: boolean;
-  link: string | null;
-  name: string;
+  item: MenuItem;
   onClick: (event: any) => void;
 }
 
 const MenuItem = ({
   areActionButtonsVisible = true,
-  iconName,
+  isAddingNewSectionMenuItem = false,
   isSidebarClosed,
-  link,
-  name,
+  item,
   onClick = () => {},
 }: MenuItemProps) => {
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
   const { setAddEditSectionModalData } = useDataStoreContext();
 
-  const itemObject = {
-    name,
-    link,
-    iconName,
-  };
-
   const handleEditMainSectionModalOpenClick = (event: any) => {
+    console.log("item", item);
     setAddEditSectionModalData({
-      data: itemObject,
+      data: item,
       isVisible: true,
       type: ModalType.EDIT_MAIN_SECTION,
     });
@@ -51,12 +45,12 @@ const MenuItem = ({
       onMouseLeave={() => setIsMenuItemHovered(false)}
     >
       <Tooltip
-        content={name}
+        content={item.name}
         isOpen={isMenuItemHovered && isSidebarClosed}
         placement="right"
         showArrow={true}
       >
-        {!link ? (
+        {isAddingNewSectionMenuItem ? (
           <Button
             className={styles.addNewCategory}
             color="primary"
@@ -66,7 +60,7 @@ const MenuItem = ({
             startContent={
               <IconDisplay
                 className={styles.menuItemIcon}
-                iconName={iconName}
+                iconName={item.iconName}
               />
             }
           >
@@ -74,13 +68,13 @@ const MenuItem = ({
           </Button>
         ) : (
           <div className={styles.menuItemLinkWrapper}>
-            <Link className={styles.menuItemLink} href={link}>
+            <Link className={styles.menuItemLink} href={`/app/${item.link}`}>
               <div className={styles.menuItemLinkWrapper}>
                 <IconDisplay
                   className={styles.menuItemIcon}
-                  iconName={iconName}
+                  iconName={item.iconName}
                 />
-                <span>{name}</span>
+                <span>{item.name}</span>
               </div>
             </Link>
             {areActionButtonsVisible && (

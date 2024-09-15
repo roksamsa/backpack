@@ -2,6 +2,7 @@
 
 import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewCategoryModal";
 import AddNewItemModal from "@/components/modals/addNewItemModal/AddNewItemModal";
+import ConfirmModal from "@/components/modals/confirmModal/ConfirmModal";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useEffect, useRef } from "react";
@@ -67,6 +68,7 @@ export default function RootLayout({
       <div className="modals">
         <AddNewCategoryModal />
         <AddNewItemModal />
+        <ConfirmModal />
       </div>
       <Toaster position="bottom-right" reverseOrder={false} />
     </DataStoreProvider>
