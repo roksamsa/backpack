@@ -76,7 +76,7 @@ const MenuItem = ({
         ) : (
           <div className={styles.menuItemLinkWrapper}>
             <Link className={styles.menuItemLink} href={`/app/${item.link}`}>
-              <div className={styles.menuItemLinkWrapper}>
+              <div className={styles.menuItemLinkContainer}>
                 <IconDisplay
                   className={styles.menuItemIcon}
                   iconName={item.iconName}

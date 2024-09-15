@@ -26,7 +26,7 @@
 
     .menuItemLink {
       width: 100%;
-      padding: 0.5rem 0;
+      padding: .5rem 0;
     }
 
     .menuItemActions {
@@ -47,6 +47,7 @@
 }
 
 .menuListWrapper {
+  overflow-x: hidden;
   max-height: calc(100% - 50px);
 }
 
@@ -105,6 +106,12 @@
 }
 
 .menuItemLinkWrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.menuItemLinkContainer {
   display: flex;
   align-items: center;
   flex-grow: 1;

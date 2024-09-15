@@ -12,6 +12,7 @@ type ContentMetalsProps = {
 
 const ContentMetals: React.FC<ContentMetalsProps> = ({ data }) => {
   const { setConfirmModalData } = useDataStoreContext();
+
   const handleDeleteItem = (item: any) => {
     setConfirmModalData({
       data: item,
