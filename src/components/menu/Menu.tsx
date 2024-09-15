@@ -55,14 +55,14 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   };
 
   const itemDashboard: MenuItem = {
-    id: 9999,
+    id: 999900000,
     iconName: "MdOutlineDashboard",
-    link: null,
+    link: "",
     name: "Dashboard",
   };
 
   const itemAddNewSection: MenuItem = {
-    id: 9999999,
+    id: 9999999999,
     iconName: "MdAdd",
     link: null,
     name: "Add new section",
