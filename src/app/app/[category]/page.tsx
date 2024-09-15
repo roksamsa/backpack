@@ -20,17 +20,18 @@ const CategoryPage = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const {
-    addingNewCategoryModalData,
-    addingNewItemModalData,
+    addEditItemModalData,
+    addEditSectionModalData,
+    itemsToShow,
     mainSections,
     setAddEditItemModalData,
     setAddEditSectionModalData,
+    setItemsToShow,
     setSubSections,
     subSections,
   } = useDataStoreContext();
   const [pageData, setPageData] = useState<any[]>([]);
   const [selectedTab, setSelectedTab] = useState<string>("");
-  const [metalsData, setMetalsData] = useState<any[]>([]);
   const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(
     null,
   );
@@ -44,7 +45,7 @@ const CategoryPage = () => {
   };
 
   const handleAddNewItemClick = () => {
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: true });
+    setAddEditItemModalData({ ...addEditItemModalData, isVisible: true });
   };
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const CategoryPage = () => {
             method: "GET",
             options: {
               onSuccess: (data) => {
-                setMetalsData(data);
+                setItemsToShow(data);
               },
             },
           });
@@ -99,7 +100,7 @@ const CategoryPage = () => {
 
       fetchSections();
     }
-  }, [subSectionIdQuery]);
+  }, [subSectionIdQuery, setItemsToShow]);
 
   useEffect(() => {
     const subSectionId = searchParams.get("subSectionId");
@@ -122,7 +123,7 @@ const CategoryPage = () => {
 
   const handleAddSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({
-      ...addingNewCategoryModalData,
+      ...addEditSectionModalData,
       type: ModalType.ADD_SUB_SECTION,
       isVisible: true,
     });
@@ -216,9 +217,9 @@ const CategoryPage = () => {
           </Button>
         </div>
       </div>
-      {metalsData.length ? (
+      {itemsToShow.length ? (
         <div className={contentWrapperClasses}>
-          <ContentMetals data={metalsData} />
+          <ContentMetals data={itemsToShow} />
         </div>
       ) : (
         <div className="no-data">

@@ -47,8 +47,7 @@
 }
 
 .menuListWrapper {
-  flex-grow: 1;
-  height: calc(100% - 50px);
+  max-height: calc(100% - 50px);
 }
 
 .menuList {

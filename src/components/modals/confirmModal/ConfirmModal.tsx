@@ -2,90 +2,134 @@ import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { Button } from "@nextui-org/button";
 import {
   Modal,
-  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 import { fetchData } from "@/utils/apiHelper";
 import { useSearchParams } from "next/navigation";
-
-import toast from "react-hot-toast";
+import { ModalType } from "@/utils/enums";
+import { useSession } from "next-auth/react";
 
 const ConfirmModal = () => {
-  const { subSections, addingNewItemModalData, setAddEditItemModalData } =
-    useDataStoreContext();
+  const {
+    confirmModalData,
+    setConfirmModalData,
+    setMainSections,
+    setItemsToShow,
+  } = useDataStoreContext();
   const searchParams = useSearchParams();
-  const [itemName, setItemName] = useState<string>("");
-  const [itemStatus, setItemStatus] = useState<string>("");
-  const [value, setValue] = useState<string>("");
-  const [section, setSection] = useState<string>("");
-  const [selectedItemType, setSelectedItemType] = useState<string>("");
+  const { data: session } = useSession();
+  const [modalTitle, setModalTitle] = useState<string>(
+    "Are you sure that you want to delete this?",
+  );
 
   const handleOnCancel = async () => {
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: false });
-    setItemName("");
+    setConfirmModalData({ ...confirmModalData, isVisible: false });
   };
 
-  const handleOnSave = async () => {
-    handleOnCancel();
+  const handleModalOpen = (event: any) => {
+    setConfirmModalData({ ...confirmModalData, isVisible: false });
+  };
 
+  const deleteSectionApiCall = async () => {
     try {
       await fetchData({
-        url: "/api/items/create",
-        method: "POST",
-        body: {
-          title: itemName,
-          status: itemStatus,
-          type: selectedItemType,
-          value: +value,
-          categoryId: +section,
-          properties: {},
-        },
+        url: "/api/categories/delete",
+        method: "DELETE",
+        query: { id: +confirmModalData?.data },
         options: {
           onSuccess: async (data) => {
             toast.success("Successfully added new section!");
             await fetchData({
-              url: "/api/items/getItemsBySection",
-              query: { categoryId: +section },
+              url: "/api/categories/getMainSections",
+              query: { userId: session?.user?.id },
               method: "GET",
               options: {
-                onSuccess: (data) => {},
+                onSuccess: (data) => {
+                  setMainSections(data);
+                },
               },
             });
           },
         },
       });
     } catch (error) {
-      toast.success("Failed to create new section!");
-      console.error("Failed to create category:", error);
+      toast.success("Failed to delete section!");
+      console.error("Failed to delete section:", error);
+    }
+  };
+
+  const deleteItemApiCall = async () => {
+    try {
+      await fetchData({
+        url: "/api/items/delete",
+        method: "DELETE",
+        query: { id: +confirmModalData?.data.id },
+        options: {
+          onSuccess: async (data) => {
+            toast.success("Successfully added new section!");
+            await fetchData({
+              url: "/api/items/getItemsBySection",
+              query: { categoryId: +confirmModalData?.data?.categoryId },
+              method: "GET",
+              options: {
+                onSuccess: (data) => {
+                  setItemsToShow(data);
+                },
+              },
+            });
+          },
+        },
+      });
+    } catch (error) {
+      toast.success("Failed to delete item!");
+      console.error("Failed to delete item:", error);
+    }
+  };
+
+  const handleOnSave = async () => {
+    handleOnCancel();
+
+    switch (confirmModalData?.type) {
+      case ModalType.CONFIRM_DELETE_MAIN_SECTION:
+        deleteSectionApiCall();
+        break;
+
+      case ModalType.CONFIRM_DELETE_ITEM:
+        deleteItemApiCall();
+        break;
+
+      default:
+        break;
     }
   };
 
   useEffect(() => {
-    const subSectionId = searchParams.get("subSectionId");
-    if (subSectionId) {
-      setSection(subSectionId);
-    }
-  }, [searchParams, subSections]);
+    switch (confirmModalData.type) {
+      case ModalType.CONFIRM_DELETE_MAIN_SECTION:
+        setModalTitle("Are you sure that you want to delete this section?");
+        break;
 
-  const handleModalOpen = (event: any) => {
-    console.log("event", event);
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: false });
-  };
+      case ModalType.CONFIRM_DELETE_ITEM:
+        setModalTitle("Are you sure that you want to delete this item?");
+        break;
+
+      default:
+        break;
+    }
+  }, [confirmModalData]);
 
   return (
-    <Modal
-      isOpen={addingNewItemModalData?.isVisible}
-      onOpenChange={handleModalOpen}
-    >
+    <Modal isOpen={confirmModalData?.isVisible} onOpenChange={handleModalOpen}>
       <ModalContent>
         {() => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Are you sre that you want to delete this item?
+              {modalTitle}
             </ModalHeader>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={handleOnCancel}>

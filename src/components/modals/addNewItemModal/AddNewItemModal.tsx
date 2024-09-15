@@ -19,7 +19,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { ModalData } from "@/interfaces/interfaces";
 
 const AddNewItemModal = () => {
-  const { subSections, addingNewItemModalData, setAddEditItemModalData } =
+  const { subSections, addEditItemModalData, setAddEditItemModalData } =
     useDataStoreContext();
   const searchParams = useSearchParams();
   const [itemName, setItemName] = useState<string>("");
@@ -27,7 +27,6 @@ const AddNewItemModal = () => {
   const [value, setValue] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [section, setSection] = useState<string>("");
-  const [currentSection, setCurrentSection] = useState<string>("");
   const [selectedItemType, setSelectedItemType] = useState<string>("");
   const [typesForDropdown, setTypesForDropdown] = useState<any[]>(
     Object.values(InvestmentType).map((value) => ({ name: value })),
@@ -38,12 +37,12 @@ const AddNewItemModal = () => {
   };
 
   const handleOnCancel = () => {
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: false });
+    setAddEditItemModalData({ ...addEditItemModalData, isVisible: false });
     setItemName("");
   };
 
   const handleModalOpen = (event: any) => {
-    setAddEditItemModalData({ ...addingNewItemModalData, isVisible: event });
+    setAddEditItemModalData({ ...addEditItemModalData, isVisible: event });
   };
 
   const handleOnSave = async () => {
@@ -90,7 +89,7 @@ const AddNewItemModal = () => {
 
   return (
     <Modal
-      isOpen={addingNewItemModalData?.isVisible}
+      isOpen={addEditItemModalData?.isVisible}
       onOpenChange={handleModalOpen}
     >
       <ModalContent>

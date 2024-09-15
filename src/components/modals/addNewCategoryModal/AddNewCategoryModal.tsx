@@ -23,7 +23,7 @@ const AddNewCategoryModal = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
-    addingNewCategoryModalData,
+    addEditSectionModalData,
     mainSections,
     setAddEditSectionModalData,
     setMainSections,
@@ -66,7 +66,7 @@ const AddNewCategoryModal = () => {
 
   const handleOnCancel = () => {
     setAddEditSectionModalData({
-      ...addingNewCategoryModalData,
+      ...addEditSectionModalData,
       isVisible: false,
     });
     setCategoryName("");
@@ -75,7 +75,7 @@ const AddNewCategoryModal = () => {
 
   const handleModalOpenChange = (event: any) => {
     setAddEditSectionModalData({
-      ...addingNewCategoryModalData,
+      ...addEditSectionModalData,
       isVisible: event,
     });
   };
@@ -122,7 +122,7 @@ const AddNewCategoryModal = () => {
         url: "/api/categories/edit",
         method: "PUT",
         body: {
-          id: addingNewCategoryModalData?.data?.id,
+          id: addEditSectionModalData?.data?.id,
           userId: session?.user?.id,
           name: categoryName,
           link: categorySlug,
@@ -156,9 +156,7 @@ const AddNewCategoryModal = () => {
   const handleOnSave = async () => {
     handleOnCancel();
 
-    console.log("handleOnSave", addingNewCategoryModalData);
-
-    switch (addingNewCategoryModalData?.type) {
+    switch (addEditSectionModalData?.type) {
       case ModalType.ADD_MAIN_SECTION:
         addNewSectionApiCall();
         break;
@@ -188,9 +186,7 @@ const AddNewCategoryModal = () => {
   }, [mainSections]);
 
   useEffect(() => {
-    console.log("addingNewCategoryModalData", addingNewCategoryModalData);
-
-    switch (addingNewCategoryModalData.type) {
+    switch (addEditSectionModalData.type) {
       case ModalType.ADD_MAIN_SECTION:
         setModalTitle("Add new main section to your backpack");
         setSaveButtonText("Add new main section");
@@ -213,19 +209,19 @@ const AddNewCategoryModal = () => {
       case ModalType.EDIT_MAIN_SECTION:
         setModalTitle("Edit main section");
         setSaveButtonText("Save");
-        setCategoryName(addingNewCategoryModalData?.data?.name || "");
-        setCategorySlug(addingNewCategoryModalData?.data?.link || "");
+        setCategoryName(addEditSectionModalData?.data?.name || "");
+        setCategorySlug(addEditSectionModalData?.data?.link || "");
         setParentCategory("");
         break;
 
       default:
         break;
     }
-  }, [addingNewCategoryModalData, mainSections, pathname]);
+  }, [addEditSectionModalData, mainSections, pathname]);
 
   return (
     <Modal
-      isOpen={addingNewCategoryModalData?.isVisible}
+      isOpen={addEditSectionModalData?.isVisible}
       onOpenChange={handleModalOpenChange}
     >
       <ModalContent>

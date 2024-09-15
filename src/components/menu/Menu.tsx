@@ -17,7 +17,7 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
-    addingNewCategoryModalData,
+    addEditSectionModalData,
     mainSections,
     setAddEditSectionModalData,
     setMainSections,
@@ -48,7 +48,7 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
 
   const handleAddSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({
-      ...addingNewCategoryModalData,
+      ...addEditSectionModalData,
       type: ModalType.ADD_MAIN_SECTION,
       isVisible: true,
     });

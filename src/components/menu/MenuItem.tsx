@@ -26,16 +26,23 @@ const MenuItem = ({
   onClick = () => {},
 }: MenuItemProps) => {
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
-  const { setAddEditSectionModalData } = useDataStoreContext();
+  const { setConfirmModalData, setAddEditSectionModalData } =
+    useDataStoreContext();
 
   const handleEditMainSectionModalOpenClick = (event: any) => {
-    console.log("item", item);
     setAddEditSectionModalData({
       data: item,
       isVisible: true,
       type: ModalType.EDIT_MAIN_SECTION,
     });
-    onClick(event);
+  };
+
+  const handleDeleteMainSectionModalOpenClick = (event: any) => {
+    setConfirmModalData({
+      data: item.id,
+      isVisible: true,
+      type: ModalType.CONFIRM_DELETE_MAIN_SECTION,
+    });
   };
 
   return (
@@ -82,10 +89,10 @@ const MenuItem = ({
                 <Button
                   isIconOnly
                   color="primary"
-                  //onClick={onClick}
                   radius="full"
                   startContent={<MdDeleteOutline />}
                   variant="light"
+                  onPress={handleDeleteMainSectionModalOpenClick}
                 />
                 <Button
                   isIconOnly
