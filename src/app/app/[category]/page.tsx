@@ -24,9 +24,11 @@ const CategoryPage = () => {
     addEditSectionModalData,
     itemsToShow,
     mainSections,
+    selectedMainSection,
     setAddEditItemModalData,
     setAddEditSectionModalData,
     setItemsToShow,
+    setSelectedSubSection,
     setSubSections,
     subSections,
   } = useDataStoreContext();
@@ -49,12 +51,8 @@ const CategoryPage = () => {
   };
 
   useEffect(() => {
-    const selectedMainSection = mainSections.find((section: any) =>
-      pathname.includes(section.link),
-    );
-
     setPageData(selectedMainSection);
-  }, [mainSections, pathname]);
+  }, [selectedMainSection]);
 
   useEffect(() => {
     if (pageData?.id) {
@@ -129,6 +127,11 @@ const CategoryPage = () => {
     });
   };
 
+  const handleTabSelectionChange = (tab: any) => {
+    setSelectedSubSection(tab);
+    setSelectedTab(String(tab));
+  };
+
   return (
     <div className="content">
       <div className="content__headline">
@@ -195,7 +198,7 @@ const CategoryPage = () => {
               className="content__headline-tabs"
               items={subSections}
               selectedKey={selectedTab}
-              onSelectionChange={(key) => setSelectedTab(String(key))}
+              onSelectionChange={(key) => handleTabSelectionChange(key)}
             >
               {(item) => <Tab key={item.id} title={item.name}></Tab>}
             </Tabs>

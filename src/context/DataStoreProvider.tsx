@@ -1,6 +1,12 @@
 import { ModalData } from "@/interfaces/interfaces";
 import { defaultEmptyModalData } from "@/utils/globals";
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface DataStoreProviderType {
   addEditItemModalData: ModalData;
@@ -9,12 +15,16 @@ interface DataStoreProviderType {
   itemsToShow: any[];
   mainSections: any[];
   metalsApiData: {};
+  selectedMainSection: any;
+  selectedSubSection: any;
   setAddEditItemModalData: (data: ModalData) => void;
   setAddEditSectionModalData: (data: ModalData) => void;
   setConfirmModalData: (data: ModalData) => void;
   setItemsToShow: (data: any[]) => void;
   setMainSections: (data: any[]) => void;
   setMetalsApiData: (data: any) => void;
+  setSelectedMainSection: (data: any) => void;
+  setSelectedSubSection: (data: any) => void;
   setSubSections: (data: any[]) => void;
   subSections: any[];
 }
@@ -26,12 +36,16 @@ const initialState: DataStoreProviderType = {
   itemsToShow: [],
   mainSections: [],
   metalsApiData: {},
+  selectedMainSection: {},
+  selectedSubSection: {},
   setAddEditItemModalData: (data) => data,
   setAddEditSectionModalData: (data) => data,
   setConfirmModalData: (data) => data,
   setItemsToShow: () => {},
   setMainSections: () => {},
   setMetalsApiData: () => {},
+  setSelectedMainSection: () => {},
+  setSelectedSubSection: () => {},
   setSubSections: () => {},
   subSections: [],
 };
@@ -52,6 +66,15 @@ export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
   const [subSections, setSubSections] = useState<any[]>([]);
   const [metalsApiData, setMetalsApiData] = useState<any[]>([]);
 
+  // Selection of items
+  const [selectedMainSection, setSelectedMainSection] = useState<any[]>([]);
+  const [selectedSubSection, setSelectedSubSection] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log("selectedSubSection", selectedSubSection);
+    console.log("selectedMainSection", selectedMainSection);
+  }, [selectedMainSection, selectedSubSection]);
+
   return (
     <DataStoreContext.Provider
       value={{
@@ -61,12 +84,16 @@ export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
         itemsToShow,
         mainSections,
         metalsApiData,
+        selectedMainSection,
+        selectedSubSection,
         setAddEditItemModalData,
         setAddEditSectionModalData,
         setConfirmModalData,
         setItemsToShow,
         setMainSections,
         setMetalsApiData,
+        setSelectedMainSection,
+        setSelectedSubSection,
         setSubSections,
         subSections,
       }}

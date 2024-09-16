@@ -26,8 +26,11 @@ const MenuItem = ({
   onClick = () => {},
 }: MenuItemProps) => {
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
-  const { setConfirmModalData, setAddEditSectionModalData } =
-    useDataStoreContext();
+  const {
+    setConfirmModalData,
+    setAddEditSectionModalData,
+    setSelectedMainSection,
+  } = useDataStoreContext();
 
   const handleEditMainSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({
@@ -43,6 +46,10 @@ const MenuItem = ({
       isVisible: true,
       type: ModalType.CONFIRM_DELETE_MAIN_SECTION,
     });
+  };
+
+  const handleMenuItemClick = () => {
+    setSelectedMainSection(item);
   };
 
   return (
@@ -75,7 +82,11 @@ const MenuItem = ({
           </Button>
         ) : (
           <div className={styles.menuItemLinkWrapper}>
-            <Link className={styles.menuItemLink} href={`/app/${item.link}`}>
+            <Link
+              className={styles.menuItemLink}
+              href={`/app/${item.link}`}
+              onClick={handleMenuItemClick}
+            >
               <div className={styles.menuItemLinkContainer}>
                 <IconDisplay
                   className={styles.menuItemIcon}
