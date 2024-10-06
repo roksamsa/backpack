@@ -20,6 +20,7 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
     addEditSectionModalData,
     mainSections,
     setAddEditSectionModalData,
+    selectedMainSection,
     setMainSections,
   } = useDataStoreContext();
 
@@ -95,7 +96,9 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
               <li
                 key={index}
                 className={`${styles.menuItem} ${
-                  pathname.includes(section.link) ? styles.active : ""
+                  selectedMainSection?.link === section.link
+                    ? styles.active
+                    : ""
                 }`}
               >
                 <MenuItem
