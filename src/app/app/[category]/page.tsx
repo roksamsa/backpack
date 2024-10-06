@@ -14,6 +14,12 @@ import IconDisplay from "@/components/icon-display/IconDisplay";
 import React from "react";
 import LogoSvg from "@/components/logo/LogoSvg";
 import { ModalType } from "@/utils/enums";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/dropdown";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -177,15 +183,30 @@ const CategoryPage = () => {
                 onPress={() => handleToggleViewClick("grid")}
               ></Button>
             </ButtonGroup>
-            <Button
-              color="primary"
-              radius="full"
-              variant="solid"
-              startContent={<MdAdd />}
-              onPress={handleAddNewItemClick}
-            >
-              Add new item
-            </Button>
+            <ButtonGroup></ButtonGroup>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  color="primary"
+                  radius="full"
+                  variant="solid"
+                  startContent={<MdAdd />}
+                >
+                  Add
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Static Actions">
+                <DropdownItem
+                  key="copy"
+                  onPress={handleAddSectionModalOpenClick}
+                >
+                  New items section
+                </DropdownItem>
+                <DropdownItem key="new" onPress={handleAddNewItemClick}>
+                  New item
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </div>
         <div className="content__headline-down">

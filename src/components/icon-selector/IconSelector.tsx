@@ -3,6 +3,7 @@ import * as MdIcons from "react-icons/md";
 
 import styles from "./IconSelector.module.scss";
 import { Input } from "@nextui-org/input";
+import IconDisplay from "../icon-display/IconDisplay";
 
 const IconPicker = ({
   onSelectIcon,
@@ -17,7 +18,7 @@ const IconPicker = ({
   const [filteredIcons, setFilteredIcons] = useState<string[]>(allIcons);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -75,11 +76,21 @@ const IconPicker = ({
   }, [hasMore, page, allIcons]);
 
   return (
-    <div>
+    <div className={styles.iconSelector}>
+      <div className={styles.selectedIconWrapper}>
+        <span>Selected icon</span>
+        <IconDisplay iconName={selectedIcon} className={styles.selectedIcon} />
+        <span>
+          {selectedIcon
+            .slice(2)
+            .replace(/([A-Z])/g, " $1")
+            .trim()}
+        </span>
+      </div>
       <Input
         type="text"
-        label="Section icon"
-        placeholder="Find icon for new section"
+        label="Icon"
+        placeholder="Find icon ..."
         value={searchQuery}
         onValueChange={setSearchQuery}
       />

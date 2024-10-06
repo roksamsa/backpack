@@ -14,8 +14,7 @@ const Dashboard = ({ data }: any) => {
 
   return (
     <div className="page">
-      <h1>Dashboard</h1>
-      <h2>Pozdravljen, {session?.user?.name}</h2>
+      <h1>Pozdravljen, {session?.user?.name}</h1>
     </div>
   );
 };

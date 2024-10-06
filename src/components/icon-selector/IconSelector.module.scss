@@ -1,11 +1,19 @@
+.iconSelector {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
 .modalIconsWrapper {
   width: 100%;
   height: 150px;
   overflow: hidden;
   overflow-y: auto;
-  margin-top: .5rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  margin-top: 1rem;
+  padding: .5rem;
+  border-top: 1px solid #ddd;
 }
 
 .modalIcons {
@@ -14,6 +22,20 @@
   gap: 10px;
   width: 100%;
   height: 100%;
+}
+
+.selectedIconWrapper {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1rem;
+
+  span {
+    margin-right: 1rem;
+  }
+}
+
+.selectedIcon {
+  margin-right: 1rem;
 }
 
 .icon {
