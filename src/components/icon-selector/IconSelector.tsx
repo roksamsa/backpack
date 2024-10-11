@@ -7,8 +7,10 @@ import IconDisplay from "../icon-display/IconDisplay";
 
 const IconPicker = ({
   onSelectIcon,
+  preSelectedIcon,
 }: {
   onSelectIcon: (icon: string) => void;
+  preSelectedIcon?: string;
 }) => {
   const iconsPerPage = 45;
   const allIcons = useMemo(() => Object.keys(MdIcons), []);
@@ -26,6 +28,12 @@ const IconPicker = ({
     setSelectedIcon(iconName); // Mark the icon as selected
     onSelectIcon(iconName); // Pass the selected icon to the parent component
   };
+
+  useEffect(() => {
+    if (preSelectedIcon) {
+      setSelectedIcon(preSelectedIcon);
+    }
+  }, [preSelectedIcon]);
 
   useEffect(() => {
     const filtered = allIcons.filter((iconName) =>

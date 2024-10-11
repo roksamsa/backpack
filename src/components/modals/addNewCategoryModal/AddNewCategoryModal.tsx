@@ -36,6 +36,7 @@ const AddNewCategoryModal = () => {
   const [cancelButtonText, setCancelButtonText] = useState<string>("Cancel");
   const [categoryName, setCategoryName] = useState<string>("");
   const [categorySlug, setCategorySlug] = useState<string>("");
+  const [preSelectedIcon, setPreSelectedIcon] = useState<string>("");
   const [parentCategory, setParentCategory] = useState<string>("");
   const [mainSectionsForDropdown, setMainSectionsForDropdown] = useState<any[]>(
     [],
@@ -230,10 +231,12 @@ const AddNewCategoryModal = () => {
         break;
 
       case ModalType.EDIT_MAIN_SECTION:
+        console.log("addEditSectionModalData", addEditSectionModalData);
         setModalTitle("Edit main section");
         setSaveButtonText("Save");
         setCategoryName(addEditSectionModalData?.data?.name || "");
         setCategorySlug(addEditSectionModalData?.data?.link || "");
+        setPreSelectedIcon(addEditSectionModalData?.data?.iconName);
         setParentCategory("");
         break;
 
@@ -286,7 +289,10 @@ const AddNewCategoryModal = () => {
                   </SelectItem>
                 ))}
               </Select>
-              <IconPicker onSelectIcon={setSelectedIcon} />
+              <IconPicker
+                onSelectIcon={setSelectedIcon}
+                preSelectedIcon={preSelectedIcon}
+              />
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={handleOnCancel}>
