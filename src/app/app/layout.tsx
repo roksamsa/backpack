@@ -1,26 +1,16 @@
 "use client";
 
+import { Suspense } from "react";
 import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewCategoryModal";
 import AddNewItemModal from "@/components/modals/addNewItemModal/AddNewItemModal";
 import ConfirmModal from "@/components/modals/confirmModal/ConfirmModal";
 import Sidebar from "@/components/sidebar/Sidebar";
+
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  /*useEffect(() => {
-    if (status === "loading") return;
-    if (status === "unauthenticated") {
-      router.push("/login");
-    } else {
-      router.push("/app");
-    }
-  }, [status, router]);*/
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const manFigure = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -62,7 +52,7 @@ export default function RootLayout({
             <div className="page__backpack-man-shadow"></div>
             <div className="page__backpack-man-figure" ref={manFigure}></div>
           </div>
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         </div>
       </div>
       <div className="modals">

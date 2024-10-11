@@ -38,7 +38,7 @@ const CategoryPage = () => {
     setSubSections,
     subSections,
   } = useDataStoreContext();
-  const [pageData, setPageData] = useState<any[]>([]);
+  const [pageData, setPageData] = useState<any>();
   const [selectedTab, setSelectedTab] = useState<string>("");
   const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(
     null,

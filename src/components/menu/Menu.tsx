@@ -11,6 +11,7 @@ import { Skeleton } from "@nextui-org/skeleton";
 import { ModalType } from "@/utils/enums";
 
 import "simplebar-react/dist/simplebar.min.css";
+import { CustomSession, MenuItemType } from "@/utils/interfaces";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const skeletonItems = Array.from({ length: 10 });
@@ -25,12 +26,13 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   } = useDataStoreContext();
 
   useEffect(() => {
-    if (session?.user?.id) {
+    const customSession = session as CustomSession;
+    if (customSession?.user?.id) {
       const fetchSections = async () => {
         try {
           await fetchData({
             url: "/api/categories/getMainSections",
-            query: { userId: session?.user?.id },
+            query: { userId: customSession?.user?.id },
             method: "GET",
             options: {
               onSuccess: (data) => {
@@ -45,7 +47,7 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
 
       fetchSections();
     }
-  }, [session?.user?.id, setMainSections]);
+  }, [session, setMainSections]);
 
   const handleAddSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({
@@ -55,14 +57,14 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
     });
   };
 
-  const itemDashboard: MenuItem = {
+  const itemDashboard: MenuItemType = {
     id: 999900000,
     iconName: "MdOutlineDashboard",
     link: "",
     name: "Dashboard",
   };
 
-  const itemAddNewSection: MenuItem = {
+  const itemAddNewSection: MenuItemType = {
     id: 9999999999,
     iconName: "MdAdd",
     link: null,

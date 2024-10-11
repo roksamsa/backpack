@@ -5,9 +5,12 @@ import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@nextui-org/skeleton";
 
 import styles from "./UserProfile.module.scss";
+import { CustomSession } from "@/utils/interfaces";
 
 const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const { data: session } = useSession();
+  const customSession = session as CustomSession;
+
   return (
     <div
       className={`${styles.userProfileWrapper} ${
@@ -15,28 +18,30 @@ const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
       }`}
       onClick={() => signOut()}
     >
-      {session?.user ? (
+      {customSession?.user ? (
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>
-            {session?.user?.image ? (
+            {customSession?.user?.image ? (
               <Image
-                alt={session?.user?.name!}
-                title={session?.user?.name!}
-                src={session?.user?.image!}
+                alt={customSession?.user?.name!}
+                title={customSession?.user?.name!}
+                src={customSession?.user?.image!}
               />
             ) : (
               <div className={styles.userAvatarWithFirstLetter}>
-                {session?.user?.name?.[0]}
-                {session?.user?.lastname && session?.user?.lastname?.[0]}
+                {customSession?.user?.name?.[0]}
+                {customSession?.user?.lastname &&
+                  customSession?.user?.lastname?.[0]}
               </div>
             )}
           </div>
           <div className={styles.userText}>
             <div className={styles.userName}>
-              {session?.user?.name}
-              {session?.user?.lastname && ` ${session.user.lastname}`}
+              {customSession?.user?.name}
+              {customSession?.user?.lastname &&
+                ` ${customSession.user.lastname}`}
             </div>
-            <div className={styles.userEmail}>{session?.user?.email}</div>
+            <div className={styles.userEmail}>{customSession?.user?.email}</div>
           </div>
         </div>
       ) : (

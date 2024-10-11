@@ -1,5 +1,5 @@
-import { ModalData } from "@/interfaces/interfaces";
 import { defaultEmptyModalData } from "@/utils/globals";
+import { ModalData } from "@/utils/interfaces";
 import React, {
   createContext,
   ReactNode,
@@ -67,13 +67,8 @@ export const DataStoreProvider = ({ children }: { children: ReactNode }) => {
   const [metalsApiData, setMetalsApiData] = useState<any[]>([]);
 
   // Selection of items
-  const [selectedMainSection, setSelectedMainSection] = useState<any[]>([]);
-  const [selectedSubSection, setSelectedSubSection] = useState<any[]>([]);
-
-  useEffect(() => {
-    console.log("selectedSubSection", selectedSubSection);
-    console.log("selectedMainSection", selectedMainSection);
-  }, [selectedMainSection, selectedSubSection]);
+  const [selectedMainSection, setSelectedMainSection] = useState<any>();
+  const [selectedSubSection, setSelectedSubSection] = useState<any>();
 
   return (
     <DataStoreContext.Provider

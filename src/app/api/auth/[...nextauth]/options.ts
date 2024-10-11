@@ -9,27 +9,11 @@ import TwitterProvider from "next-auth/providers/twitter";
 import TodoistProvider from "next-auth/providers/todoist";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
+import { CustomSession, CustomUser } from "@/utils/interfaces";
 
 const prisma = new PrismaClient({
   log: ['query', 'info', 'warn'], // adjust logging levels
 });
-
-export interface CustomSession {
-  user?: {
-    id?: any | null;
-    name?: string | null;
-    lastname?: any | null;
-    email?: string | null;
-    image?: string | null;
-  };
-  expires: ISODateString;
-}
-interface CustomUser {
-  id: string;
-  name?: string | null;
-  lastname?: string | null;
-  email?: string | null;
-}
 
 export const options: NextAuthOptions = {
   logger: {

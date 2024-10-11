@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Menu.module.scss";
 import Link from "next/link";
 import IconDisplay from "../icon-display/IconDisplay";
 
+import { useRouter } from "next/navigation";
 import { Tooltip } from "@nextui-org/tooltip";
 import { Button } from "@nextui-org/button";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { ModalType } from "@/utils/enums";
-import { MenuItem } from "@/utils/interfaces";
+import { MenuItemType } from "@/utils/interfaces";
 
 interface MenuItemProps {
   areActionButtonsVisible: boolean;
   isAddingNewSectionMenuItem: boolean;
   isSidebarClosed: boolean;
-  item: MenuItem;
+  item: MenuItemType;
   onClick: (event: any) => void;
 }
 
@@ -25,10 +26,12 @@ const MenuItem = ({
   item,
   onClick = () => {},
 }: MenuItemProps) => {
+  const router = useRouter();
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
   const {
-    setConfirmModalData,
+    selectedMainSection,
     setAddEditSectionModalData,
+    setConfirmModalData,
     setSelectedMainSection,
   } = useDataStoreContext();
 
@@ -85,15 +88,14 @@ const MenuItem = ({
             <Link
               className={styles.menuItemLink}
               href={`/app/${item.link}`}
+              prefetch={true}
               onClick={handleMenuItemClick}
             >
-              <div className={styles.menuItemLinkContainer}>
-                <IconDisplay
-                  className={styles.menuItemIcon}
-                  iconName={item.iconName}
-                />
-                <span>{item.name}</span>
-              </div>
+              <IconDisplay
+                className={styles.menuItemIcon}
+                iconName={item.iconName}
+              />
+              <span>{item.name}</span>
             </Link>
             {areActionButtonsVisible && (
               <div className={styles.menuItemActions}>

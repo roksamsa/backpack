@@ -1,6 +1,8 @@
 import { fetchData } from "@/utils/apiHelper";
 import Dashboard from "./dashboard";
 
+export const dynamic = "force-dynamic";
+
 const DashboardPage = async () => {
   const apiKey = process.env.METALS_API_KEY;
   const metalsApiData = await fetchData({

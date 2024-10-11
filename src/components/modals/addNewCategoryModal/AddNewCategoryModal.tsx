@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
 import IconPicker from "@/components/icon-selector/IconSelector";
 import { ModalType } from "@/utils/enums";
+import { CustomSession } from "@/utils/interfaces";
 
 const AddNewCategoryModal = () => {
   const pathname = usePathname();
@@ -25,8 +26,10 @@ const AddNewCategoryModal = () => {
   const {
     addEditSectionModalData,
     mainSections,
+    selectedMainSection,
     setAddEditSectionModalData,
     setMainSections,
+    setSubSections,
   } = useDataStoreContext();
   const [modalTitle, setModalTitle] = useState<string>("Add");
   const [saveButtonText, setSaveButtonText] = useState<string>("Save");
@@ -80,13 +83,15 @@ const AddNewCategoryModal = () => {
     });
   };
 
-  const addNewSectionApiCall = async () => {
+  const addNewSectionApiCall = async (addingNewSubSection: boolean) => {
+    const customSession = session as CustomSession;
+
     try {
       await fetchData({
         url: "/api/categories/create",
         method: "POST",
         body: {
-          userId: session?.user?.id,
+          userId: customSession?.user?.id,
           name: categoryName,
           link: categorySlug,
           parentId: +parentCategory,
@@ -96,17 +101,34 @@ const AddNewCategoryModal = () => {
         },
         options: {
           onSuccess: async (data) => {
-            toast.success("Successfully added new section!");
-            await fetchData({
-              url: "/api/categories/getMainSections",
-              query: { userId: session?.user?.id },
-              method: "GET",
-              options: {
-                onSuccess: (data) => {
-                  setMainSections(data);
+            if (addingNewSubSection) {
+              toast.success("Successfully added new sub section!");
+              await fetchData({
+                url: "/api/categories/getSectionsByParent",
+                query: {
+                  userId: customSession?.user?.id,
+                  parentId: selectedMainSection?.id,
                 },
-              },
-            });
+                method: "GET",
+                options: {
+                  onSuccess: (data) => {
+                    setSubSections(data);
+                  },
+                },
+              });
+            } else {
+              toast.success("Successfully added new section!");
+              await fetchData({
+                url: "/api/categories/getMainSections",
+                query: { userId: customSession?.user?.id },
+                method: "GET",
+                options: {
+                  onSuccess: (data) => {
+                    setMainSections(data);
+                  },
+                },
+              });
+            }
           },
         },
       });
@@ -117,13 +139,14 @@ const AddNewCategoryModal = () => {
   };
 
   const editSectionApiCall = async () => {
+    const customSession = session as CustomSession;
     try {
       await fetchData({
         url: "/api/categories/edit",
         method: "PUT",
         body: {
           id: addEditSectionModalData?.data?.id,
-          userId: session?.user?.id,
+          userId: customSession?.user?.id,
           name: categoryName,
           link: categorySlug,
           parentId: +parentCategory,
@@ -136,7 +159,7 @@ const AddNewCategoryModal = () => {
             toast.success("Successfully added new section!");
             await fetchData({
               url: "/api/categories/getMainSections",
-              query: { userId: session?.user?.id },
+              query: { userId: customSession?.user?.id },
               method: "GET",
               options: {
                 onSuccess: (data) => {
@@ -158,11 +181,11 @@ const AddNewCategoryModal = () => {
 
     switch (addEditSectionModalData?.type) {
       case ModalType.ADD_MAIN_SECTION:
-        addNewSectionApiCall();
+        addNewSectionApiCall(false);
         break;
 
       case ModalType.ADD_SUB_SECTION:
-        addNewSectionApiCall();
+        addNewSectionApiCall(true);
         break;
 
       case ModalType.EDIT_MAIN_SECTION:

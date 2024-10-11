@@ -13,6 +13,7 @@ import { fetchData } from "@/utils/apiHelper";
 import { useSearchParams } from "next/navigation";
 import { ModalType } from "@/utils/enums";
 import { useSession } from "next-auth/react";
+import { CustomSession } from "@/utils/interfaces";
 
 const ConfirmModal = () => {
   const {
@@ -36,6 +37,7 @@ const ConfirmModal = () => {
   };
 
   const deleteSectionApiCall = async () => {
+    const customSession = session as CustomSession;
     try {
       await fetchData({
         url: "/api/categories/delete",
@@ -46,7 +48,7 @@ const ConfirmModal = () => {
             toast.success("Successfully added new section!");
             await fetchData({
               url: "/api/categories/getMainSections",
-              query: { userId: session?.user?.id },
+              query: { userId: customSession?.user?.id },
               method: "GET",
               options: {
                 onSuccess: (data) => {

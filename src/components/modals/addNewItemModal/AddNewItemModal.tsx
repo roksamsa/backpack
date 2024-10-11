@@ -15,8 +15,7 @@ import { fetchData } from "@/utils/apiHelper";
 import { InvestmentType } from "@/utils/enums";
 
 import toast from "react-hot-toast";
-import { usePathname, useSearchParams } from "next/navigation";
-import { ModalData } from "@/interfaces/interfaces";
+import { useSearchParams } from "next/navigation";
 
 const AddNewItemModal = () => {
   const { subSections, addEditItemModalData, setAddEditItemModalData } =
