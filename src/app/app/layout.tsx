@@ -10,7 +10,11 @@ import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const manFigure = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

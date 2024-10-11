@@ -12,7 +12,7 @@ import { JWT } from "next-auth/jwt";
 import { CustomSession, CustomUser } from "@/utils/interfaces";
 
 const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn'], // adjust logging levels
+  log: ["query", "info", "warn"], // adjust logging levels
 });
 
 export const options: NextAuthOptions = {
