@@ -142,21 +142,11 @@ const CategoryPage = () => {
     <div className="content">
       <div className="content__headline">
         <div className="content__headline-up">
-          {pageData?.name ? (
-            <>
-              <IconDisplay
-                iconName={pageData.properties?.icon}
-                className="content__headline-icon"
-              />
-              <h1>{pageData?.name}</h1>
-            </>
-          ) : (
-            <div className="w-full flex items-center gap-3">
-              <div className="w-full flex flex-col gap-5">
-                <Skeleton className="h-8 w-11/12 rounded-full" />
-              </div>
-            </div>
-          )}
+          <IconDisplay
+            iconName={pageData?.iconName}
+            className="content__headline-icon"
+          />
+          <h1>{pageData?.name}</h1>
 
           <div className="content__headline-actions">
             <ButtonGroup className="content__toggle-view">

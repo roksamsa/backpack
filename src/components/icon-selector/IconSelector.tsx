@@ -86,7 +86,11 @@ const IconPicker = ({
   return (
     <div className={styles.iconSelector}>
       <div className={styles.selectedIconWrapper}>
-        <span>Selected icon</span>
+        {selectedIcon ? (
+          <span>Selected icon</span>
+        ) : (
+          <span>No selected icon yet</span>
+        )}
         <IconDisplay iconName={selectedIcon} className={styles.selectedIcon} />
         <span>
           {selectedIcon

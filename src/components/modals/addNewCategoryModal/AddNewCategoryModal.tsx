@@ -217,6 +217,7 @@ const AddNewCategoryModal = () => {
         setParentCategory("");
         setCategoryName("");
         setCategorySlug("");
+        setPreSelectedIcon("");
         break;
 
       case ModalType.ADD_SUB_SECTION:
@@ -228,6 +229,7 @@ const AddNewCategoryModal = () => {
         setParentCategory(selectedMainSection?.id.toString() || "");
         setCategoryName("");
         setCategorySlug("");
+        setPreSelectedIcon("");
         break;
 
       case ModalType.EDIT_MAIN_SECTION:
