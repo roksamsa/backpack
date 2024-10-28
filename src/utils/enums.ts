@@ -40,10 +40,12 @@ export enum InvestmentType {
 }
 
 export enum ModalType {
+  ADD_ITEMS_SECTION = "add-items-section",
   ADD_MAIN_SECTION = "add-main-section",
   ADD_SUB_SECTION = "add-sub-section",
   CONFIRM_DELETE_ITEM = "confirm-delete-item",
   CONFIRM_DELETE_MAIN_SECTION = "confirm-delete-main-section",
+  EDIT_ITEMS_SECTION = "edit-items-section",
   EDIT_MAIN_SECTION = "edit-main-section",
   EDIT_SUB_SECTION = "edit-sub-section",
 }

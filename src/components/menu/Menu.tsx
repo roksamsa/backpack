@@ -9,9 +9,10 @@ import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { Skeleton } from "@nextui-org/skeleton";
 import { ModalType } from "@/utils/enums";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { CustomSession, MenuItemType } from "@/utils/interfaces";
 
 import "simplebar-react/dist/simplebar.min.css";
-import { CustomSession, MenuItemType } from "@/utils/interfaces";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const skeletonItems = Array.from({ length: 10 });
@@ -71,65 +72,84 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
     name: "Add new section",
   };
 
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) return; // If dropped outside the list, do nothing
+
+    const reorderedSections = Array.from(mainSections);
+    const [movedSection] = reorderedSections.splice(result.source.index, 1);
+    reorderedSections.splice(result.destination.index, 0, movedSection);
+
+    setMainSections(reorderedSections);
+  };
+
   return (
     <div
       className={`${styles.menu} ${
         isSidebarClosed ? styles.sidebarClosed : ""
       }`}
     >
-      {mainSections?.length > 0 ? (
-        <SimpleBar className={styles.menuListWrapper} autoHide={false}>
-          <ul className={styles.menuList}>
-            <li
-              key="dashboard"
-              className={`${styles.menuItem} ${
-                pathname === "/app" ? styles.active : ""
-              }`}
-            >
-              <MenuItem
-                areActionButtonsVisible={false}
-                item={itemDashboard}
-                isSidebarClosed={isSidebarClosed}
-                isAddingNewSectionMenuItem={false}
-                onClick={() => {}}
-              />
-            </li>
-            {mainSections.map((section: any, index: number) => (
-              <li
-                key={index}
-                className={`${styles.menuItem} ${
-                  selectedMainSection?.link === section.link
-                    ? styles.active
-                    : ""
-                }`}
-              >
-                <MenuItem
-                  areActionButtonsVisible={true}
-                  item={{
-                    link: section.link,
-                    name: section.name,
-                    id: section.id,
-                    iconName: section.properties.icon
-                      ? section.properties.icon
-                      : "MdStar",
-                  }}
-                  isAddingNewSectionMenuItem={false}
-                  isSidebarClosed={isSidebarClosed}
-                  onClick={() => {}}
-                />
-              </li>
-            ))}
-          </ul>
-        </SimpleBar>
-      ) : (
-        <div className={styles.menuList + " w-full flex items-center gap-3"}>
-          <div className="w-full flex flex-col gap-5">
-            {skeletonItems.map((_, index) => (
-              <Skeleton key={index} className="h-8 w-5/5 rounded-full" />
-            ))}
+      <SimpleBar className={styles.menuListWrapper} autoHide={false}>
+        <div className={styles.menuList}>
+          <div
+            key="dashboard"
+            className={`${styles.menuItem} ${
+              pathname === "/app" ? styles.active : ""
+            }`}
+          >
+            <MenuItem
+              areActionButtonsVisible={false}
+              item={itemDashboard}
+              isSidebarClosed={isSidebarClosed}
+              isAddingNewSectionMenuItem={false}
+              onClick={() => {}}
+            />
           </div>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="droppable-menu" direction="vertical">
+              {(provided) => (
+                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                  {mainSections.map((section, index) => (
+                    <Draggable
+                      key={section.id}
+                      draggableId={`section-${section.id}`}
+                      index={index}
+                    >
+                      {(provided) => (
+                        <li
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`${styles.menuItem} ${
+                            selectedMainSection?.link === section.link
+                              ? styles.active
+                              : ""
+                          }`}
+                        >
+                          <MenuItem
+                            areActionButtonsVisible={true}
+                            item={{
+                              link: section.link,
+                              name: section.name,
+                              id: section.id,
+                              iconName: section.properties.icon
+                                ? section.properties.icon
+                                : "MdStar",
+                            }}
+                            isAddingNewSectionMenuItem={false}
+                            isSidebarClosed={isSidebarClosed}
+                            onClick={() => {}}
+                          />
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
-      )}
+      </SimpleBar>
       <MenuItem
         areActionButtonsVisible={false}
         isSidebarClosed={isSidebarClosed}

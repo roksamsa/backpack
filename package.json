@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@binance/connector": "^3.5.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@hello-pangea/dnd": "^17.0.0",
     "@nextui-org/button": "^2.0.37",
     "@nextui-org/card": "^2.0.33",
     "@nextui-org/dropdown": "^2.1.31",
@@ -26,6 +29,7 @@
     "next": "^14.2.9",
     "next-auth": "^4.24.7",
     "react": "^18",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",

@@ -7,7 +7,7 @@ import { Tab, Tabs } from "@nextui-org/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdAdd, MdGridView, MdSplitscreen } from "react-icons/md";
-import { Skeleton } from "@nextui-org/skeleton";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import ContentMetals from "@/components/content/ContentMetals";
 import IconDisplay from "@/components/icon-display/IconDisplay";
@@ -29,7 +29,6 @@ const CategoryPage = () => {
     addEditItemModalData,
     addEditSectionModalData,
     itemsToShow,
-    mainSections,
     selectedMainSection,
     setAddEditItemModalData,
     setAddEditSectionModalData,
@@ -46,6 +45,8 @@ const CategoryPage = () => {
   const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
     "content__wrapper rows",
   );
+
+  const [itemsSections, setItemsSections] = useState<any[]>([]);
 
   const handleToggleViewClick = (type: string) => {
     if (type === "grid") setContentWrapperClasses("content__wrapper grid");
@@ -116,6 +117,27 @@ const CategoryPage = () => {
   }, [searchParams]);
 
   useEffect(() => {
+    const fetchItemsSubSections = async () => {
+      try {
+        await fetchData({
+          url: "/api/categories/getSectionsByParent",
+          query: { parentId: selectedTab },
+          method: "GET",
+          options: {
+            onSuccess: (data) => {
+              setItemsSections(data);
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Failed get items sections:", error);
+      }
+    };
+
+    fetchItemsSubSections();
+  }, [selectedTab]);
+
+  useEffect(() => {
     if (selectedTab && subSections.length > 0) {
       const params = new URLSearchParams(searchParams);
       params.set("subSectionId", selectedTab);
@@ -124,6 +146,14 @@ const CategoryPage = () => {
       replace(`${pathname}`);
     }
   }, [selectedTab, searchParams, pathname, replace, subSections.length]);
+
+  const handleAddItemsSectionModalOpenClick = (event: any) => {
+    setAddEditSectionModalData({
+      ...addEditSectionModalData,
+      type: ModalType.ADD_ITEMS_SECTION,
+      isVisible: true,
+    });
+  };
 
   const handleAddSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({
@@ -188,7 +218,7 @@ const CategoryPage = () => {
               <DropdownMenu aria-label="Static Actions">
                 <DropdownItem
                   key="copy"
-                  onPress={handleAddSectionModalOpenClick}
+                  onPress={handleAddItemsSectionModalOpenClick}
                 >
                   New items section
                 </DropdownItem>
@@ -202,16 +232,17 @@ const CategoryPage = () => {
         <div className="content__headline-down">
           {subSections.length > 0 && (
             <Tabs
+              className="content__headline-tabs"
               aria-label="Subsections tabs"
               color="primary"
               radius="full"
               variant="light"
-              className="content__headline-tabs"
-              items={subSections}
               selectedKey={selectedTab}
-              onSelectionChange={(key) => handleTabSelectionChange(key)}
+              onSelectionChange={handleTabSelectionChange}
             >
-              {(item) => <Tab key={item.id} title={item.name}></Tab>}
+              {subSections.map((item, index) => (
+                <Tab key={item.id} title={item.name}></Tab>
+              ))}
             </Tabs>
           )}
           <Button
@@ -231,10 +262,16 @@ const CategoryPage = () => {
           </Button>
         </div>
       </div>
+      {itemsSections.map((item, index) => (
+        <h2 key={item.id}>{item.name}</h2>
+      ))}
       {itemsToShow.length ? (
-        <div className={contentWrapperClasses}>
-          <ContentMetals data={itemsToShow} />
-        </div>
+        <>
+          <h2>Other</h2>
+          <div className={contentWrapperClasses}>
+            <ContentMetals data={itemsToShow} />
+          </div>
+        </>
       ) : (
         <div className="no-data">
           <LogoSvg />

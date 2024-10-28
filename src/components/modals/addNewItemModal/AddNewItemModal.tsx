@@ -31,6 +31,8 @@ const AddNewItemModal = () => {
     Object.values(InvestmentType).map((value) => ({ name: value })),
   );
 
+  const [selectedTab, setSelectedTab] = useState<string>("");
+
   const handleItemNameChange = (name: string) => {
     setItemName(name);
   };

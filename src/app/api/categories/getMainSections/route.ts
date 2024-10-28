@@ -28,9 +28,6 @@ export async function GET(req: NextRequest) {
         OR: [{ userId: null }, { userId: userId }],
         parentId: null,
       },
-      orderBy: {
-        name: "asc",
-      },
     });
 
     return NextResponse.json(mainSections, { status: 200 });

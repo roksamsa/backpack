@@ -30,6 +30,7 @@ const AddNewCategoryModal = () => {
     setAddEditSectionModalData,
     setMainSections,
     setSubSections,
+    subSections,
   } = useDataStoreContext();
   const [modalTitle, setModalTitle] = useState<string>("Add");
   const [saveButtonText, setSaveButtonText] = useState<string>("Save");
@@ -86,6 +87,7 @@ const AddNewCategoryModal = () => {
 
   const addNewSectionApiCall = async (addingNewSubSection: boolean) => {
     const customSession = session as CustomSession;
+    console.log("customSession", customSession);
 
     try {
       await fetchData({
@@ -189,6 +191,10 @@ const AddNewCategoryModal = () => {
         addNewSectionApiCall(true);
         break;
 
+      case ModalType.ADD_ITEMS_SECTION:
+        addNewSectionApiCall(true);
+        break;
+
       case ModalType.EDIT_MAIN_SECTION:
         editSectionApiCall();
         break;
@@ -232,6 +238,19 @@ const AddNewCategoryModal = () => {
         setPreSelectedIcon("");
         break;
 
+      case ModalType.ADD_ITEMS_SECTION:
+        const selectedSubSection = mainSections.find((section: any) =>
+          pathname.includes(section.link),
+        );
+        setModalTitle("Add new items section to your backpack");
+        setSaveButtonText("Add new items section");
+        setParentCategory(selectedSubSection?.id.toString() || "");
+        setCategoryName("");
+        setCategorySlug("");
+        setPreSelectedIcon("");
+        setMainSectionsForDropdown(subSections);
+        break;
+
       case ModalType.EDIT_MAIN_SECTION:
         console.log("addEditSectionModalData", addEditSectionModalData);
         setModalTitle("Edit main section");
@@ -245,7 +264,7 @@ const AddNewCategoryModal = () => {
       default:
         break;
     }
-  }, [addEditSectionModalData, mainSections, pathname]);
+  }, [addEditSectionModalData, mainSections, subSections, pathname]);
 
   return (
     <Modal
@@ -291,10 +310,12 @@ const AddNewCategoryModal = () => {
                   </SelectItem>
                 ))}
               </Select>
-              <IconPicker
-                onSelectIcon={setSelectedIcon}
-                preSelectedIcon={preSelectedIcon}
-              />
+              {addEditSectionModalData.type !== ModalType.ADD_SUB_SECTION && (
+                <IconPicker
+                  onSelectIcon={setSelectedIcon}
+                  preSelectedIcon={preSelectedIcon}
+                />
+              )}
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={handleOnCancel}>

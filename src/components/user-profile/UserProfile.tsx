@@ -22,10 +22,10 @@ const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
         <div className={styles.userProfile}>
           <div className={styles.userAvatar}>
             {customSession?.user?.image ? (
-              <Image
-                alt={customSession?.user?.name!}
-                title={customSession?.user?.name!}
-                src={customSession?.user?.image!}
+              <img
+                alt={customSession?.user?.name || ""}
+                title={customSession?.user?.name || ""}
+                src={customSession?.user?.image}
               />
             ) : (
               <div className={styles.userAvatarWithFirstLetter}>
