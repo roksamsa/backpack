@@ -1,5 +1,14 @@
-import { useDataStoreContext } from "@/context/DataStoreProvider";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+
 import { Button } from "@nextui-org/button";
+import { fetchData } from "@/utils/apiHelper";
+import { Input } from "@nextui-org/input";
+import { InvestmentType } from "@/utils/enums";
+import { Select, SelectItem } from "@nextui-org/select";
+import { useDataStoreContext } from "@/context/DataStoreProvider";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
+import { useSearchParams } from "next/navigation";
 import {
   Modal,
   ModalBody,
@@ -7,16 +16,6 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import React, { useEffect, useState } from "react";
-
-import { Input } from "@nextui-org/input";
-import { Select, SelectItem } from "@nextui-org/select";
-import { fetchData } from "@/utils/apiHelper";
-import { InvestmentType } from "@/utils/enums";
-
-import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
-import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const AddNewItemModal = () => {
   const { subSections, itemsSections } = useDataStoreContext();

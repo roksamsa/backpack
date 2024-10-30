@@ -45,27 +45,26 @@ model VerificationToken {
 }
 
 model Category {
-  boughtDate     DateTime?
-  boughtPrice    Int?
-  children       Category[] @relation("CategoryHierarchy")
-  currency       String?
-  description    String?
-  favorite       Boolean?
-  id             Int        @id @default(autoincrement())
-  items          Item[]
-  link           String?
-  name           String
-  parent         Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  parentId       Int?
-  itemsSectionId Int?
-  productNumber  String?
-  properties     Json
-  share          Boolean?
-  status         String?
-  unit           String?
-  user           User?      @relation(fields: [userId], references: [id])
-  userId         String?
-  value          String?
+  boughtDate    DateTime?
+  boughtPrice   Int?
+  children      Category[] @relation("CategoryHierarchy")
+  currency      String?
+  description   String?
+  favorite      Boolean?
+  id            Int        @id @default(autoincrement())
+  items         Item[]
+  link          String?
+  name          String
+  parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  parentId      Int?
+  productNumber String?
+  properties    Json
+  share         Boolean?
+  status        String?
+  unit          String?
+  user          User?      @relation(fields: [userId], references: [id])
+  userId        String?
+  value         String?
 }
 
 model CategoryOrder {
@@ -76,12 +75,13 @@ model CategoryOrder {
 }
 
 model Item {
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
-  id         Int      @id @default(autoincrement())
-  properties Json
-  status     String
-  title      String
-  type       String
-  value      Float
+  category       Category @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  itemsSectionId Int?
+  id             Int      @id @default(autoincrement())
+  properties     Json
+  status         String
+  title          String
+  type           String
+  value          Float
 }
