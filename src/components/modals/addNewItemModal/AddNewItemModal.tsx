@@ -19,7 +19,7 @@ import { useSearchParams } from "next/navigation";
 import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const AddNewItemModal = () => {
-  const { subSections } = useDataStoreContext();
+  const { subSections, itemsSections } = useDataStoreContext();
   const { setAddEditItemModalData, addEditItemModalData } =
     useModalsStoreContext();
   const searchParams = useSearchParams();
@@ -154,7 +154,7 @@ const AddNewItemModal = () => {
                 selectedKeys={[section]}
                 onChange={(e) => setSection(e.target.value)}
               >
-                {subSections.map((section: any) => (
+                {itemsSections?.map((section: any) => (
                   <SelectItem key={section.id} value={section.id}>
                     {section.name}
                   </SelectItem>

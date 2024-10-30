@@ -27,8 +27,10 @@ const CategoryPage = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const {
+    itemsSections,
     itemsToShow,
     selectedMainSection,
+    setItemsSections,
     setItemsToShow,
     setSelectedSubSection,
     setSubSections,
@@ -48,8 +50,6 @@ const CategoryPage = () => {
   const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
     "content__wrapper rows",
   );
-
-  const [itemsSections, setItemsSections] = useState<any[]>([]);
 
   const handleToggleViewClick = (type: string) => {
     if (type === "grid") setContentWrapperClasses("content__wrapper grid");
