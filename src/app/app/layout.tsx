@@ -9,6 +9,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
+import { ModalsStoreProvider } from "@/context/ModalsStoreProvider";
 
 export default function RootLayout({
   children,
@@ -48,23 +49,25 @@ export default function RootLayout({
 
   return (
     <DataStoreProvider>
-      <div className="page">
-        <Sidebar />
-        <div className="page__content">
-          <div className="page__backpack-bg"></div>
-          <div className="page__backpack-man">
-            <div className="page__backpack-man-shadow"></div>
-            <div className="page__backpack-man-figure" ref={manFigure}></div>
+      <ModalsStoreProvider>
+        <div className="page">
+          <Sidebar />
+          <div className="page__content">
+            <div className="page__backpack-bg"></div>
+            <div className="page__backpack-man">
+              <div className="page__backpack-man-shadow"></div>
+              <div className="page__backpack-man-figure" ref={manFigure}></div>
+            </div>
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           </div>
-          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         </div>
-      </div>
-      <div className="modals">
-        <AddNewCategoryModal />
-        <AddNewItemModal />
-        <ConfirmModal />
-      </div>
-      <Toaster position="bottom-right" reverseOrder={false} />
+        <div className="modals">
+          <AddNewCategoryModal />
+          <AddNewItemModal />
+          <ConfirmModal />
+        </div>
+        <Toaster position="bottom-right" reverseOrder={false} />
+      </ModalsStoreProvider>
     </DataStoreProvider>
   );
 }

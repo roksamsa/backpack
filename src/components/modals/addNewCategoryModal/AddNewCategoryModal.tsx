@@ -19,19 +19,20 @@ import toast from "react-hot-toast";
 import IconPicker from "@/components/icon-selector/IconSelector";
 import { ModalType } from "@/utils/enums";
 import { CustomSession } from "@/utils/interfaces";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const AddNewCategoryModal = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
-    addEditSectionModalData,
     mainSections,
     selectedMainSection,
-    setAddEditSectionModalData,
     setMainSections,
     setSubSections,
     subSections,
   } = useDataStoreContext();
+  const { addEditSectionModalData, setAddEditSectionModalData } =
+    useModalsStoreContext();
   const [modalTitle, setModalTitle] = useState<string>("Add");
   const [saveButtonText, setSaveButtonText] = useState<string>("Save");
   const [cancelButtonText, setCancelButtonText] = useState<string>("Cancel");

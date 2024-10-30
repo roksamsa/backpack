@@ -10,6 +10,7 @@ import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { ModalType } from "@/utils/enums";
 import { MenuItemType } from "@/utils/interfaces";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 interface MenuItemProps {
   areActionButtonsVisible: boolean;
@@ -28,12 +29,9 @@ const MenuItem = ({
 }: MenuItemProps) => {
   const router = useRouter();
   const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
-  const {
-    selectedMainSection,
-    setAddEditSectionModalData,
-    setConfirmModalData,
-    setSelectedMainSection,
-  } = useDataStoreContext();
+  const { setSelectedMainSection } = useDataStoreContext();
+  const { setConfirmModalData, setAddEditSectionModalData } =
+    useModalsStoreContext();
 
   const handleEditMainSectionModalOpenClick = (event: any) => {
     setAddEditSectionModalData({

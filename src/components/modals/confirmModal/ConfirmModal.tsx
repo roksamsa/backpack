@@ -10,19 +10,14 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { fetchData } from "@/utils/apiHelper";
-import { useSearchParams } from "next/navigation";
 import { ModalType } from "@/utils/enums";
 import { useSession } from "next-auth/react";
 import { CustomSession } from "@/utils/interfaces";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const ConfirmModal = () => {
-  const {
-    confirmModalData,
-    setConfirmModalData,
-    setMainSections,
-    setItemsToShow,
-  } = useDataStoreContext();
-  const searchParams = useSearchParams();
+  const { setMainSections, setItemsToShow } = useDataStoreContext();
+  const { confirmModalData, setConfirmModalData } = useModalsStoreContext();
   const { data: session } = useSession();
   const [modalTitle, setModalTitle] = useState<string>(
     "Are you sure that you want to delete this?",

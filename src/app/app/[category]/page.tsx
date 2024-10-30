@@ -20,23 +20,26 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/dropdown";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const CategoryPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const {
-    addEditItemModalData,
-    addEditSectionModalData,
     itemsToShow,
     selectedMainSection,
-    setAddEditItemModalData,
-    setAddEditSectionModalData,
     setItemsToShow,
     setSelectedSubSection,
     setSubSections,
     subSections,
   } = useDataStoreContext();
+  const {
+    addEditItemModalData,
+    addEditSectionModalData,
+    setAddEditItemModalData,
+    setAddEditSectionModalData,
+  } = useModalsStoreContext();
   const [pageData, setPageData] = useState<any>();
   const [selectedTab, setSelectedTab] = useState<string>("");
   const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(

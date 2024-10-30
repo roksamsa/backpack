@@ -13,18 +13,17 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { CustomSession, MenuItemType } from "@/utils/interfaces";
 
 import "simplebar-react/dist/simplebar.min.css";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const skeletonItems = Array.from({ length: 10 });
   const pathname = usePathname();
   const { data: session } = useSession();
-  const {
-    addEditSectionModalData,
-    mainSections,
-    setAddEditSectionModalData,
-    selectedMainSection,
-    setMainSections,
-  } = useDataStoreContext();
+  const { mainSections, selectedMainSection, setMainSections } =
+    useDataStoreContext();
+
+  const { addEditSectionModalData, setAddEditSectionModalData } =
+    useModalsStoreContext();
 
   useEffect(() => {
     const customSession = session as CustomSession;

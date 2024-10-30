@@ -16,10 +16,12 @@ import { InvestmentType } from "@/utils/enums";
 
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const AddNewItemModal = () => {
-  const { subSections, addEditItemModalData, setAddEditItemModalData } =
-    useDataStoreContext();
+  const { subSections } = useDataStoreContext();
+  const { setAddEditItemModalData, addEditItemModalData } =
+    useModalsStoreContext();
   const searchParams = useSearchParams();
   const [itemName, setItemName] = useState<string>("");
   const [itemStatus, setItemStatus] = useState<string>("");

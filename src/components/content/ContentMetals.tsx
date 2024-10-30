@@ -1,6 +1,7 @@
 "use client";
 
 import { useDataStoreContext } from "@/context/DataStoreProvider";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 import { ModalType } from "@/utils/enums";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody } from "@nextui-org/card";
@@ -11,7 +12,7 @@ type ContentMetalsProps = {
 };
 
 const ContentMetals: React.FC<ContentMetalsProps> = ({ data }) => {
-  const { setConfirmModalData } = useDataStoreContext();
+  const { setConfirmModalData } = useModalsStoreContext();
 
   const handleDeleteItem = (item: any) => {
     setConfirmModalData({
