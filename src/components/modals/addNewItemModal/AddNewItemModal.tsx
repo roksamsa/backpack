@@ -32,6 +32,10 @@ const AddNewItemModal = () => {
     Object.values(InvestmentType).map((value) => ({ name: value })),
   );
 
+  const [subSectionsForDropdown, setSubSectionsForDropdown] = useState<any[]>(
+    [],
+  );
+
   const [selectedTab, setSelectedTab] = useState<string>("");
 
   const handleItemNameChange = (name: string) => {
@@ -88,6 +92,15 @@ const AddNewItemModal = () => {
       setSection(subSectionId);
     }
   }, [searchParams, subSections]);
+
+  useEffect(() => {
+    const otherSection = {
+      id: 999999999,
+      link: "other",
+      name: "Other",
+    };
+    setSubSectionsForDropdown([otherSection, ...itemsSections]);
+  }, [itemsSections]);
 
   return (
     <Modal
@@ -153,7 +166,7 @@ const AddNewItemModal = () => {
                 selectedKeys={[section]}
                 onChange={(e) => setSection(e.target.value)}
               >
-                {itemsSections?.map((section: any) => (
+                {subSectionsForDropdown?.map((section: any) => (
                   <SelectItem key={section.id} value={section.id}>
                     {section.name}
                   </SelectItem>
