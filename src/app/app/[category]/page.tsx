@@ -6,7 +6,12 @@ import { Button, ButtonGroup } from "@nextui-org/button";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdAdd, MdGridView, MdSplitscreen } from "react-icons/md";
+import {
+  MdAdd,
+  MdDeleteOutline,
+  MdGridView,
+  MdSplitscreen,
+} from "react-icons/md";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 import ContentMetals from "@/components/content/ContentMetals";
@@ -21,6 +26,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/dropdown";
 import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
+import { Card, CardBody } from "@nextui-org/card";
 
 const CategoryPage = () => {
   const pathname = usePathname();
@@ -138,7 +144,7 @@ const CategoryPage = () => {
     };
 
     fetchItemsSubSections();
-  }, [selectedTab]);
+  }, [selectedTab, setItemsSections]);
 
   useEffect(() => {
     if (selectedTab && subSections.length > 0) {
@@ -265,16 +271,73 @@ const CategoryPage = () => {
           </Button>
         </div>
       </div>
-      {itemsSections.map((item, index) => (
-        <h2 key={item.id}>{item.name}</h2>
-      ))}
-      {itemsToShow.length ? (
-        <>
-          <h2>Other</h2>
-          <div className={contentWrapperClasses}>
-            <ContentMetals data={itemsToShow} />
+      {itemsToShow?.length ? (
+        <div className="content__items">
+          {itemsSections?.map((section) => (
+            <div className="content__section" key={section.id}>
+              <h2>{section.name}</h2>
+              {itemsToShow
+                .filter((item) => item?.itemsSectionId === section?.id)
+                .map((filteredItem) => (
+                  <div key={filteredItem.id} className={contentWrapperClasses}>
+                    <Card
+                      className="content__card"
+                      radius="sm"
+                      shadow="md"
+                      isHoverable={true}
+                      isPressable={false}
+                    >
+                      <CardBody>
+                        <div className="card__wrapper">
+                          <div className="test">{filteredItem.type}</div>
+                          <div className="test">{filteredItem.title}</div>
+                          <div className="test">{filteredItem.status}</div>
+                          <div className="test">{filteredItem.value}</div>
+                          <Button
+                            color="primary"
+                            radius="full"
+                            variant="light"
+                            startContent={<MdDeleteOutline />}
+                          />
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </div>
+                ))}
+            </div>
+          ))}
+          <div className="content__section">
+            <h2>Other</h2>
+            {itemsToShow
+              .filter((item) => !item?.itemsSectionId)
+              .map((filteredItem) => (
+                <div key={filteredItem.id} className={contentWrapperClasses}>
+                  <Card
+                    className="content__card"
+                    radius="sm"
+                    shadow="md"
+                    isHoverable={true}
+                    isPressable={false}
+                  >
+                    <CardBody>
+                      <div className="card__wrapper">
+                        <div className="test">{filteredItem.type}</div>
+                        <div className="test">{filteredItem.title}</div>
+                        <div className="test">{filteredItem.status}</div>
+                        <div className="test">{filteredItem.value}</div>
+                        <Button
+                          color="primary"
+                          radius="full"
+                          variant="light"
+                          startContent={<MdDeleteOutline />}
+                        />
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
+              ))}
           </div>
-        </>
+        </div>
       ) : (
         <div className="no-data">
           <LogoSvg />

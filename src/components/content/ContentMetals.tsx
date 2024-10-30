@@ -24,7 +24,8 @@ const ContentMetals: React.FC<ContentMetalsProps> = ({ data }) => {
 
   return (
     <>
-      {data.map((item: any) => (
+      {JSON.stringify(data)}
+      {data?.map((item: any) => (
         <div className="content-item" key={item.id}>
           <Card radius="sm" shadow="md" isHoverable={true} isPressable={false}>
             <CardBody>

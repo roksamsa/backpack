@@ -18,7 +18,7 @@ import {
 } from "@nextui-org/modal";
 
 const AddNewItemModal = () => {
-  const { subSections, itemsSections } = useDataStoreContext();
+  const { subSections, itemsSections, setItemsToShow } = useDataStoreContext();
   const { setAddEditItemModalData, addEditItemModalData } =
     useModalsStoreContext();
   const searchParams = useSearchParams();
@@ -27,6 +27,7 @@ const AddNewItemModal = () => {
   const [value, setValue] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [section, setSection] = useState<string>("");
+  const [itemSection, setItemSection] = useState<string>("");
   const [selectedItemType, setSelectedItemType] = useState<string>("");
   const [typesForDropdown, setTypesForDropdown] = useState<any[]>(
     Object.values(InvestmentType).map((value) => ({ name: value })),
@@ -64,6 +65,7 @@ const AddNewItemModal = () => {
           type: selectedItemType,
           value: +value,
           categoryId: +section,
+          itemsSectionId: +itemSection,
           properties: {},
         },
         options: {
@@ -74,7 +76,9 @@ const AddNewItemModal = () => {
               query: { categoryId: +section },
               method: "GET",
               options: {
-                onSuccess: (data) => {},
+                onSuccess: (data) => {
+                  setItemsToShow(data);
+                },
               },
             });
           },
@@ -159,12 +163,14 @@ const AddNewItemModal = () => {
                 value={quantity}
                 onValueChange={setQuantity}
               />
+              itemSection:
+              {itemSection}
               <Select
                 label="Section"
                 placeholder="Select section"
                 className="max-w-xs"
-                selectedKeys={[section]}
-                onChange={(e) => setSection(e.target.value)}
+                selectedKeys={[itemSection]}
+                onChange={(e) => setItemSection(e.target.value)}
               >
                 {subSectionsForDropdown?.map((section: any) => (
                   <SelectItem key={section.id} value={section.id}>
