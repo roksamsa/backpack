@@ -188,7 +188,10 @@ const CategoryPage = () => {
           <h1>{pageData?.name}</h1>
 
           <div className="content__headline-actions">
-            <ButtonGroup className="content__toggle-view">
+            <ButtonGroup
+              className="content__toggle-view"
+              isDisabled={itemsToShow?.length === 0}
+            >
               <Button
                 isIconOnly
                 color={
@@ -271,7 +274,7 @@ const CategoryPage = () => {
           </Button>
         </div>
       </div>
-      {itemsToShow?.length ? (
+      {itemsToShow?.length > 0 ? (
         <div className="content__items">
           {itemsSections?.map((section) => (
             <div className="content__section" key={section.id}>

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @keyframes float {
   0% {
     transform: translateY(0);
@@ -95,6 +96,10 @@ h1 {
     display: flex;
     flex-grow: 1;
     overflow: auto;
+  }
+
+  &__container {
+    padding: 2rem;
   }
 
   &__backpack-bg {

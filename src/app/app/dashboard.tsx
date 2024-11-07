@@ -1,13 +1,14 @@
 "use client";
 
 import { useDataStoreContext } from "@/context/DataStoreProvider";
-import { fetchData } from "@/utils/apiHelper";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Dashboard = ({ data }: any) => {
   const { setMetalsApiData } = useDataStoreContext();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const [accountInfo, setAccountInfo] = useState(null);
 
@@ -42,15 +43,26 @@ const Dashboard = ({ data }: any) => {
     setMetalsApiData(data);
   }, [data, setMetalsApiData]);
 
+  useEffect(() => {
+    if (status === "loading") return;
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else {
+      router.push("/app");
+    }
+  }, [status, router]);
+
   return (
     <div className="page">
-      <h1>Pozdravljen, {session?.user?.name}</h1>
-      <div>
-        {accountInfo ? (
-          <pre>{JSON.stringify(accountInfo, null, 2)}</pre>
-        ) : (
-          <p>Loading...</p>
-        )}
+      <div className="page__container">
+        <h1>Pozdravljen, {session?.user?.name}</h1>
+        <div>
+          {accountInfo ? (
+            <pre>{JSON.stringify(accountInfo, null, 2)}</pre>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
       </div>
     </div>
   );

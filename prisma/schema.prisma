@@ -21,6 +21,7 @@ model User {
   emailVerified  DateTime?
   hashedPassword String?
   id             String         @id @default(cuid())
+  socialId       String?
   image          String?
   lastname       String?
   name           String?
@@ -58,7 +59,7 @@ model Category {
   parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
   parentId      Int?
   productNumber String?
-  properties    Json
+  properties    Json?
   share         Boolean?
   status        String?
   unit          String?

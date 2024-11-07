@@ -1,22 +1,27 @@
 import React from "react";
-import Image from "next/image";
+import styles from "./UserProfile.module.scss";
 
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "@nextui-org/skeleton";
-
-import styles from "./UserProfile.module.scss";
 import { CustomSession } from "@/utils/interfaces";
+import { useRouter } from "next/navigation";
 
 const UserProfile = ({ isSidebarClosed }: { isSidebarClosed: boolean }) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const customSession = session as CustomSession;
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+    router.push("/login");
+  };
 
   return (
     <div
       className={`${styles.userProfileWrapper} ${
         isSidebarClosed ? styles.sidebarClosed : ""
       }`}
-      onClick={() => signOut()}
+      onClick={handleSignOut}
     >
       {customSession?.user ? (
         <div className={styles.userProfile}>
