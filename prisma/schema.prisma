@@ -21,7 +21,7 @@ model User {
   emailVerified  DateTime?
   hashedPassword String?
   id             String         @id @default(cuid())
-  socialId       String?
+  socialId       String?        @unique
   image          String?
   lastname       String?
   name           String?

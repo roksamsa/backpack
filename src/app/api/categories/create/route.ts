@@ -21,10 +21,23 @@ export async function POST(req: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: {
+        id: userId ? userId : undefined,
+      },
     });
 
-    if (!user) {
+    const socialUser = await prisma.user.findUnique({
+      where: {
+        socialId: userId ? userId : undefined,
+      },
+    });
+
+    const uniqueUserId = user?.id || socialUser?.id;
+
+    console.log("user", user);
+    console.log("socialUser", socialUser);
+
+    if (!user && !socialUser) {
       throw new Error("User not found");
     }
 
@@ -35,7 +48,7 @@ export async function POST(req: NextRequest) {
         properties,
         parent: parentIdTemp ? { connect: { id: parentIdTemp } } : undefined,
         user: {
-          connect: { id: userId },
+          connect: { id: uniqueUserId },
         },
       },
     });
