@@ -14,17 +14,25 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  lastname       String?
-  email          String    @unique
-  emailVerified  DateTime? 
-  image          String?
-  hashedPassword String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  sessions       Session[]
-  categories       Category[]
+  id                String           @id @default(cuid())
+  name              String?
+  lastname          String?
+  email             String           @unique
+  emailVerified     DateTime?
+  image             String?
+  hashedPassword    String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  sessions          Session[]
+  schemaStructureId String?          @unique
+  schemaStructure   SchemaStructure? @relation("UserSchemaStructure")
+}
+
+model SchemaStructure {
+  id     String @id @default(cuid())
+  schema Json
+  userId String @unique
+  user   User   @relation("UserSchemaStructure", fields: [userId], references: [id])
 }
 
 model Session {
@@ -44,15 +52,13 @@ model VerificationToken {
 }
 
 model Category {
-  id       Int        @id @default(autoincrement())
-  name     String
-  link     String
-  parentId Int?
-  userId   String?
-  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children Category[] @relation("CategoryHierarchy")
-  user     User?      @relation(fields: [userId], references: [id])
-  items    Item[]
+  id         Int     @id @default(autoincrement())
+  name       String
+  link       String
+  parentId   Int?
+  childId    String?
+  userId     String?
+  items      Item[]
   properties Json
 }
 
