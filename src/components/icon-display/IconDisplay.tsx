@@ -7,10 +7,8 @@ const IconDisplay = ({
   iconName: string;
   className: string;
 }) => {
-  // Retrieve the icon component from MdIcons
   const IconComponent = MdIcons[iconName as keyof typeof MdIcons];
 
-  // Check if IconComponent is valid
   if (!IconComponent) {
     return <div></div>;
   }

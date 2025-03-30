@@ -19,9 +19,6 @@ export async function GET(request: NextRequest) {
       where: {
         parentId: parentId,
       },
-      orderBy: {
-        name: "asc",
-      },
     });
 
     return NextResponse.json(childCategories, { status: 201 });

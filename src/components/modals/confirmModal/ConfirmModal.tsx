@@ -10,9 +10,10 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { fetchData } from "@/utils/apiHelper";
-import { useSearchParams } from "next/navigation";
 import { ModalType } from "@/utils/enums";
 import { useSession } from "next-auth/react";
+import { CustomSession } from "@/utils/interfaces";
+import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 
 const ConfirmModal = () => {
     const {

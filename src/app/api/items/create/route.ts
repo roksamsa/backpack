@@ -13,17 +13,25 @@ if (process.env.NODE_ENV === "development") {
 
 export async function POST(req: NextRequest) {
   try {
-    const { title, status, type, value, categoryId, properties } =
-      await req.json();
+    const {
+      categoryId,
+      itemsSectionId,
+      properties,
+      status,
+      title,
+      type,
+      value,
+    } = await req.json();
 
     const newItem = await prisma.item.create({
       data: {
-        title,
+        categoryId,
+        itemsSectionId,
+        properties: properties || {},
         status,
+        title,
         type,
         value,
-        categoryId,
-        properties: properties || {},
       },
     });
 

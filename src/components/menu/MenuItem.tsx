@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Menu.module.scss";
 import Link from "next/link";
 import IconDisplay from "../icon-display/IconDisplay";

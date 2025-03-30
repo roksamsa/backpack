@@ -1,6 +1,8 @@
-import type { ISODateString, NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 import { compare } from "bcrypt";
+import { JWT } from "next-auth/jwt";
+import { CustomSession, CustomUser } from "@/utils/interfaces";
 
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -8,7 +10,6 @@ import LinkedinProvider from "next-auth/providers/linkedin";
 import TwitterProvider from "next-auth/providers/twitter";
 import TodoistProvider from "next-auth/providers/todoist";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
 
 const prisma = new PrismaClient({
     log: ['query', 'info', 'warn'], // adjust logging levels

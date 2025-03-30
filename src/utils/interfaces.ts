@@ -1,3 +1,5 @@
+import { ISODateString } from "next-auth";
+
 export interface Credentials {
     email: string;
     password: string;
@@ -33,4 +35,20 @@ export interface Category {
     name: string;
     link: string;
     iconName?: string;
+}
+export interface CustomSession {
+    user?: {
+        id?: any | null;
+        name?: string | null;
+        lastname?: any | null;
+        email?: string | null;
+        image?: string | null;
+    };
+    expires: ISODateString;
+}
+export interface CustomUser {
+    id: string;
+    name?: string | null;
+    lastname?: string | null;
+    email?: string | null;
 }

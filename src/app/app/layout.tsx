@@ -1,14 +1,18 @@
 "use client";
 
+import { Suspense } from "react";
 import AddNewCategoryModal from "@/components/modals/addNewCategoryModal/AddNewCategoryModal";
 import AddNewItemModal from "@/components/modals/addNewItemModal/AddNewItemModal";
 import ConfirmModal from "@/components/modals/confirmModal/ConfirmModal";
 import Sidebar from "@/components/sidebar/Sidebar";
+
 import { DataStoreProvider } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
+import { ModalsStoreProvider } from "@/context/ModalsStoreProvider";
+import ProtectedLayout from "./ProtectedLayout";
 
 export default function RootLayout({
     children,
