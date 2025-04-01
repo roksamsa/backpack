@@ -22,7 +22,6 @@ const ConfirmModal = () => {
         setMainSections,
         setItemsToShow,
     } = useDataStoreContext();
-    const searchParams = useSearchParams();
     const { data: session } = useSession();
     const [modalTitle, setModalTitle] = useState<string>(
         "Are you sure that you want to delete this?",

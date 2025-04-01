@@ -1,8 +1,7 @@
-import type { NextAuthOptions } from "next-auth";
+import type { ISODateString, NextAuthOptions } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 import { compare } from "bcrypt";
 import { JWT } from "next-auth/jwt";
-import { CustomSession, CustomUser } from "@/utils/interfaces";
 
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -26,6 +25,7 @@ export interface CustomSession {
     };
     expires: ISODateString;
 }
+
 interface CustomUser {
     id: string;
     name?: string | null;
@@ -60,6 +60,13 @@ export const options: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_ID!,
             clientSecret: process.env.GOOGLE_SECRET!,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code"
+                }
+            }
         }),
         LinkedinProvider({
             clientId: process.env.LINKEDIN_ID!,
@@ -128,18 +135,97 @@ export const options: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }: { token: JWT; user: CustomUser; }) {
             if (user) {
-                token.id = user.id;
-                token.lastname = user.lastname;
-                token.schemaStructure = user.schemaStructure;
+                const dbUser = await prisma.user.findUnique({
+                    where: { email: user.email || "" },
+                });
+
+                if (dbUser) {
+                    token.id = dbUser.id;
+                    token.lastname = dbUser.lastname;
+                } else {
+                    token.id = user.id;
+                    token.lastname = user.lastname;
+                    token.schemaStructure = user.schemaStructure;
+                }
             }
 
             return token;
+        },
+        async signIn({ user, account }) {
+            if (account?.provider !== "credentials") {
+                try {
+                    const existingUser = await prisma.user.findUnique({
+                        where: { email: user.email || "" },
+                    });
+
+                    console.log("44444444444", user);
+
+                    if (!existingUser) {
+                        // Create user if not found
+                        if (account) {
+                            const providerIdField = `${account.provider}Id` as keyof CustomUser;
+
+                            // Create user
+                            const newUser = await prisma.user.create({
+                                data: {
+                                    email: user.email || "",
+                                    name: user.name || "New User",
+                                    lastname: "",
+                                    image: user.image,
+                                    ...(providerIdField ? { [providerIdField]: user.id } : {}),
+                                },
+                            });
+
+                            // Create schemaStructure for the new user
+                            await prisma.schemaStructure.create({
+                                data: {
+                                    userId: newUser.id, // Use the newly created user's ID
+                                    schema: [],
+                                },
+                            });
+                        }
+                    } else {
+                        // Update user if already exists
+                        if (account) {
+                            const providerIdField = `${account.provider}Id` as keyof CustomUser;
+
+                            await prisma.user.update({
+                                where: { email: user.email! },
+                                data: {
+                                    email: user.email!,
+                                    name: user.name || "Updated User",
+                                    image: user.image || null,
+                                    ...(providerIdField ? { [providerIdField]: user.id } : {}),
+                                },
+                            });
+                        }
+
+                        // Ensure schemaStructure exists for the user
+                        const existingSchema = await prisma.schemaStructure.findUnique({
+                            where: { userId: existingUser.id },
+                        });
+
+                        if (!existingSchema) {
+                            // Create schemaStructure for the existing user
+                            await prisma.schemaStructure.create({
+                                data: {
+                                    userId: existingUser.id, // Use the existing user's ID
+                                    schema: [],
+                                },
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error creating or updating user:", error);
+                    return false;
+                }
+            }
+            return true;
         },
         async session({ session, token }: { session: CustomSession; token: JWT; }) {
             if (token?.id && session.user) {
                 session.user.id = token.id;
                 session.user.lastname = token.lastname;
-                session.user.schemaStructure = token.schemaStructure as string | null | undefined;
             }
 
             return session;

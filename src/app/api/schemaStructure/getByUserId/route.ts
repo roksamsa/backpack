@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url);
     const userId = url.searchParams.get("userId");
 
+    console.log("userId", userId);
+
     if (!userId) {
         return NextResponse.json(
             { error: "userId query parameter is required" },
@@ -22,14 +24,18 @@ export async function GET(request: NextRequest) {
         );
     }
 
+
+
     try {
         const schemaStructure = await prisma.schemaStructure.findUnique({
             where: {
-                userId,
+                userId: userId,
             },
         });
-        return NextResponse.json(schemaStructure);
+        console.log("schemaStructure", schemaStructure);
+        return NextResponse.json(schemaStructure, { status: 201 });
     } catch (error) {
+        console.log("3333333333333333", error);
         return NextResponse.json(
             { error: "Error fetching items" },
             { status: 500 },

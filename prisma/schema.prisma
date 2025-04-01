@@ -26,6 +26,11 @@ model User {
   sessions          Session[]
   schemaStructureId String?          @unique
   schemaStructure   SchemaStructure? @relation("UserSchemaStructure")
+  googleId          String?          @unique
+  githubId          String?          @unique
+  linkedinId        String?          @unique
+  twitterId         String?          @unique
+  todoistId         String?          @unique
 }
 
 model SchemaStructure {
