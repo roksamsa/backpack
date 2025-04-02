@@ -13,12 +13,13 @@ import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { fetchData } from "@/utils/apiHelper";
 import { InvestmentType } from "@/utils/enums";
+import { v4 as uuidv4 } from 'uuid';
 
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
 
 const AddNewItemModal = () => {
-    const { subSections, addEditItemModalData, setAddEditItemModalData } =
+    const { subSections, addEditItemModalData, setAddEditItemModalData, userSchemaStructure, setUserSchemaStructure, selectedSubSection } =
         useDataStoreContext();
     const searchParams = useSearchParams();
     const [itemName, setItemName] = useState<string>("");
@@ -27,6 +28,8 @@ const AddNewItemModal = () => {
     const [quantity, setQuantity] = useState<string>("");
     const [section, setSection] = useState<string>("");
     const [selectedItemType, setSelectedItemType] = useState<string>("");
+    const [selectedSection, setSelectedSection] = useState<string>("");
+    const [sectionsDropdownList, setSectionsDropdownList] = useState<any[]>([]);
     const [typesForDropdown, setTypesForDropdown] = useState<any[]>(
         Object.values(InvestmentType).map((value) => ({ name: value })),
     );
@@ -48,28 +51,61 @@ const AddNewItemModal = () => {
         handleOnCancel();
 
         try {
+            const newItemId = uuidv4();
+            const updatedSchemaStructure = userSchemaStructure.schema.map((category: any) => ({
+                ...category,
+                children: category.children.map((subcategory: any) => ({
+                    ...subcategory,
+                    children: subcategory.children.map((lastcategory: any) => {
+                        return {
+                            ...lastcategory,
+                            items: lastcategory.id.toString() === section.toString()
+                                ? [
+                                    ...lastcategory.items,
+                                    {
+                                        id: newItemId,
+                                        name: itemName,
+                                        status: itemStatus,
+                                        type: selectedItemType,
+                                        value: +value,
+                                        quantity: +quantity,
+                                    },
+                                ]
+                                : lastcategory.items,
+                        };
+                    }),
+                })),
+            }));
+
+            await fetchData({
+                url: "/api/schemaStructure/update",
+                method: "POST",
+                body: {
+                    id: userSchemaStructure.id,
+                    schema: updatedSchemaStructure,
+                },
+                options: {
+                    onSuccess: async (data) => {
+                        setUserSchemaStructure(data);
+                    }
+                }
+            });
+
             await fetchData({
                 url: "/api/items/create",
                 method: "POST",
                 body: {
+                    id: newItemId,
                     title: itemName,
                     status: itemStatus,
                     type: selectedItemType,
                     value: +value,
-                    categoryId: +section,
+                    categoryId: section,
                     properties: {},
                 },
                 options: {
                     onSuccess: async (data) => {
-                        toast.success("Successfully added new section!");
-                        await fetchData({
-                            url: "/api/items/getItemsBySection",
-                            query: { categoryId: +section },
-                            method: "GET",
-                            options: {
-                                onSuccess: (data) => { },
-                            },
-                        });
+                        toast.success("Successfully added new item!");
                     },
                 },
             });
@@ -80,11 +116,13 @@ const AddNewItemModal = () => {
     };
 
     useEffect(() => {
-        const subSectionId = searchParams.get("subSectionId");
-        if (subSectionId) {
-            setSection(subSectionId);
-        }
-    }, [searchParams, subSections]);
+        console.log("selectedSubSection", selectedSubSection);
+        setSectionsDropdownList(selectedSubSection?.children);
+    }, [userSchemaStructure, selectedSubSection]);
+
+    useEffect(() => {
+        console.log("sectionsDropdownList", sectionsDropdownList);
+    }, [sectionsDropdownList]);
 
     return (
         <Modal
@@ -124,7 +162,7 @@ const AddNewItemModal = () => {
                                 onChange={(e) => setSelectedItemType(e.target.value)}
                             >
                                 {typesForDropdown.map((section: any) => (
-                                    <SelectItem key={section.name} value={section.name}>
+                                    <SelectItem key={section.name} id={section.name}>
                                         {section.name}
                                     </SelectItem>
                                 ))}
@@ -150,8 +188,8 @@ const AddNewItemModal = () => {
                                 selectedKeys={[section]}
                                 onChange={(e) => setSection(e.target.value)}
                             >
-                                {subSections.map((section: any) => (
-                                    <SelectItem key={section.id} value={section.id}>
+                                {sectionsDropdownList.map((section: any) => (
+                                    <SelectItem key={section.id} id={section.id}>
                                         {section.name}
                                     </SelectItem>
                                 ))}

@@ -19,6 +19,7 @@ import {
     DropdownTrigger,
 } from "@heroui/dropdown";
 import { Category } from "@/utils/interfaces";
+import { fetchData } from "@/utils/apiHelper";
 
 const CategoryPage = () => {
     const pathname = usePathname();
@@ -29,19 +30,18 @@ const CategoryPage = () => {
         addEditSectionModalData,
         itemsToShow,
         selectedMainSection,
+        selectedSubSection,
         setAddEditItemModalData,
         setAddEditSectionModalData,
-        setSelectedSubSection,
+        setItemsToShow,
         setSelectedMainSection,
-        selectedSubSection,
+        setSelectedSubSection,
         userSchemaStructure,
     } = useDataStoreContext();
     const [pageData, setPageData] = useState<any[]>([]);
     const [selectedTab, setSelectedTab] = useState<string>("");
     const [tabs, setTabs] = useState<Category[]>([]);
-    const [subSectionIdQuery, setSubSectionIdQuery] = useState<string | null>(
-        null,
-    );
+    const [lastLevelItems, setLastLevelItems] = useState<any[]>([]);
     const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
         "content__wrapper rows",
     );
@@ -56,12 +56,48 @@ const CategoryPage = () => {
     };
 
     useEffect(() => {
-        const selectedCategory = userSchemaStructure?.schema?.find((item: any) => item.id === selectedMainSection?.id);
+        const selectedSubCategory = selectedSubSection.children?.find((item: any) => item.id === selectedMainSection?.id);
 
-        if (!selectedCategory) return;
+        if (!selectedSubCategory) return;
 
-        setTabs(selectedCategory.children);
+        setTabs(selectedSubCategory.children);
     }, [userSchemaStructure, selectedMainSection]);
+
+
+    useEffect(() => {
+        if (!selectedSubSection) return;
+
+        const fetchLastLevelSections = async () => {
+            const lastLevelSectionsIdsTemp = await Promise.all(
+                selectedSubSection?.children?.map(async (lastCategory: any) => ({
+                    id: lastCategory.id,
+                    items: await getItemsForSubSection(lastCategory.id),
+                })) || []
+            );
+            setLastLevelItems(lastLevelSectionsIdsTemp);
+        };
+
+        fetchLastLevelSections();
+
+        console.log("selectedSubSection", selectedSubSection);
+    }, [userSchemaStructure, selectedSubSection]);
+
+    useEffect(() => {
+        console.log("lastLevelItems", lastLevelItems);
+    }, [lastLevelItems]);
+
+    const getItemsForSubSection = async (categoryId: string) => {
+        try {
+            return await fetchData({
+                url: "/api/items/getItemsBySection",
+                query: { categoryId },
+                method: "GET",
+            });
+        }
+        catch (error) {
+            console.error("Failed to create category:", error);
+        }
+    };
 
     /*useEffect(() => {
         if (pageData?.id) {
@@ -86,7 +122,8 @@ const CategoryPage = () => {
         }
     }, [pageData, setSubSections]);*/
 
-    /*useEffect(() => {
+    /*
+    useEffect(() => {
         if (subSectionIdQuery) {
             const fetchSections = async () => {
                 try {
@@ -104,7 +141,7 @@ const CategoryPage = () => {
                     console.error("Failed to create category:", error);
                 }
             };
-    
+
             fetchSections();
         }
     }, [subSectionIdQuery, setItemsToShow]);*/
@@ -283,13 +320,26 @@ const CategoryPage = () => {
                 </div>
             </div>
             {selectedSubSection?.children && selectedSubSection.children.length > 0 && (
-                selectedSubSection.children?.map((item: Category) => (
-                    <div key={item.id} className="content__headline-subsection">
-                        <IconDisplay
-                            iconName={item.iconName || "MdOutlineDashboard"}
-                            className="content__headline-icon"
-                        />
-                        <h1>{item.name}</h1>
+                selectedSubSection.children?.map((category: Category) => (
+                    <div key={category.id} className="content__subsection-wrapper">
+                        <div className="content__headline-subsection">
+                            <IconDisplay
+                                iconName={category.iconName || "MdOutlineDashboard"}
+                                className="content__headline-icon"
+                            />
+                            <h2>{category.name}</h2>
+                        </div>
+
+                        <div className="content__subsection-items">
+                            {
+                                lastLevelItems?.find((lastCategory: any) => lastCategory.id === category.id)?.items?.map((item: any) => {
+                                    <div key={item.id} className="content__item">
+                                        <p>{item.title}</p>
+                                        <p>{item.value}</p>
+                                    </div>;
+                                })
+                            }
+                        </div>
                     </div>
                 ))
             )}

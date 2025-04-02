@@ -13,20 +13,18 @@ if (process.env.NODE_ENV === "development") {
 
 export async function GET(request: NextRequest) {
     const url = new URL(request.url);
-    const categoryId = url.searchParams.get("categoryId");
+    const itemId = url.searchParams.get("itemId");
 
-    if (!categoryId) {
+    if (!itemId) {
         return NextResponse.json(
-            { error: "categoryId query parameter is required" },
+            { error: "itemId query parameter is required" },
             { status: 400 },
         );
     }
 
     try {
-        const items = await prisma.item.findMany({
-            where: {
-                categoryId,
-            },
+        const items = await prisma.item.findUnique({
+            where: { id: itemId },
         });
         return NextResponse.json(items);
     } catch (error) {

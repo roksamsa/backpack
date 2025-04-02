@@ -161,6 +161,18 @@ h1 {
     flex-direction: column;
     flex-grow: 1;
 
+    &__subsection-items {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    &__subsection-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
     &__headline-subsection {
         display: flex;
         align-items: center;

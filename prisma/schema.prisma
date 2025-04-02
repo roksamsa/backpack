@@ -14,30 +14,30 @@ datasource db {
 }
 
 model User {
-  id                String           @id @default(cuid())
-  name              String?
-  lastname          String?
+  createdAt         DateTime         @default(now())
   email             String           @unique
   emailVerified     DateTime?
-  image             String?
-  hashedPassword    String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  sessions          Session[]
-  schemaStructureId String?          @unique
-  schemaStructure   SchemaStructure? @relation("UserSchemaStructure")
-  googleId          String?          @unique
   githubId          String?          @unique
+  googleId          String?          @unique
+  hashedPassword    String?
+  id                String           @id @default(cuid())
+  image             String?
+  lastname          String?
   linkedinId        String?          @unique
-  twitterId         String?          @unique
+  name              String?
+  schemaStructure   SchemaStructure? @relation("UserSchemaStructure")
+  schemaStructureId String?          @unique
+  sessions          Session[]
   todoistId         String?          @unique
+  twitterId         String?          @unique
+  updatedAt         DateTime         @updatedAt
 }
 
 model SchemaStructure {
   id     String @id @default(cuid())
   schema Json
-  userId String @unique
   user   User   @relation("UserSchemaStructure", fields: [userId], references: [id])
+  userId String @unique
 }
 
 model Session {
@@ -57,21 +57,19 @@ model VerificationToken {
 }
 
 model Category {
-  id         Int     @id @default(autoincrement())
-  name       String
-  link       String
-  parentId   Int?
   childId    String?
-  userId     String?
-  items      Item[]
+  id         Int     @id @default(autoincrement())
+  link       String
+  name       String
+  parentId   Int?
   properties Json
+  userId     String?
 }
 
 model Item {
-  category       Category @relation(fields: [categoryId], references: [id])
-  categoryId     Int
+  categoryId     String? @unique
+  id             String  @id @default(cuid())
   itemsSectionId Int?
-  id             Int      @id @default(autoincrement())
   properties     Json
   status         String
   title          String
