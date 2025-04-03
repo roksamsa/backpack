@@ -17,7 +17,9 @@ interface DataStoreProviderType {
     mainSections: any[];
     metalsApiData: {};
     selectedMainSection: Category;
+    selectedMainSectionId: string;
     selectedSubSection: any;
+    selectedSubSectionId: string;
     setAddEditItemModalData: (data: ModalData) => void;
     setAddEditSectionModalData: (data: ModalData) => void;
     setConfirmModalData: (data: ModalData) => void;
@@ -25,7 +27,9 @@ interface DataStoreProviderType {
     setMainSections: (data: any[]) => void;
     setMetalsApiData: (data: any) => void;
     setSelectedMainSection: (data: Category) => void;
+    setSelectedMainSectionId: (data: string) => void;
     setSelectedSubSection: (data: any) => void;
+    setSelectedSubSectionId: (data: string) => void;
     setSubSections: (data: any[]) => void;
     setUserSchemaStructure: (data: UserSchemaStructure) => void;
     subSections: any[];
@@ -40,7 +44,9 @@ const initialState: DataStoreProviderType = {
     mainSections: [],
     metalsApiData: {},
     selectedMainSection: {} as Category,
+    selectedMainSectionId: "",
     selectedSubSection: {},
+    selectedSubSectionId: "",
     setAddEditItemModalData: (data) => data,
     setAddEditSectionModalData: (data) => data,
     setConfirmModalData: (data) => data,
@@ -48,7 +54,9 @@ const initialState: DataStoreProviderType = {
     setMainSections: () => { },
     setMetalsApiData: () => { },
     setSelectedMainSection: () => { },
+    setSelectedMainSectionId: () => { },
     setSelectedSubSection: () => { },
+    setSelectedSubSectionId: () => { },
     setSubSections: () => { },
     setUserSchemaStructure: () => { },
     subSections: [],
@@ -75,12 +83,49 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
 
     // Selection of items
     const [selectedMainSection, setSelectedMainSection] = useState<Category>({} as Category);
-    const [selectedSubSection, setSelectedSubSection] = useState<any[]>([]);
+    const [selectedSubSection, setSelectedSubSection] = useState<Category>({} as Category);
+    const [selectedMainSectionId, setSelectedMainSectionId] = useState<string>("");
+    const [selectedSubSectionId, setSelectedSubSectionId] = useState<string>("");
 
     useEffect(() => {
-        console.log("selectedSubSection", selectedSubSection);
-        console.log("selectedMainSection", selectedMainSection);
-    }, [selectedMainSection, selectedSubSection]);
+        if (!userSchemaStructure?.schema) return;
+
+        if (selectedMainSectionId) {
+            const mainCategory = userSchemaStructure.schema?.find(
+                (mainCategory: Category) => mainCategory.id === selectedMainSectionId,
+            ) as Category;
+
+            if (mainCategory) setSelectedMainSection(mainCategory);
+
+            if (mainCategory && selectedSubSectionId) {
+                const subCategory = mainCategory.children?.find(
+                    (subCategory: any) => subCategory.id === selectedSubSectionId,
+                ) as Category;
+
+                if (subCategory) {
+                    setSelectedSubSection(subCategory);
+                } else {
+                    setSelectedSubSection({} as Category);
+                }
+            }
+        }
+    }, [userSchemaStructure, selectedMainSectionId, selectedSubSectionId]);
+
+    useEffect(() => {
+        console.log("selectedMainSectionId", selectedMainSectionId);
+    }, [selectedMainSectionId]);
+
+    useEffect(() => {
+        console.log("selectedMainSection111", selectedMainSection);
+    }, [selectedMainSection]);
+
+    useEffect(() => {
+        console.log("selectedSubSectionId", selectedSubSectionId);
+    }, [selectedSubSectionId]);
+
+    useEffect(() => {
+        console.log("selectedSubSection111", selectedSubSection);
+    }, [selectedSubSection]);
 
     return (
         <DataStoreContext.Provider
@@ -92,7 +137,9 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
                 mainSections,
                 metalsApiData,
                 selectedMainSection,
+                selectedMainSectionId,
                 selectedSubSection,
+                selectedSubSectionId,
                 setAddEditItemModalData,
                 setAddEditSectionModalData,
                 setConfirmModalData,
@@ -100,7 +147,9 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
                 setMainSections,
                 setMetalsApiData,
                 setSelectedMainSection,
+                setSelectedMainSectionId,
                 setSelectedSubSection,
+                setSelectedSubSectionId,
                 setSubSections,
                 setUserSchemaStructure,
                 subSections,

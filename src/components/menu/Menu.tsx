@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Menu.module.scss";
 import SimpleBar from "simplebar-react";
-import MenuItem from "./MenuItem";
 
 import { usePathname } from "next/navigation";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useSession } from "next-auth/react";
 import { fetchData } from "@/utils/apiHelper";
 import { ModalType } from "@/utils/enums";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { CustomSession, MenuItemType } from "@/utils/interfaces";
 
 import "simplebar-react/dist/simplebar.min.css";
-import { isDataEmpty, isObjectEmpty } from "@/utils/helpers";
+import { MenuItemType } from "@/utils/interfaces";
+import MenuItem from "./MenuItem";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
     const skeletonItems = Array.from({ length: 10 });
@@ -49,11 +47,6 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
         }
     }, [session?.user?.id, setUserSchemaStructure]);
 
-    useEffect(() => {
-        console.log("userSchemaStructure11111111", userSchemaStructure);
-        console.log("userSchemaStructure11111111", !isObjectEmpty(userSchemaStructure));
-    }, [userSchemaStructure]);
-
     const handleAddSectionModalOpenClick = (event: any) => {
         setAddEditSectionModalData({
             ...addEditSectionModalData,
@@ -62,14 +55,14 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
         });
     };
 
-    const itemDashboard: MenuItem = {
+    const itemDashboard: MenuItemType = {
         id: 999900000,
         iconName: "MdOutlineDashboard",
         link: "",
         name: "Dashboard",
     };
 
-    const itemAddNewSection: MenuItem = {
+    const itemAddNewSection: MenuItemType = {
         id: 9999999999,
         iconName: "MdAdd",
         link: null,

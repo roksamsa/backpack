@@ -32,7 +32,7 @@ const Logo = ({
                         isIconOnly
                         radius="full"
                         className={styles.arrowToggleWrapper}
-                        onClick={() => setIsSidebarClosed(!isSidebarClosed)}
+                        onPress={() => setIsSidebarClosed(!isSidebarClosed)}
                     >
                         <MdArrowBackIosNew />
                     </Button>

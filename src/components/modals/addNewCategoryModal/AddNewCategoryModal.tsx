@@ -154,6 +154,7 @@ const AddNewCategoryModal = () => {
                 },
                 options: {
                     onSuccess: async (data) => {
+                        console.log("9999999999999999", data);
                         setUserSchemaStructure(data);
                     }
                 }

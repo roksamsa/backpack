@@ -8,7 +8,6 @@ import { Tab, Tabs } from "@heroui/tabs";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import ContentMetals from "@/components/content/ContentMetals";
 import IconDisplay from "@/components/icon-display/IconDisplay";
 import LogoSvg from "@/components/logo/LogoSvg";
 import React from "react";
@@ -32,24 +31,22 @@ const CategoryPage = () => {
         itemsToShow,
         selectedMainSection,
         selectedSubSection,
+        selectedSubSectionId,
         setAddEditItemModalData,
         setAddEditSectionModalData,
-        setItemsToShow,
-        setSelectedMainSection,
-        setSelectedSubSection,
+        setSelectedSubSectionId,
         userSchemaStructure,
     } = useDataStoreContext();
-    const [pageData, setPageData] = useState<any[]>([]);
     const [selectedTab, setSelectedTab] = useState<string>("");
     const [tabs, setTabs] = useState<Category[]>([]);
     const [lastLevelItems, setLastLevelItems] = useState<any[]>([]);
     const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
-        "content__wrapper rows",
+        "content__subsection-items rows",
     );
 
     const handleToggleViewClick = (type: string) => {
-        if (type === "grid") setContentWrapperClasses("content__wrapper grid");
-        if (type === "rows") setContentWrapperClasses("content__wrapper rows");
+        if (type === "grid") setContentWrapperClasses("content__subsection-items grid");
+        if (type === "rows") setContentWrapperClasses("content__subsection-items rows");
     };
 
     const handleAddNewItemClick = () => {
@@ -57,12 +54,13 @@ const CategoryPage = () => {
     };
 
     useEffect(() => {
+        if (!selectedMainSection) return;
+
         setTabs(selectedMainSection?.children || []);
     }, [userSchemaStructure, selectedMainSection]);
 
-
     useEffect(() => {
-        if (!selectedSubSection) return;
+        if (!selectedSubSection || !userSchemaStructure?.schema) return;
 
         const fetchLastLevelSections = async () => {
             const lastLevelSectionsIdsTemp = await Promise.all(
@@ -75,7 +73,6 @@ const CategoryPage = () => {
         };
 
         fetchLastLevelSections();
-        setItemsToShow(selectedSubSection?.children?.flatMap((item: any) => item.items || []));
     }, [userSchemaStructure, selectedSubSection]);
 
     const getItemsForSubSection = async (categoryId: string) => {
@@ -91,72 +88,20 @@ const CategoryPage = () => {
         }
     };
 
-    /*useEffect(() => {
-        if (pageData?.id) {
-            const fetchSubSections = async () => {
-                try {
-                    await fetchData({
-                        url: "/api/categories/getSectionsByParent",
-                        query: { parentId: pageData?.id },
-                        method: "GET",
-                        options: {
-                            onSuccess: (data) => {
-                                setSubSections(data);
-                            },
-                        },
-                    });
-                } catch (error) {
-                    console.error("Failed to create category:", error);
-                }
-            };
-    
-            fetchSubSections();
-        }
-    }, [pageData, setSubSections]);*/
-
-    /*
     useEffect(() => {
-        if (subSectionIdQuery) {
-            const fetchSections = async () => {
-                try {
-                    await fetchData({
-                        url: "/api/items/getItemsBySection",
-                        query: { categoryId: subSectionIdQuery },
-                        method: "GET",
-                        options: {
-                            onSuccess: (data) => {
-                                setItemsToShow(data);
-                            },
-                        },
-                    });
-                } catch (error) {
-                    console.error("Failed to create category:", error);
-                }
-            };
-
-            fetchSections();
-        }
-    }, [subSectionIdQuery, setItemsToShow]);*/
-
-    /*useEffect(() => {
-        const subSectionId = searchParams.get("subSectionId");
-    
-        if (subSectionId) {
-            setSubSectionIdQuery(subSectionId);
-            setSelectedTab(subSectionId);
-        }
-    }, [searchParams]);*/
-
-    useEffect(() => {
-        if (selectedSubSection) {
+        if (selectedSubSectionId) {
             const params = new URLSearchParams(searchParams);
+
+            console.log("selectedSubSection11111111111111", selectedSubSection);
+
             params.set("subSectionId", selectedSubSection?.link);
+
             setSelectedTab(selectedSubSection?.id);
             replace(`${pathname}?${params.toString()}`);
         } else {
             replace(`${pathname}`);
         }
-    }, [selectedSubSection, searchParams, pathname, replace]);
+    }, [selectedSubSectionId, searchParams, pathname, replace]);
 
     const handleAddSectionModalOpenClick = (event: any) => {
         setAddEditSectionModalData({
@@ -177,34 +122,9 @@ const CategoryPage = () => {
     const handleTabSelectionChange = (tab: any) => {
         const selectedSubCategory = tabs?.find((item) => item.id === tab);
 
-        setSelectedSubSection(selectedSubCategory);
+        setSelectedSubSectionId(selectedSubCategory?.id || "");
         setSelectedTab(String(tab));
     };
-
-    useEffect(() => {
-        if (userSchemaStructure?.schema) {
-            const mainSection = userSchemaStructure.schema.find(
-                (item: any) => item.id === selectedMainSection?.id
-            );
-
-            setSelectedMainSection(mainSection);
-
-            if (mainSection && mainSection.children) {
-                const subSection = mainSection.children.find(
-                    (child: any) => child.id === selectedSubSection?.id
-                );
-
-                setSelectedSubSection(subSection);
-
-                console.log("selectedMainSection", mainSection);
-                console.log("selectedSubSection", subSection);
-            }
-        }
-    }, [userSchemaStructure, selectedMainSection, selectedSubSection]);
-
-    useEffect(() => {
-        console.log("selectedSubSection", selectedSubSection);
-    }, [selectedSubSection]);
 
     return (
         <div className="content">
@@ -315,7 +235,7 @@ const CategoryPage = () => {
                     </Button>
                 </div>
             </div>
-            {itemsToShow?.length ? (
+            {selectedSubSection?.children?.length ? (
                 selectedSubSection?.children && selectedSubSection.children.length > 0 && (
                     selectedSubSection.children.map((subcategory: Category) => (
                         <div key={subcategory.id} className="content__subsection-wrapper">
@@ -327,7 +247,7 @@ const CategoryPage = () => {
                                 <h2>{subcategory.name}</h2>
                             </div>
 
-                            <div className="content__subsection-items">
+                            <div className={contentWrapperClasses}>
                                 {subcategory?.items && subcategory?.items?.length > 0 &&
                                     subcategory.items.map((item: any, index: number) => (
                                         <div
@@ -337,7 +257,7 @@ const CategoryPage = () => {
                                                 animationDelay: `${index * 0.1}s`,
                                             }}
                                         >
-                                            <Card radius="sm" shadow="md" isHoverable={true} isPressable={false}>
+                                            <Card radius="sm" shadow="md" isHoverable={true} isPressable={false} className="content__card">
                                                 <CardBody>
                                                     <div className="content__item">
                                                         <h3>{item.name}</h3>

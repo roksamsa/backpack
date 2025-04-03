@@ -29,8 +29,8 @@ const MenuItem = ({
     const {
         setConfirmModalData,
         setAddEditSectionModalData,
-        setSelectedMainSection,
-        setSelectedSubSection,
+        setSelectedMainSectionId,
+        setSelectedSubSectionId,
     } = useDataStoreContext();
 
     const handleEditMainSectionModalOpenClick = (event: any) => {
@@ -50,8 +50,11 @@ const MenuItem = ({
     };
 
     const handleMenuItemClick = (item: Category) => {
-        setSelectedMainSection(item);
-        setSelectedSubSection(item?.children?.[0]);
+        setSelectedMainSectionId(item.id);
+
+        if (item?.children?.length) {
+            setSelectedSubSectionId(item?.children?.[0].id || "");
+        }
     };
 
     return (

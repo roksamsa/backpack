@@ -175,9 +175,26 @@ h1 {
     flex-direction: column;
     flex-grow: 1;
 
+    &__card {
+        border: .5px solid #e1e1e1;
+        box-shadow: 0 3px 3px 0px rgb(0 0 0 / 0.05);
+    }
+
     &__subsection-items {
         display: flex;
         flex-direction: column;
+        display: grid;
+        grid-column-gap: .5rem;
+        grid-row-gap: .5rem;
+
+        &.grid {
+            grid-template-columns: repeat(auto-fit, 300px);
+
+            .content__item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
     }
 
     &__subsection-wrapper {
@@ -187,12 +204,10 @@ h1 {
 
     &__item {
         display: flex;
-        align-items: center;
         justify-content: space-between;
     }
 
     &__subsection-item {
-        margin-bottom: 1rem;
         will-change: transform, opacity;
         animation: enterFadeIn 200ms ease-in-out both;
 
@@ -256,11 +271,12 @@ h1 {
     }
 
     &__headline-icon {
-        margin-right: 1rem;
+        width: 20px;
+        margin-right: .75rem;
 
         svg {
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
         }
     }
 

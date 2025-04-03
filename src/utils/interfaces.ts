@@ -15,7 +15,7 @@ export interface ModalData {
     type: string;
 }
 
-export interface MenuItem {
+export interface MenuItemType {
     iconName: string;
     id: number;
     link: string | null;
@@ -51,4 +51,20 @@ export interface CustomUser {
     name?: string | null;
     lastname?: string | null;
     email?: string | null;
+}
+
+export interface SharedItemType {
+    boughtDate: Date | string;
+    boughtPrice: number;
+    category: string;
+    currentPrice?: number;
+    description?: string;
+    favorite: boolean;
+    images?: string[];
+    links?: string[];
+    productNumber?: string | number;
+    share: boolean;
+    shareLink?: string;
+    status: "new" | "used" | "refurbished" | string;
+    title: string;
 }
