@@ -315,7 +315,7 @@ const CategoryPage = () => {
                     </Button>
                 </div>
             </div>
-            {itemsToShow.length ? (
+            {itemsToShow?.length ? (
                 selectedSubSection?.children && selectedSubSection.children.length > 0 && (
                     selectedSubSection.children.map((subcategory: Category) => (
                         <div key={subcategory.id} className="content__subsection-wrapper">
