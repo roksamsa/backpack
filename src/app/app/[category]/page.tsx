@@ -75,7 +75,7 @@ const CategoryPage = () => {
         };
 
         fetchLastLevelSections();
-        setItemsToShow(selectedSubSection.children.flatMap((item: any) => item.items || []));
+        setItemsToShow(selectedSubSection?.children?.flatMap((item: any) => item.items || []));
     }, [userSchemaStructure, selectedSubSection]);
 
     const getItemsForSubSection = async (categoryId: string) => {
