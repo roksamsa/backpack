@@ -156,6 +156,20 @@ h1 {
     }
 }
 
+@keyframes enterFadeIn {
+    0% {
+        will-change: transform, opacity;
+        transform: translate3d(0, -10px, 0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+        will-change: transform, opacity;
+    }
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -164,13 +178,35 @@ h1 {
     &__subsection-items {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
     }
 
     &__subsection-wrapper {
         display: flex;
         flex-direction: column;
-        flex-grow: 1;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__subsection-item {
+        margin-bottom: 1rem;
+        will-change: transform, opacity;
+        animation: enterFadeIn 200ms ease-in-out both;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &__subsection-wrapper {
+        margin-bottom: 3rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     &__headline-subsection {

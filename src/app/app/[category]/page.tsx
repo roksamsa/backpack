@@ -20,6 +20,7 @@ import {
 } from "@heroui/dropdown";
 import { Category } from "@/utils/interfaces";
 import { fetchData } from "@/utils/apiHelper";
+import { Card, CardBody } from "@heroui/card";
 
 const CategoryPage = () => {
     const pathname = usePathname();
@@ -56,11 +57,7 @@ const CategoryPage = () => {
     };
 
     useEffect(() => {
-        const selectedSubCategory = selectedSubSection.children?.find((item: any) => item.id === selectedMainSection?.id);
-
-        if (!selectedSubCategory) return;
-
-        setTabs(selectedSubCategory.children);
+        setTabs(selectedMainSection.children || []);
     }, [userSchemaStructure, selectedMainSection]);
 
 
@@ -78,13 +75,8 @@ const CategoryPage = () => {
         };
 
         fetchLastLevelSections();
-
-        console.log("selectedSubSection", selectedSubSection);
+        setItemsToShow(selectedSubSection.children.flatMap((item: any) => item.items || []));
     }, [userSchemaStructure, selectedSubSection]);
-
-    useEffect(() => {
-        console.log("lastLevelItems", lastLevelItems);
-    }, [lastLevelItems]);
 
     const getItemsForSubSection = async (categoryId: string) => {
         try {
@@ -210,6 +202,10 @@ const CategoryPage = () => {
         }
     }, [userSchemaStructure, selectedMainSection, selectedSubSection]);
 
+    useEffect(() => {
+        console.log("selectedSubSection", selectedSubSection);
+    }, [selectedSubSection]);
+
     return (
         <div className="content">
             <div className="content__headline">
@@ -319,40 +315,50 @@ const CategoryPage = () => {
                     </Button>
                 </div>
             </div>
-            {selectedSubSection?.children && selectedSubSection.children.length > 0 && (
-                selectedSubSection.children?.map((category: Category) => (
-                    <div key={category.id} className="content__subsection-wrapper">
-                        <div className="content__headline-subsection">
-                            <IconDisplay
-                                iconName={category.iconName || "MdOutlineDashboard"}
-                                className="content__headline-icon"
-                            />
-                            <h2>{category.name}</h2>
-                        </div>
-
-                        <div className="content__subsection-items">
-                            {
-                                lastLevelItems?.find((lastCategory: any) => lastCategory.id === category.id)?.items?.map((item: any) => {
-                                    <div key={item.id} className="content__item">
-                                        <p>{item.title}</p>
-                                        <p>{item.value}</p>
-                                    </div>;
-                                })
-                            }
-                        </div>
-                    </div>
-                ))
-            )}
             {itemsToShow.length ? (
-                <div className={contentWrapperClasses}>
-                    <ContentMetals data={itemsToShow} />
-                </div>
-            ) : (
-                <div className="no-data">
-                    <LogoSvg />
-                    <p>No items in you backpack yet :(</p>
-                </div>
-            )}
+                selectedSubSection?.children && selectedSubSection.children.length > 0 && (
+                    selectedSubSection.children.map((subcategory: Category) => (
+                        <div key={subcategory.id} className="content__subsection-wrapper">
+                            <div className="content__headline-subsection">
+                                <IconDisplay
+                                    iconName={subcategory.iconName || "MdOutlineDashboard"}
+                                    className="content__headline-icon"
+                                />
+                                <h2>{subcategory.name}</h2>
+                            </div>
+
+                            <div className="content__subsection-items">
+                                {subcategory?.items && subcategory?.items?.length > 0 &&
+                                    subcategory.items.map((item: any, index: number) => (
+                                        <div
+                                            key={item.id}
+                                            className="content__subsection-item"
+                                            style={{
+                                                animationDelay: `${index * 0.1}s`,
+                                            }}
+                                        >
+                                            <Card radius="sm" shadow="md" isHoverable={true} isPressable={false}>
+                                                <CardBody>
+                                                    <div className="content__item">
+                                                        <h3>{item.name}</h3>
+                                                        <span>{item.type}</span>
+                                                        <span>{item.quantity}</span>
+                                                        <span>{item.value}</span>
+                                                    </div>
+                                                </CardBody>
+                                            </Card>
+                                        </div>
+                                    ))}
+                            </div>
+                        </div>
+                    ))
+                )) :
+                (
+                    <div className="no-data">
+                        <LogoSvg />
+                        <p>No items in you backpack yet :(</p>
+                    </div>
+                )}
         </div>
     );
 };

@@ -116,7 +116,7 @@ const AddNewItemModal = () => {
     };
 
     useEffect(() => {
-        console.log("selectedSubSection", selectedSubSection);
+        console.log("2222222222", selectedSubSection);
         setSectionsDropdownList(selectedSubSection?.children);
     }, [userSchemaStructure, selectedSubSection]);
 

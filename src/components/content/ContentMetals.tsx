@@ -1,7 +1,6 @@
 "use client";
 
 import { useDataStoreContext } from "@/context/DataStoreProvider";
-import { useModalsStoreContext } from "@/context/ModalsStoreProvider";
 import { ModalType } from "@/utils/enums";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
