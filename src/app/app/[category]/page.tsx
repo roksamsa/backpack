@@ -57,7 +57,7 @@ const CategoryPage = () => {
     };
 
     useEffect(() => {
-        setTabs(selectedMainSection.children || []);
+        setTabs(selectedMainSection?.children || []);
     }, [userSchemaStructure, selectedMainSection]);
 
 
