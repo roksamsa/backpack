@@ -1,5 +1,12 @@
-import { useDataStoreContext } from "@/context/DataStoreProvider";
+
 import { Button } from "@heroui/button";
+import { fetchData } from "@/utils/apiHelper";
+import { Input } from "@heroui/input";
+import { InvestmentType } from "@/utils/enums";
+import { Select, SelectItem } from "@heroui/select";
+import { useDataStoreContext } from "@/context/DataStoreProvider";
+import { useSearchParams } from "next/navigation";
+import { v4 as uuidv4 } from 'uuid';
 import {
     Modal,
     ModalBody,
@@ -7,28 +14,19 @@ import {
     ModalFooter,
     ModalHeader,
 } from "@heroui/modal";
+
 import React, { useEffect, useState } from "react";
-
-import { Input } from "@heroui/input";
-import { Select, SelectItem } from "@heroui/select";
-import { fetchData } from "@/utils/apiHelper";
-import { InvestmentType } from "@/utils/enums";
-import { v4 as uuidv4 } from 'uuid';
-
 import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
 
 const AddNewItemModal = () => {
-    const { subSections, addEditItemModalData, setAddEditItemModalData, userSchemaStructure, setUserSchemaStructure, selectedSubSection } =
+    const { addEditItemModalData, setAddEditItemModalData, userSchemaStructure, setUserSchemaStructure, selectedSubSection } =
         useDataStoreContext();
-    const searchParams = useSearchParams();
     const [itemName, setItemName] = useState<string>("");
     const [itemStatus, setItemStatus] = useState<string>("");
     const [value, setValue] = useState<string>("");
     const [quantity, setQuantity] = useState<string>("");
     const [section, setSection] = useState<string>("");
     const [selectedItemType, setSelectedItemType] = useState<string>("");
-    const [selectedSection, setSelectedSection] = useState<string>("");
     const [sectionsDropdownList, setSectionsDropdownList] = useState<any[]>([]);
     const [typesForDropdown, setTypesForDropdown] = useState<any[]>(
         Object.values(InvestmentType).map((value) => ({ name: value })),
@@ -116,13 +114,8 @@ const AddNewItemModal = () => {
     };
 
     useEffect(() => {
-        console.log("2222222222", selectedSubSection);
         setSectionsDropdownList(selectedSubSection?.children);
     }, [userSchemaStructure, selectedSubSection]);
-
-    useEffect(() => {
-        console.log("sectionsDropdownList", sectionsDropdownList);
-    }, [sectionsDropdownList]);
 
     return (
         <Modal

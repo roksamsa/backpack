@@ -7,7 +7,7 @@ import { ModalType } from "@/utils/enums";
 import { Select, SelectItem } from "@heroui/select";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { usePathname } from "next/navigation";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from 'uuid';
 
 import IconPicker from "@/components/icon-selector/IconSelector";
@@ -42,9 +42,6 @@ const AddNewCategoryModal = () => {
     const [categoryName, setCategoryName] = useState<string>("");
     const [categorySlug, setCategorySlug] = useState<string>("");
     const [parentCategory, setParentCategory] = useState<string>("");
-    const [mainSectionsForDropdown, setMainSectionsForDropdown] = useState<any[]>(
-        [],
-    );
     const [isSlugManuallyEdited, setIsSlugManuallyEdited] =
         useState<boolean>(false);
     const [selectedIcon, setSelectedIcon] = useState("");
@@ -226,17 +223,6 @@ const AddNewCategoryModal = () => {
                 break;
         }
     };
-
-    useEffect(() => {
-        const mainSectionsWithNoneSection = [
-            {
-                id: null,
-                name: "No parent section",
-            },
-            ...mainSections,
-        ];
-        setMainSectionsForDropdown(mainSectionsWithNoneSection);
-    }, [mainSections]);
 
     const [parentDropdownSections, setParentDropdownSections] = useState<Category[]>([]);
 

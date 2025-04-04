@@ -90,6 +90,10 @@ h1 {
         height: 100%;
     }
 
+    &__content-wrapper {
+        width: 100%;
+    }
+
     &__content {
         display: flex;
         flex-grow: 1;

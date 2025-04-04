@@ -1,6 +1,7 @@
 import { ModalData } from "@/interfaces/interfaces";
 import { defaultEmptyModalData } from "@/utils/globals";
 import { Category, UserSchemaStructure } from "@/utils/interfaces";
+import { useRouter, useParams } from "next/navigation";
 import React, {
     createContext,
     ReactNode,
@@ -66,6 +67,8 @@ const initialState: DataStoreProviderType = {
 const DataStoreContext = createContext<DataStoreProviderType>(initialState);
 
 export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
+    const router = useRouter();
+    const params = useParams();
     const [addEditSectionModalData, setAddEditSectionModalData] =
         useState<ModalData>(defaultEmptyModalData);
     const [addEditItemModalData, setAddEditItemModalData] = useState<ModalData>(
@@ -92,14 +95,14 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
 
         if (selectedMainSectionId) {
             const mainCategory = userSchemaStructure.schema?.find(
-                (mainCategory: Category) => mainCategory.id === selectedMainSectionId,
+                (mainCategory: Category) => mainCategory.link === selectedMainSectionId,
             ) as Category;
 
             if (mainCategory) setSelectedMainSection(mainCategory);
 
             if (mainCategory && selectedSubSectionId) {
                 const subCategory = mainCategory.children?.find(
-                    (subCategory: any) => subCategory.id === selectedSubSectionId,
+                    (subCategory: any) => subCategory.link === selectedSubSectionId,
                 ) as Category;
 
                 if (subCategory) {
@@ -110,22 +113,6 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
             }
         }
     }, [userSchemaStructure, selectedMainSectionId, selectedSubSectionId]);
-
-    useEffect(() => {
-        console.log("selectedMainSectionId", selectedMainSectionId);
-    }, [selectedMainSectionId]);
-
-    useEffect(() => {
-        console.log("selectedMainSection111", selectedMainSection);
-    }, [selectedMainSection]);
-
-    useEffect(() => {
-        console.log("selectedSubSectionId", selectedSubSectionId);
-    }, [selectedSubSectionId]);
-
-    useEffect(() => {
-        console.log("selectedSubSection111", selectedSubSection);
-    }, [selectedSubSection]);
 
     return (
         <DataStoreContext.Provider

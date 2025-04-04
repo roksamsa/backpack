@@ -33,7 +33,6 @@ const Dashboard = ({ data }: any) => {
         const getCryptoPrices = async () => {
             const response = await fetch("/api/binance/prices");
             const data = await response.json();
-            console.log("DDDDDDDDDD", data);
         };
 
         getCryptoPrices();
@@ -41,16 +40,7 @@ const Dashboard = ({ data }: any) => {
 
     useEffect(() => {
         setMetalsApiData(data);
-    }, [data, setMetalsApiData]);
-
-    /*useEffect(() => {
-      if (status === "loading") return;
-      if (status === "unauthenticated") {
-        router.push("/login");
-      } else {
-        router.push("/app");
-      }
-    }, [status, router]);*/
+    }, [data]);
 
     return (
         <div className="page">

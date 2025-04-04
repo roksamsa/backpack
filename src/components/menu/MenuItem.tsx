@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Menu.module.scss";
 import Link from "next/link";
 import IconDisplay from "../icon-display/IconDisplay";
@@ -9,6 +9,7 @@ import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { ModalType } from "@/utils/enums";
 import { Category } from "@/utils/interfaces";
+import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
     areActionButtonsVisible: boolean;
@@ -25,12 +26,12 @@ const MenuItem = ({
     item,
     onClick = () => { },
 }: MenuItemProps) => {
+    const router = useRouter();
     const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
     const {
         setConfirmModalData,
         setAddEditSectionModalData,
         setSelectedMainSectionId,
-        setSelectedSubSectionId,
     } = useDataStoreContext();
 
     const handleEditMainSectionModalOpenClick = (event: any) => {
@@ -50,11 +51,12 @@ const MenuItem = ({
     };
 
     const handleMenuItemClick = (item: Category) => {
-        setSelectedMainSectionId(item.id);
+        const appPrefix = '/app';
+        const mainCategory = item.link;
+        const path = `${appPrefix}/${mainCategory}`;
 
-        if (item?.children?.length) {
-            setSelectedSubSectionId(item?.children?.[0].id || "");
-        }
+        // setSelectedMainSectionId(item.id);
+        router.push(path);
     };
 
     return (
