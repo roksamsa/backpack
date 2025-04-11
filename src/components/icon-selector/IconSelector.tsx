@@ -96,7 +96,7 @@ const IconPicker = ({
             />
             <div ref={containerRef} className={styles.modalIconsWrapper}>
                 <div className={styles.modalIcons}>
-                    {displayedIcons.map((iconName) => {
+                    {displayedIcons.map((iconName, index) => {
                         const isSelected = selectedIcon === iconName;
                         const IconComponent = MdIcons[iconName as keyof typeof MdIcons];
 
@@ -104,7 +104,7 @@ const IconPicker = ({
                             <div
                                 className={`${styles.icon} ${isSelected ? styles.iconSelected : ""
                                     }`}
-                                key={iconName}
+                                key={iconName + index}
                                 onClick={() => handleIconClick(iconName)}
                             >
                                 <IconComponent size={24} />

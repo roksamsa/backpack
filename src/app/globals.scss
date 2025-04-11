@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @keyframes float {
     0% {
         transform: translateY(0);
@@ -91,6 +90,8 @@ h1 {
     }
 
     &__content-wrapper {
+        display: flex;
+        flex-direction: column;
         width: 100%;
     }
 
@@ -174,6 +175,11 @@ h1 {
     }
 }
 
+main {
+    display: flex;
+    flex-grow: 1;
+}
+
 .content {
     display: flex;
     flex-direction: column;
@@ -213,7 +219,7 @@ h1 {
 
     &__subsection-item {
         will-change: transform, opacity;
-        animation: enterFadeIn 200ms ease-in-out both;
+        animation: enterFadeIn 100ms ease-in-out both;
 
         &:last-child {
             margin-bottom: 0;

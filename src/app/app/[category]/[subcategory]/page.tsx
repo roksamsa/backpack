@@ -11,6 +11,7 @@ import React from "react";
 const CategoryPage = () => {
     const {
         selectedSubSection,
+        selectedContentView,
     } = useDataStoreContext();
 
     return (
@@ -27,14 +28,14 @@ const CategoryPage = () => {
                                 <h2>{subcategory.name}</h2>
                             </div>
 
-                            <div>
+                            <div className={`content__subsection-items ${selectedContentView}`}>
                                 {subcategory?.items && subcategory?.items?.length > 0 &&
                                     subcategory.items.map((item: any, index: number) => (
                                         <div
                                             key={item.id}
                                             className="content__subsection-item"
                                             style={{
-                                                animationDelay: `${index * 0.1}s`,
+                                                animationDelay: `${index * 50}ms`,
                                             }}
                                         >
                                             <Card radius="sm" shadow="md" isHoverable={true} isPressable={false} className="content__card">

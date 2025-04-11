@@ -9,8 +9,9 @@ import { fetchData } from "@/utils/apiHelper";
 import { ModalType } from "@/utils/enums";
 
 import "simplebar-react/dist/simplebar.min.css";
-import { MenuItemType } from "@/utils/interfaces";
+import { Category, CustomSession, MenuItemType } from "@/utils/interfaces";
 import MenuItem from "./MenuItem";
+import { Skeleton } from "@heroui/skeleton";
 
 const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
     const skeletonItems = Array.from({ length: 10 });
@@ -25,12 +26,14 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
     } = useDataStoreContext();
 
     useEffect(() => {
-        if (session?.user?.id) {
+        const customSession = session as CustomSession;
+
+        if (customSession?.user?.id) {
             const fetchSections = async () => {
                 try {
                     await fetchData({
                         url: "/api/schemaStructure/getByUserId",
-                        query: { userId: session?.user?.id },
+                        query: { userId: customSession?.user?.id },
                         method: "GET",
                         options: {
                             onSuccess: (data) => {
@@ -55,15 +58,15 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
         });
     };
 
-    const itemDashboard: MenuItemType = {
-        id: 999900000,
+    const itemDashboard: Category = {
+        id: "999900000",
         iconName: "MdOutlineDashboard",
         link: "",
         name: "Dashboard",
     };
 
-    const itemAddNewSection: MenuItemType = {
-        id: 9999999999,
+    const itemAddNewSection: Category = {
+        id: "9999999999",
         iconName: "MdAdd",
         link: null,
         name: "Add new section",
@@ -89,6 +92,9 @@ const Menu = ({ isSidebarClosed }: { isSidebarClosed: boolean; }) => {
                             onClick={() => { }}
                         />
                     </li>
+                    {userSchemaStructure?.schema?.length === 0 && skeletonItems.map((_, index) => (
+                        <Skeleton key={index} className="h-8 w-11/12 rounded-full" />
+                    ))}
                     {userSchemaStructure?.schema?.map((section: any, index: number) => (
                         <li
                             key={index}

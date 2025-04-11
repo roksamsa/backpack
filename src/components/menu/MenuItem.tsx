@@ -31,7 +31,6 @@ const MenuItem = ({
     const {
         setConfirmModalData,
         setAddEditSectionModalData,
-        setSelectedMainSectionId,
     } = useDataStoreContext();
 
     const handleEditMainSectionModalOpenClick = (event: any) => {
@@ -48,15 +47,6 @@ const MenuItem = ({
             isVisible: true,
             type: ModalType.CONFIRM_DELETE_MAIN_SECTION,
         });
-    };
-
-    const handleMenuItemClick = (item: Category) => {
-        const appPrefix = '/app';
-        const mainCategory = item.link;
-        const path = `${appPrefix}/${mainCategory}`;
-
-        // setSelectedMainSectionId(item.id);
-        router.push(path);
     };
 
     return (
@@ -92,7 +82,6 @@ const MenuItem = ({
                         <Link
                             className={styles.menuItemLink}
                             href={`/app/${item.link}`}
-                            onClick={() => handleMenuItemClick(item)}
                         >
                             <div className={styles.menuItemLinkContainer}>
                                 <IconDisplay

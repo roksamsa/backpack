@@ -21,22 +21,16 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
     const {
         addEditItemModalData,
         addEditSectionModalData,
+        selectedContentView,
         selectedMainSection,
         setAddEditItemModalData,
         setAddEditSectionModalData,
+        setSelectedContentView,
         setSelectedMainSectionId,
         setSelectedSubSectionId,
     } = useDataStoreContext();
-    const [contentWrapperClasses, setContentWrapperClasses] = useState<string>(
-        "content__subsection-items rows",
-    );
     const [selectedTab, setSelectedTab] = useState<string>("");
     const [tabs, setTabs] = useState<Category[]>([]);
-
-    const handleToggleViewClick = (type: string) => {
-        if (type === "grid") setContentWrapperClasses("content__subsection-items grid");
-        if (type === "rows") setContentWrapperClasses("content__subsection-items rows");
-    };
 
     const handleAddItemsSectionModalOpenClick = (event: any) => {
         setAddEditSectionModalData({
@@ -55,6 +49,8 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
         const selectedSubCategory = tabs?.find((item) => item.id === tab);
         const mainCategory = params.category;
         const path = selectedSubCategory ? `${appPrefix}/${mainCategory}/${selectedSubCategory.link}` : `${appPrefix}/${mainCategory}`;
+
+        console.log("selectedSubCategory", selectedSubCategory);
 
         router.push(path);
 
@@ -78,36 +74,43 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
 
     useEffect(() => {
         const appPrefix = '/app';
-        const subCategory = params.subcategory;
-        const mainCategory = params.category;
+        const { subcategory, category: mainCategory } = params;
+
+        console.log("subcategory", subcategory);
+        console.log("mainCategory", mainCategory);
+
+        if (mainCategory) {
+            setSelectedMainSectionId(mainCategory.toString());
+        }
 
         if (!tabs?.length) {
-            const path = `${appPrefix}/${mainCategory}`;
-            if (currentPath !== path) {
-                router.push(path);
+            if (currentPath !== `${appPrefix}/${mainCategory}`) {
+                //router.push(`${appPrefix}/${mainCategory}`);
             }
-            setSelectedSubSectionId("");
+
             setSelectedTab("");
-            setSelectedMainSectionId(mainCategory?.toString() || "");
+            setSelectedSubSectionId("");
+
             return;
         }
 
-        const selectedSubCategory = subCategory
-            ? tabs.find((item) => item.link === subCategory)
-            : tabs[0];
+        const selectedSubCategory = tabs.find((item) => item.link === subcategory) || tabs[0];
 
-        const path = selectedSubCategory
-            ? `${appPrefix}/${mainCategory}/${selectedSubCategory.link}`
-            : `${appPrefix}/${mainCategory}`;
+        if (selectedSubCategory) {
+            const { id, link } = selectedSubCategory;
 
-        if (currentPath !== path) {
-            router.push(path);
+            if (selectedTab !== id.toString()) {
+                setSelectedTab(id.toString());
+                setSelectedSubSectionId(link);
+
+                console.log("selectedSubCategory", currentPath);
+
+                if (currentPath !== `${appPrefix}/${mainCategory}/${link}`) {
+                    //router.push(`${appPrefix}/${mainCategory}/${link}`);
+                }
+            }
         }
-
-        setSelectedSubSectionId(selectedSubCategory?.link || "");
-        setSelectedTab(selectedSubCategory?.id?.toString() || "");
-        setSelectedMainSectionId(mainCategory?.toString() || "");
-    }, [params, tabs]);
+    }, [params, tabs, currentPath, router, selectedTab]);
 
     return (
         <div className="page__content-wrapper">
@@ -134,24 +137,24 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
                             <Button
                                 isIconOnly
                                 color={
-                                    contentWrapperClasses.includes("rows") ? "primary" : "default"
+                                    selectedContentView === "rows" ? "primary" : "default"
                                 }
                                 radius="full"
                                 variant="light"
                                 className="button icon-only"
                                 startContent={<MdSplitscreen />}
-                                onPress={() => handleToggleViewClick("rows")}
+                                onPress={() => setSelectedContentView("rows")}
                             ></Button>
                             <Button
                                 isIconOnly
                                 color={
-                                    contentWrapperClasses.includes("grid") ? "primary" : "default"
+                                    selectedContentView === "grid" ? "primary" : "default"
                                 }
                                 radius="full"
                                 variant="light"
                                 className="button icon-only"
                                 startContent={<MdGridView />}
-                                onPress={() => handleToggleViewClick("grid")}
+                                onPress={() => setSelectedContentView("grid")}
                             ></Button>
                         </ButtonGroup>
                         <ButtonGroup></ButtonGroup>

@@ -33,7 +33,7 @@ export interface Category {
     children?: Category[];
     items?: { id: string; }[];
     name: string;
-    link: string;
+    link: string | null;
     iconName?: string;
 }
 export interface CustomSession {

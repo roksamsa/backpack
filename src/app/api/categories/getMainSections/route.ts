@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
         const userId = url.searchParams.get("userId");
         const socialUser = await prisma.user.findUnique({
             where: {
-                socialId: userId ? userId : undefined,
+                id: userId ? userId : undefined,
             },
         });
 

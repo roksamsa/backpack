@@ -1,7 +1,6 @@
 import { ModalData } from "@/interfaces/interfaces";
 import { defaultEmptyModalData } from "@/utils/globals";
 import { Category, UserSchemaStructure } from "@/utils/interfaces";
-import { useRouter, useParams } from "next/navigation";
 import React, {
     createContext,
     ReactNode,
@@ -17,6 +16,7 @@ interface DataStoreProviderType {
     itemsToShow: any[];
     mainSections: any[];
     metalsApiData: {};
+    selectedContentView: 'rows' | 'grid';
     selectedMainSection: Category;
     selectedMainSectionId: string;
     selectedSubSection: any;
@@ -27,6 +27,7 @@ interface DataStoreProviderType {
     setItemsToShow: (data: any[]) => void;
     setMainSections: (data: any[]) => void;
     setMetalsApiData: (data: any) => void;
+    setSelectedContentView: (data: 'rows' | 'grid') => void;
     setSelectedMainSection: (data: Category) => void;
     setSelectedMainSectionId: (data: string) => void;
     setSelectedSubSection: (data: any) => void;
@@ -44,6 +45,7 @@ const initialState: DataStoreProviderType = {
     itemsToShow: [],
     mainSections: [],
     metalsApiData: {},
+    selectedContentView: 'rows',
     selectedMainSection: {} as Category,
     selectedMainSectionId: "",
     selectedSubSection: {},
@@ -54,6 +56,7 @@ const initialState: DataStoreProviderType = {
     setItemsToShow: () => { },
     setMainSections: () => { },
     setMetalsApiData: () => { },
+    setSelectedContentView: () => { },
     setSelectedMainSection: () => { },
     setSelectedMainSectionId: () => { },
     setSelectedSubSection: () => { },
@@ -67,8 +70,6 @@ const initialState: DataStoreProviderType = {
 const DataStoreContext = createContext<DataStoreProviderType>(initialState);
 
 export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
-    const router = useRouter();
-    const params = useParams();
     const [addEditSectionModalData, setAddEditSectionModalData] =
         useState<ModalData>(defaultEmptyModalData);
     const [addEditItemModalData, setAddEditItemModalData] = useState<ModalData>(
@@ -89,6 +90,8 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
     const [selectedSubSection, setSelectedSubSection] = useState<Category>({} as Category);
     const [selectedMainSectionId, setSelectedMainSectionId] = useState<string>("");
     const [selectedSubSectionId, setSelectedSubSectionId] = useState<string>("");
+
+    const [selectedContentView, setSelectedContentView] = useState<'rows' | 'grid'>('rows');
 
     useEffect(() => {
         if (!userSchemaStructure?.schema) return;
@@ -123,6 +126,7 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
                 itemsToShow,
                 mainSections,
                 metalsApiData,
+                selectedContentView,
                 selectedMainSection,
                 selectedMainSectionId,
                 selectedSubSection,
@@ -133,6 +137,7 @@ export const DataStoreProvider = ({ children }: { children: ReactNode; }) => {
                 setItemsToShow,
                 setMainSections,
                 setMetalsApiData,
+                setSelectedContentView,
                 setSelectedMainSection,
                 setSelectedMainSectionId,
                 setSelectedSubSection,

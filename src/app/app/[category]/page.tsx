@@ -11,6 +11,7 @@ import React from "react";
 const CategoryPage = () => {
     const {
         selectedSubSection,
+        selectedContentView,
     } = useDataStoreContext();
 
     return (
@@ -27,7 +28,7 @@ const CategoryPage = () => {
                                 <h2>{subcategory.name}</h2>
                             </div>
 
-                            <div>
+                            <div className={`content__subsection-items ${selectedContentView}`}>
                                 {subcategory?.items && subcategory?.items?.length > 0 &&
                                     subcategory.items.map((item: any, index: number) => (
                                         <div

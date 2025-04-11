@@ -93,6 +93,15 @@ const AddNewCategoryModal = () => {
                 method: "GET",
             });
 
+            const sectionAlreadyExists = schema?.schema?.some(
+                (category: Category) => category.link === categorySlug,
+            );
+
+            if (sectionAlreadyExists) {
+                toast.error("Section already exists!");
+                return;
+            }
+
             const schemaStructure = schema?.schema || [];
             const newCategory = {
                 id: uuidv4(),
@@ -151,8 +160,8 @@ const AddNewCategoryModal = () => {
                 },
                 options: {
                     onSuccess: async (data) => {
-                        console.log("9999999999999999", data);
                         setUserSchemaStructure(data);
+                        handleOnCancel();
                     }
                 }
             });
@@ -200,24 +209,29 @@ const AddNewCategoryModal = () => {
     };
 
     const handleOnSave = async () => {
-        handleOnCancel();
-
         switch (addEditSectionModalData?.type) {
-            case ModalType.ADD_MAIN_SECTION:
+            case ModalType.ADD_MAIN_SECTION: {
                 addNewSectionApiCall(false);
                 break;
+            }
 
-            case ModalType.ADD_SUB_SECTION:
+            case ModalType.ADD_SUB_SECTION: {
                 addNewSectionApiCall(false);
+                handleOnCancel();
                 break;
+            }
 
-            case ModalType.ADD_ITEMS_SUB_SECTION:
+            case ModalType.ADD_ITEMS_SUB_SECTION: {
                 addNewSectionApiCall(true);
+                handleOnCancel();
                 break;
+            }
 
-            case ModalType.EDIT_MAIN_SECTION:
+            case ModalType.EDIT_MAIN_SECTION: {
                 editSectionApiCall();
+                handleOnCancel();
                 break;
+            }
 
             default:
                 break;
