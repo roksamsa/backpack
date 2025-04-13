@@ -6,6 +6,7 @@ import ConfirmModal from "@/components/modals/confirmModal/ConfirmModal";
 import Sidebar from "@/components/sidebar/Sidebar";
 
 import { DataStoreProvider } from "@/context/DataStoreProvider";
+import { toastOptions } from "@/utils/globals";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -76,7 +77,7 @@ export default function RootLayout({
                 <AddNewItemModal />
                 <ConfirmModal />
             </div>
-            <Toaster position="bottom-right" reverseOrder={false} />
+            <Toaster toastOptions={toastOptions} />
         </DataStoreProvider>
     );
 }

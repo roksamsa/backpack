@@ -153,7 +153,7 @@ const AddNewCategoryModal = () => {
 
             await fetchData({
                 url: "/api/schemaStructure/update",
-                method: "POST",
+                method: "PUT",
                 body: {
                     id: schema?.id,
                     schema: schemaStructure,

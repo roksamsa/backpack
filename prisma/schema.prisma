@@ -67,7 +67,7 @@ model Category {
 }
 
 model Item {
-  categoryId     String? @unique
+  categoryId     String?
   id             String  @id @default(cuid())
   itemsSectionId Int?
   properties     Json

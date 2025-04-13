@@ -1,15 +1,14 @@
+import { Button } from "@heroui/button";
+import { Category } from "@/utils/interfaces";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { ModalType } from "@/utils/enums";
+import { Tooltip } from "@heroui/tooltip";
+import { useDataStoreContext } from "@/context/DataStoreProvider";
+
+import IconDisplay from "../icon-display/IconDisplay";
+import Link from "next/link";
 import React, { useState } from "react";
 import styles from "./Menu.module.scss";
-import Link from "next/link";
-import IconDisplay from "../icon-display/IconDisplay";
-
-import { Tooltip } from "@heroui/tooltip";
-import { Button } from "@heroui/button";
-import { MdDeleteOutline, MdEdit } from "react-icons/md";
-import { useDataStoreContext } from "@/context/DataStoreProvider";
-import { ModalType } from "@/utils/enums";
-import { Category } from "@/utils/interfaces";
-import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
     areActionButtonsVisible: boolean;
@@ -26,7 +25,6 @@ const MenuItem = ({
     item,
     onClick = () => { },
 }: MenuItemProps) => {
-    const router = useRouter();
     const [isMenuItemHovered, setIsMenuItemHovered] = useState<boolean>(false);
     const {
         setConfirmModalData,

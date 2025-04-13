@@ -178,6 +178,11 @@ h1 {
 main {
     display: flex;
     flex-grow: 1;
+    //overflow: auto;
+
+    .content {
+        padding-bottom: 1rem;
+    }
 }
 
 .content {
@@ -200,7 +205,8 @@ main {
         &.grid {
             grid-template-columns: repeat(auto-fit, 300px);
 
-            .content__item {
+            .content__subsection-item {
+                width: auto;
                 align-items: flex-start;
                 flex-direction: column;
             }
@@ -218,6 +224,7 @@ main {
     }
 
     &__subsection-item {
+        width: 100%;
         will-change: transform, opacity;
         animation: enterFadeIn 100ms ease-in-out both;
 
@@ -231,6 +238,7 @@ main {
 
         &:last-child {
             margin-bottom: 0;
+            padding-bottom: 1rem;
         }
     }
 
@@ -277,7 +285,32 @@ main {
     }
 
     &__headline-tabs {
+        display: flex;
         overflow: hidden;
+
+        ul {
+            display: flex;
+        }
+    }
+
+    &__headline-tab {
+        padding: .25rem .75rem;
+        list-style: none;
+        border-radius: 30px;
+        transition: background-color 150ms ease-in-out;
+
+        &.active {
+            background-color: #006fee;
+            color: #fff;
+
+            &:hover {
+                background-color: #006fee;
+            }
+        }
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
     }
 
     &__headline-icon {

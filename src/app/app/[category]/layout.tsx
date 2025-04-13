@@ -2,16 +2,18 @@
 
 import { Button, ButtonGroup } from "@heroui/button";
 import { Category } from "@/utils/interfaces";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/dropdown";
+import { fetchData } from "@/utils/apiHelper";
 import { MdAdd, MdGridView, MdSplitscreen } from "react-icons/md";
 import { ModalType } from "@/utils/enums";
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Skeleton } from "@heroui/skeleton";
-import { Tab, Tabs } from "@heroui/tabs";
 import { useDataStoreContext } from "@/context/DataStoreProvider";
 import { useParams, useRouter, usePathname } from 'next/navigation';
 
 import IconDisplay from "@/components/icon-display/IconDisplay";
+import toast from "react-hot-toast";
 
 export default function MainLayout({ children }: { children: ReactNode; }) {
     const params = useParams();
@@ -28,9 +30,13 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
         setSelectedContentView,
         setSelectedMainSectionId,
         setSelectedSubSectionId,
+        setUserSchemaStructure,
+        userSchemaStructure,
     } = useDataStoreContext();
     const [selectedTab, setSelectedTab] = useState<string>("");
     const [tabs, setTabs] = useState<Category[]>([]);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
 
     const handleAddItemsSectionModalOpenClick = (event: any) => {
         setAddEditSectionModalData({
@@ -112,6 +118,54 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
         }
     }, [params, tabs, currentPath, router, selectedTab]);
 
+    const onDragEnd = async (result: any) => {
+        if (!result.destination) return;
+
+        const reorderedTabs = Array.from(tabs);
+        const [removed] = reorderedTabs.splice(result.source.index, 1);
+        reorderedTabs.splice(result.destination.index, 0, removed);
+
+        setTabs(reorderedTabs);
+
+        const userSchemaModified = userSchemaStructure?.schema.map((category: Category) => {
+            if (category.id === selectedMainSection?.id) {
+                return {
+                    ...category,
+                    children: reorderedTabs,
+                };
+            }
+            return category;
+        });
+
+        await fetchData({
+            url: "/api/schemaStructure/update",
+            method: "PUT",
+            body: {
+                id: userSchemaStructure?.id,
+                schema: userSchemaModified,
+            },
+            options: {
+                onSuccess: async (data) => {
+                    toast.success("Subcategories updated successfully!");
+                    console.log("Updated subcategories", data);
+                },
+            },
+        });
+    };
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const activeTab = containerRef.current.querySelector('.content__headline-tab.active') as HTMLElement;
+
+        if (activeTab) {
+            setIndicatorStyle({
+                left: activeTab.offsetLeft,
+                width: activeTab.offsetWidth
+            });
+        }
+    }, [selectedTab, tabs]);
+
     return (
         <div className="page__content-wrapper">
             <header className="content__headline">
@@ -185,24 +239,35 @@ export default function MainLayout({ children }: { children: ReactNode; }) {
                 </div>
                 <div className="content__headline-down">
                     {tabs?.length > 0 && (
-                        <Tabs
-                            aria-label="Subsections tabs"
-                            color="primary"
-                            radius="full"
-                            variant="light"
-                            className="content__headline-tabs"
-                            items={tabs}
-                            selectedKey={selectedTab}
-                            onSelectionChange={(key) => handleTabSelectionChange(key)}
-                        >
-                            {(item) => (
-                                <Tab
-                                    key={item.id}
-                                    title={item.name}
-                                    className="content__headline-tab"
-                                ></Tab>
-                            )}
-                        </Tabs>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable droppableId="menuItems" direction="horizontal">
+                                {(provided) => (
+                                    <div className="content__headline-tabs"
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        <ul>
+                                            {tabs?.map((tab: any, index: number) => (
+                                                <Draggable key={tab.id} draggableId={tab.id} index={index}>
+                                                    {(provided) => (
+                                                        <li
+                                                            className={`content__headline-tab ${selectedTab === tab.id ? "active" : ""}`}
+                                                            onClick={() => handleTabSelectionChange(tab.id)}
+                                                            ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                        >
+                                                            {tab.name}
+                                                        </li>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                        </ul>
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </DragDropContext>
                     )}
                     <Button
                         isIconOnly={tabs?.length > 0}

@@ -1,152 +1,157 @@
 .menu {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    overflow: hidden;
 
-  &.sidebarClosed {
-    .menuList {
-      padding: 0 1rem;
+    &.sidebarClosed {
+        .menuList {
+            padding: 0 1rem;
+        }
+
+        .menuItem span {
+            display: none;
+        }
+
+        .menuItemIcon {
+            margin-right: 0;
+            margin-left: 1.5px;
+        }
+
+        .menuItemLinkWrapper {
+            padding: 0 1rem;
+        }
+
+        .menuItemLink {
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+
+        .menuItemActions {
+            display: none;
+        }
+
+        .addNewCategory {
+            justify-content: flex-start;
+            min-width: auto;
+            margin: 0.3rem 1rem 0 1rem;
+            font-size: 24px;
+
+            span {
+                display: none;
+            }
+        }
     }
-
-    .menuItem span {
-      display: none;
-    }
-
-    .menuItemIcon {
-      margin-right: 0;
-      margin-left: 1.5px;
-    }
-
-    .menuItemLinkWrapper {
-      padding: 0 1rem;
-    }
-
-    .menuItemLink {
-      width: 100%;
-      padding: 0.5rem 0;
-    }
-
-    .menuItemActions {
-      display: none;
-    }
-
-    .addNewCategory {
-      justify-content: flex-start;
-      min-width: auto;
-      margin: 0.3rem 1rem 0 1rem;
-      font-size: 24px;
-
-      span {
-        display: none;
-      }
-    }
-  }
 }
 
 .menuListWrapper {
-  overflow-x: hidden;
-  max-height: calc(100% - 50px);
+    overflow-x: hidden;
+    max-height: calc(100% - 50px);
 }
 
 .menuList {
-  padding: 0 2rem;
+    padding: 0 2rem;
 }
 
 .menuItemWrapper {
-  display: flex;
-  flex-shrink: 0;
-  min-height: 45px;
+    display: flex;
+    flex-shrink: 0;
+    min-height: 45px;
 }
 
 .menuItem {
-  display: flex;
-  align-items: center;
-  min-height: 45px;
-  margin-top: 0.3rem;
-  border-radius: 30px;
-  font-size: 1.2rem;
-  // transition: all 150ms ease-in-out;
+    display: flex;
+    align-items: center;
+    min-height: 45px;
+    margin-top: 0.3rem;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    // transition: all 150ms ease-in-out;
 
-  .menuItemWrapper {
-    width: 100%;
-  }
-
-  span {
-    white-space: nowrap;
-  }
-
-  &:hover {
-    background-color: #dfe7f3;
-
-    .menuItemActions {
-      opacity: 1;
+    .menuItemWrapper {
+        width: 100%;
     }
-  }
 
-  &.active {
-    background-color: #0b5adb;
-    color: #fff;
+    .menuItemWrapperDragging {
+        position: absolute;
+        background-color: #dfe7f3;
+    }
+
+    span {
+        white-space: nowrap;
+    }
 
     &:hover {
-      .menuItemActions svg {
-        color: #fff;
-      }
+        background-color: #dfe7f3;
+
+        .menuItemActions {
+            opacity: 1;
+        }
     }
-  }
+
+    &.active {
+        background-color: #0b5adb;
+        color: #fff;
+
+        &:hover {
+            .menuItemActions svg {
+                color: #fff;
+            }
+        }
+    }
 }
 
 .menuItemLink {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
 }
 
 .menuItemLinkWrapper {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .menuItemLinkContainer {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .menuItemIcon {
-  margin-right: 0.7rem;
-  transition: margin 150ms ease-in-out;
+    margin-right: 0.7rem;
+    transition: margin 150ms ease-in-out;
 
-  svg {
-    width: 20px;
-    height: 20px;
-  }
+    svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .menuItemActions {
-  display: flex;
-  flex-shrink: 0;
-  opacity: 0;
+    display: flex;
+    flex-shrink: 0;
+    opacity: 0;
 
-  button {
-    width: 2rem;
-    height: 2rem;
-    min-width: 2rem;
-  }
+    button {
+        width: 2rem;
+        height: 2rem;
+        min-width: 2rem;
+    }
 }
 
 .addNewCategory {
-  flex-grow: 1;
-  justify-content: flex-start;
-  min-height: 45px;
-  margin: 0.3rem 2rem 0 2rem;
-  transition: all 150ms ease-in-out;
+    flex-grow: 1;
+    justify-content: flex-start;
+    min-height: 45px;
+    margin: 0.3rem 2rem 0 2rem;
+    transition: all 150ms ease-in-out;
 
-  .menuItemIcon {
-    margin-right: 0;
-  }
+    .menuItemIcon {
+        margin-right: 0;
+    }
 }

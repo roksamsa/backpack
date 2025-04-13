@@ -43,7 +43,6 @@ const Register = () => {
                 url: "/api/schemaStructure/create",
                 method: "POST",
                 body: {
-                    id: schemaStructureId,
                     schema: [],
                     userId: data.user.id,
                 },

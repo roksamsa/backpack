@@ -52,32 +52,76 @@ const AddNewItemModal = () => {
             const newItemId = uuidv4();
             const updatedSchemaStructure = userSchemaStructure.schema.map((category: any) => ({
                 ...category,
-                children: category.children.map((subcategory: any) => ({
-                    ...subcategory,
-                    children: subcategory.children.map((lastcategory: any) => {
+                children: category.children.map((subcategory: any) => {
+                    if (subcategory.id.toString() === selectedSubSection?.id.toString()) {
                         return {
-                            ...lastcategory,
-                            items: lastcategory.id.toString() === section.toString()
-                                ? [
-                                    ...lastcategory.items,
-                                    {
-                                        id: newItemId,
-                                        name: itemName,
-                                        status: itemStatus,
-                                        type: selectedItemType,
-                                        value: +value,
-                                        quantity: +quantity,
-                                    },
-                                ]
-                                : lastcategory.items,
+                            ...subcategory,
+                            children: (subcategory.children || []).map((lastcategory: any) => {
+                                if (lastcategory.id.toString() === section.toString()) {
+                                    return {
+                                        ...lastcategory,
+                                        items: [
+                                            ...lastcategory.items,
+                                            {
+                                                id: newItemId,
+                                                name: itemName,
+                                                quantity: +quantity,
+                                                status: itemStatus,
+                                                type: selectedItemType,
+                                                value: +value,
+                                            },
+                                        ],
+                                    };
+                                }
+                                return lastcategory;
+                            }).map((lastcategory: any) => {
+                                if (!section && lastcategory.id === 'uncategorized') {
+                                    return {
+                                        ...lastcategory,
+                                        items: [
+                                            ...lastcategory.items,
+                                            {
+                                                categoryId: 'uncategorized',
+                                                id: newItemId,
+                                                name: itemName,
+                                                quantity: +quantity,
+                                                status: itemStatus,
+                                                type: selectedItemType,
+                                                value: +value,
+                                            },
+                                        ],
+                                    };
+                                }
+                                return lastcategory;
+                            }).concat(
+                                !section &&
+                                    !subcategory.children.some((child: any) => child.id === 'uncategorized')
+                                    ? [{
+                                        id: 'uncategorized',
+                                        name: "Uncategorized",
+                                        items: [
+                                            {
+                                                categoryId: 'uncategorized',
+                                                id: newItemId,
+                                                name: itemName,
+                                                quantity: +quantity,
+                                                status: itemStatus,
+                                                type: selectedItemType,
+                                                value: +value,
+                                            },
+                                        ],
+                                    }]
+                                    : []
+                            ),
                         };
-                    }),
-                })),
+                    }
+                    return subcategory;
+                }),
             }));
 
             await fetchData({
                 url: "/api/schemaStructure/update",
-                method: "POST",
+                method: "PUT",
                 body: {
                     id: userSchemaStructure.id,
                     schema: updatedSchemaStructure,
@@ -98,7 +142,7 @@ const AddNewItemModal = () => {
                     status: itemStatus,
                     type: selectedItemType,
                     value: +value,
-                    categoryId: section,
+                    categoryId: section || 'uncategorized',
                     properties: {},
                 },
                 options: {

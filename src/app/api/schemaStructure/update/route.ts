@@ -7,7 +7,7 @@ const prisma =
         log: ["query", "info", "warn"],
     });
 
-export async function POST(req: any) {
+export async function PUT(req: any) {
     try {
         const { id, schema } = await req.json();
 
