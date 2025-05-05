@@ -92,9 +92,13 @@ export const options: NextAuthOptions = {
                     throw new Error("Please enter your email and password");
                 }
 
+                console.log("222222222", credentials);
+
                 const user = await prisma.user.findUnique({
-                    where: { email: credentials.email },
+                  where: { email: credentials.email },
                 });
+
+                console.log("1111111111", user);
 
                 if (!user || !user.hashedPassword) {
                     throw new Error("User not found");
